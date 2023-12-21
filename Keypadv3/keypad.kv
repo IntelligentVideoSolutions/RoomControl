@@ -1,0 +1,123 @@
+<Keypad>
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None,None
+        width: root.width
+        height: root.height
+        spacing: 3
+        padding: 0
+        id: main_window
+        BoxLayout:
+            size_hint: 1,1
+            id: display_window
+            width: root.width
+            height: 50
+            Label:
+                size_hint: 1,1
+                id: display_label
+                width: root.width
+#                height: 50
+                color: 'black'
+        GridLayout:
+            size_hint: 1,4
+            rows: 4
+            cols: 3
+            width: root.width
+#            height: 50
+            id: keypad_window
+            Button:
+                id: 1_button
+                size_hint: 1,1
+                text: '1'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 2_button
+                size_hint: 1,1
+                text: '2'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 3_button
+                size_hint: 1,1
+                text: '3'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 4_button
+                size_hint: 1,1
+                text: '4'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 5_button
+                size_hint: 1,1
+                text: '5'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 6_button
+                size_hint: 1,1
+                text: '6'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 7_button
+                size_hint: 1,1
+                text: '7'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 8_button
+                size_hint: 1,1
+                text: '8'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 9_button
+                size_hint: 1,1
+                text: '9'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: asterisk_button
+                size_hint: 1,1
+                text: '*'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: 0_button
+                size_hint: 1,1
+                text: '0'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)
+            Button:
+                id: pound_button
+                size_hint: 1,1
+                text: '#'
+#                height: 30
+#                width: 30
+                always_release: True
+                on_release: root.PressButton(self)

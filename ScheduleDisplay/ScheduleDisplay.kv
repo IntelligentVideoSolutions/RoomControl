@@ -1,0 +1,43 @@
+<BackgroundScrollView@ScrollView>
+	background_color: 0, 0, 0, 0
+	canvas.before:
+		Color:
+			rgba: self.background_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
+<BackgroundGridLayout@GridLayout>
+	background_color: 0, 0, 0, 0
+	canvas.before:
+		Color:
+			rgba: self.background_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
+<BackgroundBoxLayout@BoxLayout>
+	background_color: 0, 0, 0, 0
+	canvas.before:
+		Color:
+			rgba: self.background_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
+<BackgroundLabel@Label>:
+	background_color: 0, 0, 0, 0
+	canvas.before:
+		Color:
+			rgba: self.background_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+<ScheduleLabel@BackgroundLabel>
+	background_color: utils.get_color_from_hex('#C9DCEE')
+	color: .4,.4,.4,1
+<HRLabel@BackgroundLabel>
+	background_color: 1,1,1,1
+	color: .4,.4,.4,1
+
+<ActiveLabel@BackgroundLabel>
+	background_color: 1,.8,.8,1
+	color: .4,.4,.4,1
