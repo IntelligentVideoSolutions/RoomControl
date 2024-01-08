@@ -1,4 +1,4 @@
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.relativelayout import RelativeLayout
 
 from kivy.clock import Clock
 from kivy.uix.dropdown import DropDown
@@ -15,11 +15,15 @@ class DropDownButton(StandardButton):
 class StandardDropDown(DropDown):
 	id = ObjectProperty(None)
 
-class CameraControl(FloatLayout):
-	def __init__(self, valt, room, **kwargs):
+class CameraControl(RelativeLayout):
+	def __init__(self, valt, room, vidtype="H264",fps="30",resolution="800x450",volume=0,**kwargs):
 		super(CameraControl, self).__init__(**kwargs)
 		self.valt = valt
 		self.room = room
+		self.vidtype = vidtype
+		self.fps = fps
+		self.resolution = resolution
+		self.volume = volume
 		self.panstepsize = 5
 		self.tiltstepsize = 5
 		self.zoomstepsize = 100
@@ -98,9 +102,10 @@ class CameraControl(FloatLayout):
 			pass
 		self.camera_control = axiscamera.AxisCamera(self.camera_address, self.camera_username, self.camera_password)
 		#self.my_camera = Video(source='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=800x450&fps=23&0.mjpg',state='play', preview='splash.png')
-		self.my_camera = Video(
-			source='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=800x450&fps=23',
-			state='play', preview='images/splash.png')
+		if self.vidtype == "MJPG":
+			self.my_camera = Video(source='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + self.fps, state='play', preview='images/splash.png', volume=self.volume)
+		elif self.vidtype == "H264":
+			self.my_camera = Video(source='rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + self.fps, state='play', preview='images/splash.png', volume=self.volume)
 		self.ids['cam_window'].clear_widgets()
 		self.ids['cam_window'].add_widget(self.my_camera)
 		self.event_check_camera_connection_status = Clock.schedule_interval(self.check_camera_connection_status, 1)

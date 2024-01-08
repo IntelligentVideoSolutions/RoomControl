@@ -188,56 +188,59 @@
 					on_release: app.getnetworkinfo()
 
 <AboutScreen>:
-	BoxLayout:
-		orientation: 'horizontal'
-		size_hint: 1,1
+#	BoxLayout:
+#		orientation: 'horizontal'
+#		size_hint: 1,1
 #		Label:
 #			size_hint: .25,1
-		BoxLayout:
-			size_hint: 1,1
-			orientation: 'vertical'
-			spacing: 5
-			padding: 10
-			HeaderLabel:
-				text: "Network Information"
-				size_hint: 1,None
-				height: 50
-			BackgroundScrollView:
-				size_hint: 1,None
-				height:300
-				#bar_pos_y: "right"
-				#do_scroll: True
-				#do_scroll_y: True
-				BoxLayout:
-					orientation: 'vertical'
-					id: network_info_layout
-					height: self.minimum_height
-					size_hint: 1,None
-					spacing: 10
-					padding: 20
-			HeaderLabel:
-				text: "System Information"
-				size_hint: 1,None
-				height: 50
-			StandardGridLayout:
-			    row_default_height:30
-				size_hint: 1,None
-				cols: 2
-				spacing: 10
-				padding: 20
-				height: 30
-				StandardTextLabel:
-					text: "Version:"
-					size_hint_x: None
-					width: 100
-				DisabledTextInput:
-					id: firmware
-					text: "Not Available"
-			Button:
-				text: 'Done'
-				height: 30
-				size_hint: 1,None
-				on_release: app.go_to_home_screen()
+    BoxLayout:
+        size_hint: 1,1
+        orientation: 'vertical'
+        spacing: 5
+        padding: 10
+        HeaderLabel:
+            text: "Network Information"
+            size_hint: 1,None
+            height: 50
+        BackgroundScrollView:
+            size_hint: 1,None
+            height:self.parent.height-240
+            background_color: utils.get_color_from_hex('#D4D6D9')
+            #bar_pos_y: "right"
+            #do_scroll: True
+            #do_scroll_y: True
+            BoxLayout:
+                orientation: 'vertical'
+                id: network_info_layout
+                height: self.minimum_height
+                size_hint: 1,None
+                spacing: 10
+                padding: 20
+        HeaderLabel:
+            text: "System Information"
+            size_hint: 1,None
+            height: 50
+        StandardGridLayout:
+            row_default_height:30
+            size_hint: 1,None
+            cols: 2
+            spacing: 10
+            padding: 20
+            height: 30
+            StandardTextLabel:
+                text: "Version:"
+                size_hint_x: None
+                width: 100
+                font_size: 15
+            DisabledTextInput:
+                id: firmware
+                text: "Not Available"
+                font_size: 15
+        Button:
+            text: 'Done'
+            height: 30
+            size_hint: 1,None
+            on_release: app.go_to_home_screen()
 #		Label:
 #			size_hint: .25,1
 
@@ -305,18 +308,26 @@
             orientation:'horizontal'
             background_color:utils.get_color_from_hex('#F4F6F9')
             spacing:10
-            padding:10
-            size_hint:1,2
+            padding:0
+#            size_hint:1,2
+            size_hint: 1,None
+            height: 180
             RelativeLayout:
                 size_hint: None,None
                 width: self.parent.width-self.parent.padding[0]-self.parent.padding[2]
                 height: self.parent.height-self.parent.padding[1]-self.parent.padding[3]
+                BackgroundLabel:
+                    background_color:utils.get_color_from_hex('#000000')
+                    pos:0,self.parent.height-60
+                    size_hint: None, None
+                    height:60
+                    width:self.parent.width
                 Image:
     #                size_hint: .5,1
                     size_hint: None, None
-                    pos: 0,self.parent.height-28
-                    height: 28
-                    width: 28
+                    pos: 10,self.parent.height-54
+                    height: 50
+                    width: 50
     #                height: root.height
     #                width: 16
                     halign: "left"
@@ -325,62 +336,67 @@
                     source: app.imagepath + 'ivsicon.png'
                 ImageButton:
                     size_hint: None, None
-                    pos: self.parent.width-66, self.parent.height-28
-                    height: 28
-                    width: 28
+                    pos: self.parent.width-122, self.parent.height-56
+                    height: 56
+                    width: 56
     #					size_hint: None, None
     #					width:141
     #					height:70
-                    source: app.imagepath + 'config_icon.png'
-                    upimage: app.imagepath + 'config_icon.png'
-                    downimage: app.imagepath + 'config_icon.png'
+                    source: app.imagepath + 'config_icon_w.png'
+                    upimage: app.imagepath + 'config_icon_w.png'
+                    downimage: app.imagepath + 'config_icon_w.png'
                     always_release: True
                     on_release: app.open_auth()
                 ImageButton:
-                    color: utils.get_color_from_hex('#626262')
                     size_hint: None, None
-                    pos: self.parent.width-28, self.parent.height-28
-                    height: 28
-                    width: 28
+                    pos: self.parent.width-56, self.parent.height-56
+                    height: 56
+                    width: 56
     #					width:108
     #					height:70
     #					size_hint: None, None
-                    source: app.imagepath + 'info_icon.png'
-                    upimage: app.imagepath + 'info_icon.png'
-                    downimage: app.imagepath + 'info_icon.png'
+                    source: app.imagepath + 'info_icon_w.png'
+                    upimage: app.imagepath + 'info_icon_w.png'
+                    downimage: app.imagepath + 'info_icon_w.png'
                     always_release: True
                     on_release: app.getnetworkinfo()
-                BackgroundLabel:
-#                    background_color: 1,0,0,1
+                Label:
                     size_hint: None, None
-                    height: 25
-                    width: self.parent.width-150
+                    height: 56
+                    width: self.parent.width-248
                     id: display_room_name
-                    color: utils.get_color_from_hex('#626262')
+                    color: utils.get_color_from_hex('#FFFFFF')
 #                    pos: (self.parent.width-self.width)/2,0
-                    pos: (self.parent.width-self.width)/2,(self.parent.height-self.height)/2
+                    pos: 70,self.parent.height-56
                     text_size: self.width,self.height
-                    halign: "center"
+                    halign: "left"
                     shorten: True
                     shorten_from: "right"
-#                    font_size: 25
+                    font_size: 50
+                    bold: True
                 Label:
                     size_hint: None, None
                     id: recording_time
                     color: 1,0,0,1
-                    pos: 0,0
-                    height: 22
+#                    pos: 0,0
+                    pos: (self.parent.width-self.width)/2,60
+                    height: self.parent.height-120
+                    width: self.parent.width
                     text_size: self.size
-                    halign: "left"
+                    halign: "center"
+                    valign: "center"
+                    font_size: 40
                 Label:
                     id: feedback
                     color: 0,0,0,1
                     size_hint: None, None
-                    halign: 'center'
-                    text_size: self.width, None
-                    height: self.texture_size[1]
-                    pos: (self.parent.width-self.width)/2,self.parent.height-self.height
-                    height: self.parent.height
+                    pos: (self.parent.width-self.width)/2,60
+                    height: self.parent.height-120
+                    width: self.parent.width
+                    text_size: self.size
+                    halign: "center"
+                    valign: "center"
+                    font_size: 40
                 BoxLayout:
                     size_hint: None, None
                     id: recording_layout
@@ -388,16 +404,16 @@
                     padding: 0
 #                    pos: (self.parent.width-self.width)/2,0
 #                    pos: 0,0
-                    pos: self.parent.width-self.width,0
-                    height: 28
-                    width: 66
+                    pos: (self.parent.width-self.width)/2,0
+                    height: 60
+                    width: 300
                 BoxLayout:
                     size_hint: None, None
                     id: privacy_layout
 #                    pos: self.parent.width-self.width,0
-                    pos: self.parent.width-self.width,0
-                    width: 28
-                    height: 28
+                    pos: self.parent.width-self.width-122,self.parent.height-58
+                    width: 56
+                    height: 56
 		BackgroundBoxLayout:
 			size_hint: 1,10
 			id: app_window

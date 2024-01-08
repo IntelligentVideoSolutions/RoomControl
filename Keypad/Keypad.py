@@ -1,8 +1,8 @@
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.clock import Clock
 
-class Keypad(FloatLayout):
+class Keypad(RelativeLayout):
 	def __init__(self, valt, room, pinlength, **kwargs):
 		super(Keypad, self).__init__(**kwargs)
 		self.valt = valt

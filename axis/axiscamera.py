@@ -29,7 +29,7 @@ class AxisCamera:
 		threading.Timer(1,self.check_camera_config).start()
 
 	def isdigest(self):
-		time.sleep(30)
+		# time.sleep(30)
 		url = self.baseurl + 'param.cgi?action=list&group=root.Properties'
 		passmgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 		passmgr.add_password(None, url, self.username, self.password)

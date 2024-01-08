@@ -1,4 +1,4 @@
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
@@ -18,7 +18,7 @@ class ActiveLabel(BackgroundLabel):
 	pass
 class ScheduleLabel(BackgroundLabel):
 	pass
-class ScheduleDisplay(FloatLayout):
+class ScheduleDisplay(RelativeLayout):
 	def __init__(self, valt, room, **kwargs):
 		super(ScheduleDisplay, self).__init__(**kwargs)
 		self.valt = valt
