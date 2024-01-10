@@ -1,5 +1,11 @@
 from Framework import ivs_accessory_framework
+import os
+from kivy.utils import platform
 __version__ = ".2"
+
+if platform == "android":
+     os.environ["SDL_AUDIODRIVER"] = "android"
+
 
 class RoomControlAccessory(ivs_accessory_framework.IVS_Accessory_Framework):
 	pass

@@ -24,7 +24,7 @@ class AxisCamera:
 		self.baseurl = 'http://' + ip + '/axis-cgi/'
 		self.username = un
 		self.password = pw
-		self.digestthread = ThreadWithReturnValue(target=self.isdigest)
+		self.digestthread = ThreadWithReturnValue(target=self.connect_to_camera)
 		self.digestthread.start()
 		threading.Timer(1,self.check_camera_config).start()
 
@@ -63,7 +63,13 @@ class AxisCamera:
 			return 0
 		else:
 			return 1
-
+	def connect_to_camera(self):
+		digest = 0
+		while digest == 0:
+			digest = self.isdigest()
+			if digest == 0:
+				time.sleep(10)
+		return digest
 	def check_camera_config(self):
 		self.authtype = self.digestthread.join()
 		#		print(self.authtype)

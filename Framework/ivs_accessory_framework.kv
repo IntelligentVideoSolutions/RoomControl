@@ -72,13 +72,13 @@
 <HeaderLabel@Label>
 	color: utils.get_color_from_hex('#626262')
 #	font_size: 18
-	font_size: 15
+	font_size: '15sp'
 	height: 50
 <StandardGridLayout@GridLayout>
 	height: self.minimum_height
 <ErrorLabel@Label>
 	color: 1,0,0,1
-	font_size: 12
+	font_size: '12sp'
 	text_size: self.size
 	valign: 'top'
 	size_hint: None, None
@@ -124,13 +124,13 @@
 			Label:
 				id: display_clock
 				size_hint: 1,1
-				font_size: 30
+				font_size: '30sp'
 				valign: 'bottom'
 				color: utils.get_color_from_hex('#28282D')
 			Label:
 				id: display_date
 				size_hint: 1,.25
-				font_size: 15
+				font_size: '15sp'
 				color: utils.get_color_from_hex('#626262')
 				valign: 'top'
 			Label:
@@ -139,12 +139,13 @@
 				size_hint: 1,.75
 				halign: 'center'
 				text_size: self.width, None
+				font_size: '15sp'
                 height: self.texture_size[1]
 			Label:
 				id: display_room_name
 				size_hint: 1,1
 				color: utils.get_color_from_hex('#626262')
-				font_size: 18
+				font_size: '20sp'
                 text_size: self.width,self.height
                 halign: "center"
                 shorten: True

@@ -108,6 +108,8 @@ class CameraControl(RelativeLayout):
 			self.my_camera = Video(source='rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + self.fps, state='play', preview='images/splash.png', volume=self.volume)
 		self.ids['cam_window'].clear_widgets()
 		self.ids['cam_window'].add_widget(self.my_camera)
+		# label = Label(text='Connecting to Camera. Please Wait...',color='black')
+		# self.ids['cam_window'].add_widget(label)
 		self.event_check_camera_connection_status = Clock.schedule_interval(self.check_camera_connection_status, 1)
 		# self.enable_camera_controls()
 	def check_camera_connection_status(self,dt):

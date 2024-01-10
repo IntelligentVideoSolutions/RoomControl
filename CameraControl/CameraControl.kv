@@ -8,13 +8,13 @@
         padding: 0
         id: main_window
         BoxLayout:
-            size_hint: 1,1
+            size_hint: 1,5
             id: cam_window
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: 1,None
+            size_hint: 1,1
             width: root.width
-            height: 90
+#            height: 90
             BoxLayout:
                 orientation: 'vertical'
                 BoxLayout:
@@ -39,8 +39,8 @@
                 Button:
                     id: preset_button
                     text: "Preset"
-                    size_hint: 1,None
-                    height: 30
+                    size_hint: 1,1
+#                    height: 30
             GridLayout:
                 rows: 3
                 cols: 3
@@ -52,8 +52,8 @@
                 Button:
                     id: up_button
                     text: 'up'
-                    height: 30
-                    size_hint: 1,None
+#                    height: self.parent.height/3
+                    size_hint: 1,1
                     always_release: True
 #                    on_release: root.tiltup()
                     on_press: root.tilt_up_on()
@@ -62,8 +62,8 @@
                 Button:
                     id: left_button
                     text: 'Left'
-                    height: 30
-                    size_hint: 1,None
+#                    height: self.parent.height/3
+                    size_hint: 1,1
                     always_release: True
                     on_press: root.pan_left_on()
                     on_release: root.pan_left_off()
@@ -72,8 +72,8 @@
                 Button:
                     id: right_button
                     text: 'Right'
-                    height: 30
-                    size_hint: 1,None
+#                    height: self.parent.height/3
+                    size_hint: 1,1
                     always_release: True
                     on_press: root.pan_right_on()
                     on_release: root.pan_right_off()
@@ -81,8 +81,8 @@
                 Button:
                     id: down_button
                     text: 'Down'
-                    height: 30
-                    size_hint: 1,None
+#                    height: self.parent.height/3
+                    size_hint: 1,1
                     always_release: True
 #                    on_release: root.tiltdown()
                     on_press: root.tilt_down_on()
@@ -113,22 +113,22 @@
                     Button:
                         id: zoom_in_button
                         text: 'In'
-                        height: 30
-                        size_hint: 1,None
+#                        height: 30
+                        size_hint: 1,1
                         always_release: True
                         on_press: root.zoom_in_on()
                         on_release: root.zoom_in_off()
                     Button:
                         id: zoom_out_button
                         text: 'Out'
-                        height: 30
-                        size_hint: 1,None
+#                        height: 30
+                        size_hint: 1,1
                         always_release: True
                         on_press: root.zoom_out_on()
                         on_release: root.zoom_out_off()
                 Button:
                     id: privacy_button
                     text: "Privacy"
-                    size_hint: 1,None
-                    height: 30
+                    size_hint: 1,1
+#                    height: 30
                     on_release: root.toggle_privacy()

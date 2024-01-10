@@ -909,7 +909,7 @@ class valt:
 			return 0
 	def handleerror(self,e):
 		log(e)
-		if str(e) == "<urlopen error timed out>" or str(e) == "<urlopen error [Errno 11001] getaddrinfo failed>" or str(e) == "HTTP Error 400: Bad Request" or "<urlopen error [Errno -3] Temporary failure in name resolution>":
+		if str(e) == "<urlopen error timed out>" or str(e) == "<urlopen error [Errno 11001] getaddrinfo failed>" or str(e) == "HTTP Error 400: Bad Request" or str(e) == "<urlopen error [Errno -3] Temporary failure in name resolution>":
 			self.errormsg = "Server Address Unreachable"
 			self.accesstoken = 0
 			self.reauthenticate(self.failure_reauth_time)
