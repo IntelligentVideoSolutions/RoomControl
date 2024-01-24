@@ -1,6 +1,7 @@
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty, NumericProperty
+from libs.modules.ivs import ivs
 import threading
 from libs.pys.RoundedButton import RoundedButton
 from libs.pys.RoundedShadowButton import RoundedShadowButton
@@ -25,9 +26,9 @@ class Keypad(RelativeLayout):
 	def update_display_label(self,text):
 		self.ids["display_label"].text = text
 	def PinEntered(self):
-		print("pin entered")
+		# print("pin entered")
 		enteredcode = self.ids["display_label"].text
-		# ivs.log("PIN entered: " + enteredcode, logpath)
+		ivs.log("PIN entered: " + enteredcode)
 		self.author = self.getuserid(enteredcode, self.valt.getusers())
 		if self.author > 0:
 			self.update_display_label("Good Pin")

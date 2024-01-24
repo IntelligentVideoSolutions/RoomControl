@@ -5,7 +5,7 @@ from jnius import autoclass
 # from multiprocessing.dummy import Process
 from kivy.clock import Clock
 
-__version__ = "2.0.1"
+__version__ = "2.1"
 
 
 if platform == "android":

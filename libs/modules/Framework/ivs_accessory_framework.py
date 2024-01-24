@@ -30,6 +30,7 @@ from functools import partial
 
 # IVS Imports
 from libs.modules.ivs import ivs
+from libs.modules.ivs.valt import VALT
 from libs.modules.CameraControl.CameraControl import CameraControl
 from libs.modules.ScheduleDisplay.ScheduleDisplay import ScheduleDisplay
 from libs.modules.Keypad.Keypad import Keypad
@@ -76,7 +77,7 @@ class IVS_Accessory_Framework(App):
 	roomchecktime = 5  # Number of seconds to wait between room status checks against the VALT server.
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
 	orientation = ""
-
+	debug = False
 	# if os.name == "nt":
 	# 	# kvpath = 'C:/Users/jbuttitta/PycharmProjects/'
 	# 	# imagepath = 'images\\'
@@ -187,21 +188,26 @@ class IVS_Accessory_Framework(App):
 			for room in valtrooms:
 				if value == room["name"]:
 					self.config.set('valt', 'room', room["id"])
+					self.valt.selected_room = room["id"]
 					# print(self.config.get('valt','room'))
 					self.write_config()
 				pass
-		# self.initiate_check_room_status()
+			self.valt.start_room_check_thread()
 		elif key == 'recname':
+			# TODO: Fix this so that it doesn't reload the application in order to change the recording name.
+			# if self.config.get("application", "mode") == "Keypad":
+			# 	self.lw.recordingname = value
+			# 	return
 			pass
+		elif key == 'room':
+			self.valt.selected_room = value
 		else:
 			if type(valtrooms).__name__ == 'list':
-				# print(valtrooms)
 				roomlist = []
 				for room in valtrooms:
 					roomlist.append(room["name"])
 				self.update_settings_options(self.settings.children, 'roomname', roomlist)
 				if key == "server":
-					print("test")
 					self.config.set('valt', 'roomname', None)
 					self.config.set('valt', 'room', None)
 					self.write_config()
@@ -251,7 +257,8 @@ class IVS_Accessory_Framework(App):
 				else:
 					ivs.disablewebinterface()
 			if key == "pinlength":
-				self.reinitialize()
+				if self.config.get("application", "mode") == "Keypad":
+					self.lw.pinlength = value
 			if key == "mode":
 				self.reinitialize()
 			if key == "streamtype":
@@ -285,8 +292,9 @@ class IVS_Accessory_Framework(App):
 		self.enable_disable_clock()
 
 	def connecttovalt(self):
-		self.valt = ivs.valt(self.config.get("valt", "server"), self.config.get("valt", "username"),
-							 self.config.get("valt", "password"), self.logpath)
+		self.valt = VALT(self.config.get("valt", "server"), self.config.get("valt", "username"),
+							 self.config.get("valt", "password"), self.logpath,room=self.config.get("valt", "room"))
+		self.valt.bind_to_selected_room_status(self.room_status_change)
 		if self.valt.accesstoken != 0:
 			self.connsuccess()
 		else:
@@ -323,7 +331,7 @@ class IVS_Accessory_Framework(App):
 		else:
 			self.screenmgmt.get_screen(self.homescreen).ids['display_room_name'].text = str(roomname)
 			self.clear_feedback()
-			self.checkroomstatusthread(1)
+			# self.checkroomstatusthread(1)
 			self.addremovebuttons()
 		try:
 			self.event_recording.cancel()
@@ -333,7 +341,7 @@ class IVS_Accessory_Framework(App):
 			self.event_checkvalt.cancel()
 		except:
 			pass
-		self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 		try:
 			self.notification.dismiss()
 		except:
@@ -372,10 +380,7 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
 		# self.event_startrecording = Clock.schedule_once(self.startrecording,self.executedelay)
-		try:
-			self.event_checkroomstatus.cancel()
-		except:
-			pass
+		self.valt.stop_room_check_thread()
 		threading.Thread(target=self.startrecording).start()
 
 	def initiatestop(self):
@@ -387,10 +392,7 @@ class IVS_Accessory_Framework(App):
 			self.recevent.cancel()
 		except:
 			pass
-		try:
-			self.event_checkroomstatus.cancel()
-		except:
-			pass
+		self.valt.stop_room_check_thread()
 		threading.Thread(target=self.stoprecording).start()
 
 	def initiatepause(self):
@@ -402,10 +404,7 @@ class IVS_Accessory_Framework(App):
 			self.recevent.cancel()
 		except:
 			pass
-		try:
-			self.event_checkroomstatus.cancel()
-		except:
-			pass
+		self.valt.stop_room_check_thread()
 		threading.Thread(target=self.pauserecording).start()
 
 	def initiateresume(self):
@@ -413,33 +412,34 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].text = ""
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
 		# self.event_resumerecording = Clock.schedule_once(self.resumerecording,self.executedelay)
-		try:
-			self.event_checkroomstatus.cancel()
-		except:
-			pass
+		self.valt.stop_room_check_thread()
 		threading.Thread(target=self.resumerecording).start()
 
 	def startrecording(self):
 		if self.valt.startrecording(self.config.get("valt", "room"), self.config.get("valt", "recname")) != 0:
 			self.updrecon()
-		self.initiate_check_room_status()
+		# self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 
 	def stoprecording(self):
 		if self.valt.stoprecording(self.config.get("valt", "room")) != 0:
 			self.updrecoff()
-		self.initiate_check_room_status()
+		# self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 
 	def pauserecording(self):
 		if self.valt.pauserecording(self.config.get("valt", "room")) != 0:
 			self.updpause()
 		# self.clear_feedback()
-		self.initiate_check_room_status()
+		# self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 
 	def resumerecording(self):
 		if self.valt.resumerecording(self.config.get("valt", "room")) != 0:
 			self.updrecon()
 		# self.clear_feedback()
-		self.initiate_check_room_status()
+		# self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 
 	@mainthread
 	def updrecon(self):
@@ -450,6 +450,13 @@ class IVS_Accessory_Framework(App):
 			self.addpausestopbuttons()
 		# lbl = Label(size_hint=(.6,1))
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(lbl)
+
+		# To prevent multiple timers from starting
+		try:
+			self.recevent.cancel()
+		except:
+			pass
+
 		self.recevent = Clock.schedule_interval(self.updrectime, 1)
 		self.recstarttime = time.time() - self.valt.getrecordingtime(self.config.get("valt", "room"))
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].padding = 2
@@ -464,6 +471,7 @@ class IVS_Accessory_Framework(App):
 		if int(self.config.get('application', 'privbutton')):
 			self.addlockbutton()
 		try:
+			# print("test")
 			self.recevent.cancel()
 		except:
 			pass
@@ -483,6 +491,7 @@ class IVS_Accessory_Framework(App):
 			pass
 		if int(self.config.get('application', 'recbutton')):
 			self.addresumebutton()
+		self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].text =""
 		self.recstarttime = 0
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].text = "Recording Paused"
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].color = (1,.5,0,1)
@@ -492,7 +501,8 @@ class IVS_Accessory_Framework(App):
 	def updlock(self):
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
 		self.update_feedback("Room is Locked", (0, 0, 0, 1))
-		self.addunlockbutton()
+		if int(self.config.get('application', 'privbutton')):
+			self.addunlockbutton()
 
 	@mainthread
 	def updprepared(self):
@@ -500,6 +510,8 @@ class IVS_Accessory_Framework(App):
 
 	@mainthread
 	def updrectime(self, dt):
+		if self.debug:
+			ivs.log("Recording Time Updated")
 		if self.orientation == "Landscape":
 			self.screenmgmt.get_screen(self.homescreen).ids.recording_time.text = "Recording: " + str(
 				timedelta(seconds=int(time.time() - self.recstarttime)))
@@ -657,7 +669,8 @@ class IVS_Accessory_Framework(App):
 					self.addpausestopbuttons()
 			if int(self.config.get('application', 'privbutton')):
 				if self.recstarttime == 0:
-					if self.valt.getroomstatus(self.config.get("valt", "room")) == 4:
+					# if self.valt.getroomstatus(self.config.get("valt", "room")) == 4:
+					if self.valt.selected_room_status == 4:
 						self.addunlockbutton()
 					else:
 						self.addlockbutton()
@@ -724,7 +737,9 @@ class IVS_Accessory_Framework(App):
 		threading.Thread(target=self.checkroomstatus).start()
 
 	def checkroomstatus(self):
-		curroomstatus = self.valt.getroomstatus(self.config.get("valt", "room"))
+		print("THIS SHOULD NOT HAPPEN")
+		# curroomstatus = self.valt.getroomstatus(self.config.get("valt", "room"))
+		curroomstatus = self.valt.selected_room_status
 		# ivs.log("Check Room",self.logpath)
 
 		# The following lines will stop rechecking the room status until the valt config has been fixed
@@ -748,7 +763,8 @@ class IVS_Accessory_Framework(App):
 		else:
 			self.update_feedback(self.valt.errormsg, (1, 0, 0, 1))
 		if self.valt.accesstoken != 0:
-			# ivs.log(curroomstatus,self.logpath)
+			if self.debug:
+				ivs.log("Current Room Status: " + str(curroomstatus),self.logpath)
 			if curroomstatus == 2:
 				if self.recstarttime == 0:
 					self.updrecon()
@@ -804,19 +820,13 @@ class IVS_Accessory_Framework(App):
 		self.update_feedback("Locking Room", (0, 0, 0, 1))
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
-		try:
-			self.event_checkroomstatus.cancel()
-		except:
-			pass
+		self.valt.stop_room_check_thread()
 		threading.Thread(target=self.enableprivacy).start()
 
 	def initiatedisableprivacy(self):
 		self.update_feedback("Unlocking Room", (0, 0, 0, 1))
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].text = ""
-		try:
-			self.event_checkroomstatus.cancel()
-		except:
-			pass
+		self.valt.stop_room_check_thread()
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
 		threading.Thread(target=self.disableprivacy).start()
 
@@ -824,7 +834,8 @@ class IVS_Accessory_Framework(App):
 		# if self.valt.getroomstatus(self.config.get("valt","room")) == 1:
 		self.valt.lockroom(self.config.get("valt", "room"))
 		self.updlock()
-		self.initiate_check_room_status()
+		# self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 
 	def disableprivacy(self):
 		self.valt.unlockroom(self.config.get("valt", "room"))
@@ -832,7 +843,8 @@ class IVS_Accessory_Framework(App):
 			self.addrecordingbutton()
 		self.addlockbutton()
 		self.clear_feedback()
-		self.initiate_check_room_status()
+		# self.initiate_check_room_status()
+		self.valt.start_room_check_thread()
 
 	def restart(self):
 		quit()
@@ -1177,17 +1189,17 @@ class IVS_Accessory_Framework(App):
 
 	def load_app_window(self):
 		if self.config.get("application", "mode") == "Camera Control":
-			lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
+			self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
 							   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
 							   volume=self.config.get("application", "audio"))
 		elif self.config.get("application", "mode") == "Schedule":
-			lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
+			self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
 		elif self.config.get("application", "mode") == "Keypad":
-			lw = Keypad(self.valt, self.config.get("valt", "room"), pinlength = int(self.config.get("application", "pinlength")), recordingname=self.config.get("valt", "recname"))
-		# lw = Keypad(self.valt, self.config.get("valt", "room"), 6)
+			self.lw = Keypad(self.valt, self.config.get("valt", "room"), pinlength = int(self.config.get("application", "pinlength")), recordingname=self.config.get("valt", "recname"))
+		# self.lw = Keypad(self.valt, self.config.get("valt", "room"), 6)
 		self.screenmgmt.get_screen(self.homescreen).ids['app_window'].clear_widgets()
 		if self.config.get("application", "mode") != "None":
-			self.screenmgmt.get_screen(self.homescreen).ids['app_window'].add_widget(lw)
+			self.screenmgmt.get_screen(self.homescreen).ids['app_window'].add_widget(self.lw)
 
 	# else:
 	# 	lw=BackgroundLabel(text="test",size_hint=(1,1),color='black',font_size=15)
@@ -1256,6 +1268,10 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.get_screen(screenname).ids['recording_layout'].clear_widgets()
 		self.screenmgmt.get_screen(screenname).ids['privacy_layout'].clear_widgets()
 		self.screenmgmt.get_screen(screenname).ids['app_window'].clear_widgets()
-
+	def room_status_change(self,curroomstatus):
+		# ivs.log("Room Status Changed! New Status Is: " + str(curroomstatus))
+		# if curroomstatus != self.lastroomstatus:
+		# 	self.lastroomstatus = curroomstatus
+		self.updroomstatus(curroomstatus)
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()
