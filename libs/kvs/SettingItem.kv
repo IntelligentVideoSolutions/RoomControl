@@ -1,0 +1,13 @@
+<SettingItem>:
+# Override to change selection color to IVS Orange
+    canvas:
+        Color:
+            rgba:  255 / 255., 122 / 255., 43 / 255., self.selected_alpha
+        Rectangle:
+            pos: self.x, self.y + 1
+            size: self.size
+        Color:
+            rgb: .2, .2, .2
+        Rectangle:
+            pos: self.x, self.y - 2
+            size: self.width, 1

@@ -1,0 +1,10 @@
+<BackgroundColor@Widget>
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+# Now you can simply Mix the `BackgroundColor` class with almost
+# any other widget... to give it a background.

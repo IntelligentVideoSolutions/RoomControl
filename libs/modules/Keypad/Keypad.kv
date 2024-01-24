@@ -1,0 +1,169 @@
+#: include libs/kvs/RoundedShadowButton.kv
+
+#: set btntxtcol 'black'
+#: set btncol (1,1,1,1)
+#: set btnrad 50
+#: set btnfontsize '100sp'
+#: set btndowncol (247/255,142/255,48/255,1)
+
+<Keypad>
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None,None
+        width: root.width
+        height: root.height
+        spacing: 3
+        padding: 0
+        id: main_window
+        BoxLayout:
+            size_hint: 1,1
+            id: display_window
+            width: root.width
+            height: 50
+            Label:
+                size_hint: 1,1
+                id: display_label
+                width: root.width
+                font_size: '50sp'
+#                height: 50
+                color: 'black'
+        GridLayout:
+            size_hint: 1,4
+            rows: 4
+            cols: 3
+            width: root.width
+            spacing: 5
+#            height: 50
+            RoundedShadowButton:
+                id: 1_button
+                size_hint: 1,1
+                text: '1'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 2_button
+                size_hint: 1,1
+                text: '2'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 3_button
+                size_hint: 1,1
+                text: '3'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 4_button
+                size_hint: 1,1
+                text: '4'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 5_button
+                size_hint: 1,1
+                text: '5'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 6_button
+                size_hint: 1,1
+                text: '6'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 7_button
+                size_hint: 1,1
+                text: '7'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 8_button
+                size_hint: 1,1
+                text: '8'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 9_button
+                size_hint: 1,1
+                text: '9'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: asterisk_button
+                size_hint: 1,1
+                text: '*'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: 0_button
+                size_hint: 1,1
+                text: '0'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+            RoundedShadowButton:
+                id: pound_button
+                size_hint: 1,1
+                text: '#'
+                font_size: btnfontsize
+                color: btntxtcol
+                button_color: btncol
+                button_down_color: btndowncol
+                button_radius: btnrad
+                always_release: True
+                on_release: root.PressButton(self)
+

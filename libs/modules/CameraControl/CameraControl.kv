@@ -1,0 +1,197 @@
+#: set cambtntxtcol 'black'
+#: set cambtncol (1,1,1,1)
+#: set cambtnrad 10
+#: set cambtnfontsize '30sp'
+#: set cambtndowncol (247/255,142/255,48/255,1)
+#: set cambtndiscol (100.0/255.0,100.0/255.0,25.0/255.0,1)
+<CameraControl>
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None,None
+        width: root.width
+        height: root.height
+        spacing: 3
+        padding: 0
+        id: main_window
+        BoxLayout:
+            size_hint: 1,5
+            id: cam_window
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1,1
+            width: root.width
+            spacing: 3
+            padding: 0
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 3
+                padding: 0
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Step Size:'
+                        color: 'black'
+                        size_hint: (.5,1)
+                        font_size: '20sp'
+                    Slider:
+                        id: pantiltslider
+                        min: 1
+                        max: 50
+                        value: 5
+                        step: 1
+                        orientation: 'horizontal'
+                        cursor_size: (20,20)
+                        sensitivity: 'handle'
+                        on_value: root.change_step_size()
+                        size_hint: (1,1)
+                        font_size: '30sp'
+                BoxLayout:
+                    id: select_layout
+                RoundedShadowButton:
+                    id: preset_button
+                    text: "Preset"
+                    size_hint: 1,1
+#                    font_size: '30sp'
+                    font_size: cambtnfontsize
+                    color: cambtntxtcol
+                    button_color: cambtncol
+                    button_down_color: cambtndowncol
+                    button_radius: cambtnrad
+#                    height: 30
+                    disabled: True
+            GridLayout:
+                rows: 3
+                cols: 3
+                size_hint:1,1
+                width: root.width
+                spacing: 0
+                padding: 0
+                Label:
+                RoundedShadowButton:
+                    id: up_button
+                    text: 'Up'
+#                    height: self.parent.height/3
+                    size_hint: 1,1
+                    always_release: True
+#                    on_release: root.tiltup()
+                    on_press: root.tilt_up_on()
+                    on_release: root.tilt_up_off()
+                    font_size: cambtnfontsize
+                    color: cambtntxtcol
+                    button_color: cambtncol
+                    button_down_color: cambtndowncol
+                    button_radius: cambtnrad
+                    disabled: True
+                Label:
+                RoundedShadowButton:
+                    id: left_button
+                    text: 'Left'
+#                    height: self.parent.height/3
+                    size_hint: 1,1
+                    always_release: True
+                    on_press: root.pan_left_on()
+                    on_release: root.pan_left_off()
+                    font_size: cambtnfontsize
+                    color: cambtntxtcol
+                    button_color: cambtncol
+                    button_down_color: cambtndowncol
+                    button_radius: cambtnrad
+                    disabled: True
+                Label:
+                RoundedShadowButton:
+                    id: right_button
+                    text: 'Right'
+#                    height: self.parent.height/3
+                    size_hint: 1,1
+                    always_release: True
+                    on_press: root.pan_right_on()
+                    on_release: root.pan_right_off()
+                    font_size: cambtnfontsize
+                    color: cambtntxtcol
+                    button_color: cambtncol
+                    button_down_color: cambtndowncol
+                    button_radius: cambtnrad
+                    disabled: True
+                Label:
+                RoundedShadowButton:
+                    id: down_button
+                    text: 'Down'
+#                    height: self.parent.height/3
+                    size_hint: 1,1
+                    always_release: True
+#                    on_release: root.tiltdown()
+                    on_press: root.tilt_down_on()
+                    on_release: root.tilt_down_off()
+                    font_size: cambtnfontsize
+                    color: cambtntxtcol
+                    button_color: cambtncol
+                    button_down_color: cambtndowncol
+                    button_radius: cambtnrad
+                    disabled: True
+                Label:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 1,1
+                spacing: 3
+                padding: 0
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Volume:'
+                        color: 'black'
+                        size_hint: (.5,1)
+                        font_size: '20sp'
+                    Slider:
+                        id: volume_slider
+                        min: 0
+                        max: 1
+                        step: .05
+                        value: 0
+                        orientation: 'horizontal'
+                        cursor_size: (20,20)
+                        sensitivity: 'handle'
+                        on_value: root.change_volume()
+                        size_hint: (1,1)
+                BoxLayout:
+                    spacing: 3
+                    padding: 0
+                    orientation: 'horizontal'
+                    RoundedShadowButton:
+                        id: zoom_in_button
+                        text: 'In'
+                        font_size: cambtnfontsize
+                        color: cambtntxtcol
+                        button_color: cambtncol
+                        button_down_color: cambtndowncol
+                        button_radius: cambtnrad
+                        size_hint: 1,1
+                        always_release: True
+                        on_press: root.zoom_in_on()
+                        on_release: root.zoom_in_off()
+                        disabled: True
+                    RoundedShadowButton:
+                        id: zoom_out_button
+                        text: 'Out'
+                        font_size: cambtnfontsize
+                        color: cambtntxtcol
+                        button_color: cambtncol
+                        button_down_color: cambtndowncol
+                        button_radius: cambtnrad
+#                        height: 30
+                        size_hint: 1,1
+                        always_release: True
+                        on_press: root.zoom_out_on()
+                        on_release: root.zoom_out_off()
+                        disabled: True
+                RoundedShadowButton:
+                    id: privacy_button
+                    text: "Privacy"
+                    size_hint: 1,1
+                    font_size: cambtnfontsize
+                    color: cambtntxtcol
+                    button_color: cambtncol
+                    button_down_color: cambtndowncol
+                    button_radius: cambtnrad
+#                    height: 30
+                    on_release: root.toggle_privacy()
+                    disabled: True

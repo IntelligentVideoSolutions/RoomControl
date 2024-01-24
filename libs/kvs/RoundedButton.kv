@@ -1,0 +1,16 @@
+#<RoundedButton@Button>
+#    background_color: (0,0,0,0)
+#    background_normal: ''
+#    button_color: (88/255,88/255,88/255,1)
+#    button_down_color: (50/255,164/255,206/255,1)
+#    button_radius: 50
+#    canvas.before:
+#        Color:
+#            rgba: self.button_color
+#        RoundedRectangle:
+#            size: self.size
+#            pos: self.pos
+#            radius: [self.button_radius]
+#
+#    on_press: root.change_to_down_color()
+#    on_release: root.change_to_up_color()

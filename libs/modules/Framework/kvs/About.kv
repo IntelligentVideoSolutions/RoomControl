@@ -1,0 +1,56 @@
+<AboutScreen>:
+#	BoxLayout:
+#		orientation: 'horizontal'
+#		size_hint: 1,1
+#		Label:
+#			size_hint: .25,1
+    BoxLayout:
+        size_hint: 1,1
+        orientation: 'vertical'
+        spacing: 5
+        padding: 10
+        HeaderLabel:
+            text: "Network Information"
+            size_hint: 1,None
+            height: 50
+        BackgroundScrollView:
+            size_hint: 1,None
+            height:self.parent.height-240
+            background_color: utils.get_color_from_hex('#D4D6D9')
+            #bar_pos_y: "right"
+            #do_scroll: True
+            #do_scroll_y: True
+            BoxLayout:
+                orientation: 'vertical'
+                id: network_info_layout
+                height: self.minimum_height
+                size_hint: 1,None
+                spacing: 10
+                padding: 20
+        HeaderLabel:
+            text: "System Information"
+            size_hint: 1,None
+            height: 50
+        StandardGridLayout:
+            row_default_height:30
+            size_hint: 1,None
+            cols: 2
+            spacing: 10
+            padding: 20
+            height: 30
+            StandardTextLabel:
+                text: "Version:"
+                size_hint_x: None
+                width: 100
+                font_size: 15
+            DisabledTextInput:
+                id: firmware
+                text: "Not Available"
+                font_size: 15
+        Button:
+            text: 'Done'
+            height: 30
+            size_hint: 1,None
+            on_release: app.go_to_home_screen()
+#		Label:
+#			size_hint: .25,1
