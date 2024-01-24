@@ -1,0 +1,26 @@
+#<RoundedShadowButton>
+#    background_color: (0,0,0,0)
+#    background_normal: ''
+#    button_color: (88/255,88/255,88/255,1)
+#    button_down_color: (50/255,164/255,206/255,1)
+#    button_radius: 50
+#    canvas.before:
+#        Color:
+#            rgba: 0, 0, 0, 0.25
+#        BoxShadow:
+#            pos: self.pos
+#            size: self.size
+#            offset: 10,-10
+#            spread_radius: -20, -20
+#            border_radius: 10, 10, 10, 10
+#            blur_radius: 50 if self.state == "normal" else 50
+#            border_radius: (self.button_radius,self.button_radius,self.button_radius,self.button_radius)
+#        Color:
+#            rgba: self.button_color
+#        RoundedRectangle:
+#            size: self.size
+#            pos: self.pos
+#            radius: [self.button_radius]
+#
+#    on_press: root.change_to_down_color()
+#    on_release: root.change_to_up_color()
