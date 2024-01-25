@@ -416,29 +416,33 @@ class IVS_Accessory_Framework(App):
 		threading.Thread(target=self.resumerecording).start()
 
 	def startrecording(self):
-		if self.valt.startrecording(self.config.get("valt", "room"), self.config.get("valt", "recname")) != 0:
-			self.updrecon()
+		# if self.valt.startrecording(self.config.get("valt", "room"), self.config.get("valt", "recname")) != 0:
+		# 	self.updrecon()
 		# self.initiate_check_room_status()
+		self.valt.startrecording(self.config.get("valt", "room"), self.config.get("valt", "recname"))
 		self.valt.start_room_check_thread()
 
 	def stoprecording(self):
-		if self.valt.stoprecording(self.config.get("valt", "room")) != 0:
-			self.updrecoff()
+		# if self.valt.stoprecording(self.config.get("valt", "room")) != 0:
+		# 	self.updrecoff()
 		# self.initiate_check_room_status()
+		self.valt.stoprecording(self.config.get("valt", "room"))
 		self.valt.start_room_check_thread()
 
 	def pauserecording(self):
-		if self.valt.pauserecording(self.config.get("valt", "room")) != 0:
-			self.updpause()
+		# if self.valt.pauserecording(self.config.get("valt", "room")) != 0:
+		# 	self.updpause()
 		# self.clear_feedback()
 		# self.initiate_check_room_status()
+		self.valt.pauserecording(self.config.get("valt", "room"))
 		self.valt.start_room_check_thread()
 
 	def resumerecording(self):
-		if self.valt.resumerecording(self.config.get("valt", "room")) != 0:
-			self.updrecon()
+		# if self.valt.resumerecording(self.config.get("valt", "room")) != 0:
+		# 	self.updrecon()
 		# self.clear_feedback()
 		# self.initiate_check_room_status()
+		self.valt.resumerecording(self.config.get("valt", "room"))
 		self.valt.start_room_check_thread()
 
 	@mainthread
@@ -770,9 +774,9 @@ class IVS_Accessory_Framework(App):
 					self.updrecon()
 					self.valt.errormsg = None
 			elif curroomstatus == 1:
-				if not self.screenmgmt.get_screen(self.homescreen).ids.recording_time.text == "":
-					self.updrecoff()
-					self.valt.errormsg = None
+				# if not self.screenmgmt.get_screen(self.homescreen).ids.recording_time.text == "":
+				self.updrecoff()
+				self.valt.errormsg = None
 			elif curroomstatus == 0:
 				self.update_feedback(self.valt.errormsg, (1, 0, 0, 1))
 				self.valt.errormsg = None
@@ -833,16 +837,16 @@ class IVS_Accessory_Framework(App):
 	def enableprivacy(self):
 		# if self.valt.getroomstatus(self.config.get("valt","room")) == 1:
 		self.valt.lockroom(self.config.get("valt", "room"))
-		self.updlock()
+		# self.updlock()
 		# self.initiate_check_room_status()
 		self.valt.start_room_check_thread()
 
 	def disableprivacy(self):
 		self.valt.unlockroom(self.config.get("valt", "room"))
-		if int(self.config.get('application', 'recbutton')):
-			self.addrecordingbutton()
-		self.addlockbutton()
-		self.clear_feedback()
+		# if int(self.config.get('application', 'recbutton')):
+		# 	self.addrecordingbutton()
+		# self.addlockbutton()
+		# self.clear_feedback()
 		# self.initiate_check_room_status()
 		self.valt.start_room_check_thread()
 
