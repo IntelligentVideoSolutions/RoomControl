@@ -15,12 +15,8 @@
 			spacing: 10
 			padding: 10
 			size_hint: 3,1
-#			size_hint: None,1
-#			width: 600
 		BackgroundBoxLayout:
 			size_hint: 1,1
-#			size_hint: None,1
-#			width: 200
 			id: sys_window
 			orientation: 'vertical'
 			spacing: 10
@@ -28,11 +24,7 @@
 			background_color: utils.get_color_from_hex('#F4F6F9')
 			Image:
 				size_hint: 1,2.5
-#                size_hint: None, None
-#                height: 133
-#                width: 163
-#                halign: 'center'
-#                valign: 'center'
+
                 fit_mode: 'contain'
 				source: app.imagepath + 'ivslogo.png'
 			Label:
@@ -40,13 +32,13 @@
 			Label:
 				id: display_clock
 				size_hint: 1,1
-				font_size: '50sp'
+				font_size: '30sp'
 				valign: 'bottom'
 				color: utils.get_color_from_hex('#28282D')
 			Label:
 				id: display_date
 				size_hint: 1,.25
-				font_size: '20sp'
+				font_size: '15sp'
 				color: utils.get_color_from_hex('#626262')
 				valign: 'top'
 			Label:
@@ -55,13 +47,13 @@
 				size_hint: 1,.75
 				halign: 'center'
 				text_size: self.width, None
-				font_size: '30sp'
+				font_size: '15sp'
                 height: self.texture_size[1]
 			Label:
 				id: display_room_name
 				size_hint: 1,1
 				color: utils.get_color_from_hex('#626262')
-				font_size: '30sp'
+				font_size: '20sp'
                 text_size: self.width,self.height
                 halign: "center"
                 shorten: True
@@ -88,7 +80,7 @@
 					always_release: True
 					on_release: app.open_auth()
                     text: 'Settings'
-                    font_size: '25sp'
+                    font_size: '15sp'
                     color: 'black'
                     button_color: btncol
                     button_down_color: btndowncol
@@ -99,23 +91,10 @@
 					always_release: True
 					on_release: app.getnetworkinfo()
                     text: 'About'
-                    font_size: '25sp'
+                    font_size: '15sp'
                     color: 'black'
                     button_color: btncol
                     button_down_color: btndowncol
                     button_radius: 10
                     bold: True
-#				ImageButton:
-#					size_hint: 1,1
-#					source: app.imagepath + 'config.png'
-#					upimage: app.imagepath + 'config.png'
-#					downimage: app.imagepath + 'config_down.png'
-#					always_release: True
-#					on_release: app.open_auth()
-#				ImageButton:
-#					size_hint: .765,1
-#					source: app.imagepath + 'about.png'
-#					upimage: app.imagepath + 'about.png'
-#					downimage: app.imagepath + 'about_down.png'
-#					always_release: True
-#					on_release: app.getnetworkinfo()
+

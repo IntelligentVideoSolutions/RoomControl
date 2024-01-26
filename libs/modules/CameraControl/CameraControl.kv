@@ -1,7 +1,8 @@
 #: set cambtntxtcol 'black'
 #: set cambtncol (1,1,1,1)
 #: set cambtnrad 10
-#: set cambtnfontsize '30sp'
+#: set cambtnfontsize '20sp'
+#: set camtxtfontsize '15sp'
 #: set cambtndowncol (247/255,142/255,48/255,1)
 #: set cambtndiscol (100.0/255.0,100.0/255.0,25.0/255.0,1)
 <CameraControl>
@@ -32,7 +33,7 @@
                         text: 'Step Size:'
                         color: 'black'
                         size_hint: (.5,1)
-                        font_size: '20sp'
+                        font_size: camtxtfontsize
                     Slider:
                         id: pantiltslider
                         min: 1
@@ -140,7 +141,7 @@
                         text: 'Volume:'
                         color: 'black'
                         size_hint: (.5,1)
-                        font_size: '20sp'
+                        font_size: camtxtfontsize
                     Slider:
                         id: volume_slider
                         min: 0

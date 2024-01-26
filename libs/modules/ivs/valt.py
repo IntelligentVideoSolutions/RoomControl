@@ -24,7 +24,8 @@ class VALT:
 		self.success_reauth_time = 28800
 		self.failure_reauth_time = 30
 		self.logpath = logpath
-		self.errormsg = None
+		self._errormsg_observers = []
+		self._errormsg = None
 		self.testmsg = None
 		self.accesstoken = 0
 		self.httptimeout = 5
@@ -35,6 +36,7 @@ class VALT:
 		self.room_check_interval = 5
 		self.run_check_room_status = False
 		self._observers =  []
+
 
 		if 'room' in kwargs:
 			self.selected_room = kwargs['room']
@@ -944,7 +946,7 @@ class VALT:
 			self.errormsg = "Server Address Unreachable"
 			self.accesstoken = 0
 			self.reauthenticate(self.failure_reauth_time)
-		elif str(e) == "timed out" or str(e) == "Remote end closed connection without response":
+		elif str(e) == "timed out" or str(e) == "Remote end closed connection without response" or str(e) == "The read operation timed out":
 			self.errormsg = "Server Did Not Respond"
 			self.accesstoken = 0
 			self.reauthenticate(self.failure_reauth_time)
@@ -1094,9 +1096,15 @@ class VALT:
 	def check_room_status(self):
 		while True:
 			if self.run_check_room_status:
+				if self.debug:
+					ivs.log("Access Token: " + str(self.accesstoken))
 				if self.accesstoken != 0 and self.selected_room != None:
 					temp_room_status = self.getroomstatus(self.selected_room)
 					if temp_room_status != self.selected_room_status:
+						self.selected_room_status = temp_room_status
+					if temp_room_status != 0 and temp_room_status != 99 and self.errormsg != None:
+						print("Clear Error")
+						self.errormsg = None
 						self.selected_room_status = temp_room_status
 					if self.debug:
 						ivs.log("Checking " + str(self.selected_room) + " current status is " + str(self.selected_room_status))
@@ -1130,3 +1138,13 @@ class VALT:
 			ivs.log(str(self.selected_room) + ' status updated to ' + str(new_status))
 	def bind_to_selected_room_status(self,callback):
 		self._observers.append(callback)
+	@property
+	def errormsg(self):
+		return self._errormsg
+	@errormsg.setter
+	def errormsg(self,newmsg):
+		self._errormsg = newmsg
+		for callback in self._errormsg_observers:
+			callback(self._errormsg)
+	def bind_to_errormg(self,callback):
+		self._errormsg_observers.append(callback)

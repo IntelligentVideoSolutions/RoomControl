@@ -6,52 +6,36 @@
 		height: root.height
 		spacing: 3
 		padding: 0
-#		BackgroundBoxLayout:
-#			id: sys_window
-#			orientation: 'vertical'
-#			background_color: utils.get_color_from_hex('#F4F6F9')
-#			spacing: 10
-#			padding: 10
-#			size_hint: 1,3
         BackgroundBoxLayout:
             id:sys_window
             orientation:'horizontal'
             background_color:utils.get_color_from_hex('#F4F6F9')
             spacing:10
             padding:0
-#            size_hint:1,2
-            size_hint: 1,None
-            height: 180
+            size_hint: 1,1
+#            height: 180
             RelativeLayout:
                 size_hint: None,None
                 width: self.parent.width-self.parent.padding[0]-self.parent.padding[2]
                 height: self.parent.height-self.parent.padding[1]-self.parent.padding[3]
                 BackgroundLabel:
                     background_color:utils.get_color_from_hex('#000000')
-                    pos:0,self.parent.height-60
-                    size_hint: None, None
-                    height:60
-                    width:self.parent.width
+                    pos:0,self.parent.height-self.parent.height/3
+                    size_hint: 1, 1
                 Image:
-    #                size_hint: .5,1
                     size_hint: None, None
-                    pos: 10,self.parent.height-54
-                    height: 50
-                    width: 50
-    #                height: root.height
-    #                width: 16
+                    pos: 10,self.parent.height-self.parent.height/3+5
+                    height: self.parent.height/3-10
+                    width: self.parent.height/3-10
                     halign: "left"
                     valign: 'bottom'
                     fit_mode: 'contain'
                     source: app.imagepath + 'ivsicon.png'
                 ImageButton:
                     size_hint: None, None
-                    pos: self.parent.width-122, self.parent.height-56
-                    height: 56
-                    width: 56
-    #					size_hint: None, None
-    #					width:141
-    #					height:70
+                    pos: self.parent.width-((self.width)*2+14), self.parent.height-self.height-2
+                    height: self.parent.height/3-4
+                    width: self.parent.height/3-4
                     source: app.imagepath + 'config_icon_w.png'
                     upimage: app.imagepath + 'config_icon_w.png'
                     downimage: app.imagepath + 'config_icon_w.png'
@@ -59,12 +43,9 @@
                     on_release: app.open_auth()
                 ImageButton:
                     size_hint: None, None
-                    pos: self.parent.width-56, self.parent.height-56
-                    height: 56
-                    width: 56
-    #					width:108
-    #					height:70
-    #					size_hint: None, None
+                    pos: self.parent.width-self.width, self.parent.height-self.height-2
+                    height: self.parent.height/3-4
+                    width: self.parent.height/3-4
                     source: app.imagepath + 'info_icon_w.png'
                     upimage: app.imagepath + 'info_icon_w.png'
                     downimage: app.imagepath + 'info_icon_w.png'
@@ -72,63 +53,58 @@
                     on_release: app.getnetworkinfo()
                 Label:
                     size_hint: None, None
-                    height: 56
-                    width: self.parent.width-248
+                    height: self.parent.height/3-4
+                    width: self.parent.width-(self.parent.height/3+14)*4
                     id: display_room_name
                     color: utils.get_color_from_hex('#FFFFFF')
-#                    pos: (self.parent.width-self.width)/2,0
-                    pos: 70,self.parent.height-56
+                    pos: self.parent.height/3+10,self.parent.height-self.height-6
                     text_size: self.width,self.height
                     halign: "left"
+                    valign: "center"
                     shorten: True
                     shorten_from: "right"
-                    font_size: 50
+                    font_size: '30sp'
                     bold: True
                 Label:
                     size_hint: None, None
                     id: recording_time
                     color: 1,0,0,1
-#                    pos: 0,0
-                    pos: (self.parent.width-self.width)/2,60
-                    height: self.parent.height-120
+                    pos: (self.parent.width-self.width)/2,self.parent.height/3
+                    height: self.parent.height/3
                     width: self.parent.width
                     text_size: self.size
                     halign: "center"
                     valign: "center"
-                    font_size: 40
+                    font_size: '30sp'
                 Label:
                     id: feedback
                     color: 0,0,0,1
                     size_hint: None, None
-                    pos: (self.parent.width-self.width)/2,60
-                    height: self.parent.height-120
+                    pos: (self.parent.width-self.width)/2,self.parent.height/3
+                    height: self.parent.height/3
                     width: self.parent.width
                     text_size: self.size
                     halign: "center"
                     valign: "center"
-                    font_size: 40
+                    font_size: '20sp'
                 BoxLayout:
                     size_hint: None, None
                     id: recording_layout
                     spacing: 0
                     padding: 0
-#                    pos: (self.parent.width-self.width)/2,0
-#                    pos: 0,0
                     pos: (self.parent.width-self.width)/2,0
-                    height: 60
-                    width: 300
+                    height: self.parent.height/3
+                    width: self.parent.width * .45
                 BoxLayout:
                     size_hint: None, None
                     id: privacy_layout
-#                    pos: self.parent.width-self.width,0
-                    pos: self.parent.width-self.width-122,self.parent.height-58
-                    width: 56
-                    height: 56
+                    pos: self.parent.width-((self.width)*3+28),self.parent.height-self.height-2
+                    height: self.parent.height/3-4
+                    width: self.parent.height/3-4
 		BackgroundBoxLayout:
-			size_hint: 1,10
+			size_hint: 1,7
 			id: app_window
 			orientation: 'horizontal'
-#			halign: 'center'
 			spacing: 10
 			padding: 10
 			background_color: utils.get_color_from_hex('#F4F6F9')

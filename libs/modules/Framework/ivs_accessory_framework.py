@@ -19,7 +19,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.settings import SettingItem
-from kivy.metrics import dp
+from kivy.metrics import dp,sp
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
 
@@ -71,8 +71,10 @@ class IVS_Accessory_Framework(App):
 	timezonefilepath = 'config/timezones.json'
 	versionfilepath = 'config/version.json'
 	configfilepath = 'config/accessory.ini'
-	executedelay = .1  # Number of seconds to wait between a button press and execution of an API call. API calls "freeze" the application while waiting on a response, so this allows a screen update to be sent prior to the freeze.
+	executedelay = .1  # Number of seconds to wait between a button press and execution of an API call. API calls "freeze" the application while waiting on a response, so this allows a screen update to be sent prior to the freeze. This should no longer be used as everything should now be utilizing threading.
 	standardfontsize = "15sp"  # default size of font used in text labels and field.
+	standardfontcolor = (98/255,98/255,98/255,1)
+	button_font_size = "15sp"
 	headerfontsize = "20sp"  # default size of font used in headers.
 	roomchecktime = 5  # Number of seconds to wait between room status checks against the VALT server.
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
@@ -295,6 +297,9 @@ class IVS_Accessory_Framework(App):
 		self.valt = VALT(self.config.get("valt", "server"), self.config.get("valt", "username"),
 							 self.config.get("valt", "password"), self.logpath,room=self.config.get("valt", "room"))
 		self.valt.bind_to_selected_room_status(self.room_status_change)
+		self.valt.bind_to_errormg(self.error_message)
+		if self.debug:
+			self.valt.debug = True
 		if self.valt.accesstoken != 0:
 			self.connsuccess()
 		else:
@@ -329,7 +334,8 @@ class IVS_Accessory_Framework(App):
 		if roomname == 0:
 			self.update_feedback(self.valt.errormsg, (1, 0, 0, 1))
 		else:
-			self.screenmgmt.get_screen(self.homescreen).ids['display_room_name'].text = str(roomname)
+			self.screenmgmt.get_screen('Portrait_Home_Screen').ids['display_room_name'].text = str(roomname)
+			self.screenmgmt.get_screen('Landscape_Home_Screen').ids['display_room_name'].text = str(roomname)
 			self.clear_feedback()
 			# self.checkroomstatusthread(1)
 			self.addremovebuttons()
@@ -356,7 +362,8 @@ class IVS_Accessory_Framework(App):
 			pass
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
-		self.screenmgmt.get_screen(self.homescreen).ids['display_room_name'].text = ""
+		self.screenmgmt.get_screen('Portrait_Home_Screen').ids['display_room_name'].text = ""
+		self.screenmgmt.get_screen('Landscape_Home_Screen').ids['display_room_name'].text = ""
 		# self.update_feedback("Unable to connect to VALT",(1,0,0,1))
 		self.update_feedback(self.valt.errormsg, (1, 0, 0, 1))
 		self.event_checkvalt = Clock.schedule_interval(self.checkvalt, 1)
@@ -449,7 +456,8 @@ class IVS_Accessory_Framework(App):
 	def updrecon(self):
 		self.clear_feedback()
 		self.screenmgmt.get_screen(self.homescreen).ids.recording_time.color = (1, 0, 0, 1)
-		self.screenmgmt.get_screen(self.homescreen).ids['display_room_name'].color = (1, 0, 0, 1)
+		self.screenmgmt.get_screen('Portrait_Home_Screen').ids['display_room_name'].color = (1, 0, 0, 1)
+		self.screenmgmt.get_screen('Landscape_Home_Screen').ids['display_room_name'].color = (1, 0, 0, 1)
 		if int(self.config.get('application', 'recbutton')):
 			self.addpausestopbuttons()
 		# lbl = Label(size_hint=(.6,1))
@@ -481,10 +489,10 @@ class IVS_Accessory_Framework(App):
 			pass
 		self.recstarttime = 0
 		self.screenmgmt.get_screen(self.homescreen).ids.recording_time.text = ""
-		if self.orientation == "Landscape":
-			self.screenmgmt.get_screen(self.homescreen).ids['display_room_name'].color = (.38, .38, .38, 1)
-		else:
-			self.screenmgmt.get_screen(self.homescreen).ids['display_room_name'].color = (1, 1, 1, 1)
+		# if self.orientation == "Landscape":
+		self.screenmgmt.get_screen('Landscape_Home_Screen').ids['display_room_name'].color = (.38, .38, .38, 1)
+		# else:
+		self.screenmgmt.get_screen('Portrait_Home_Screen').ids['display_room_name'].color = (1, 1, 1, 1)
 
 	@mainthread
 	def updpause(self):
@@ -575,7 +583,7 @@ class IVS_Accessory_Framework(App):
 		# 				  upimage=self.imagepath + 'Start_Rec.png', downimage=self.imagepath + 'Start_Rec_down.png',
 		# 				  always_release=True, on_release=lambda x: self.initiaterecording())
 		btn = RoundedShadowButtonWithImage(id='start_button', text="Start Recording", size_hint=(1, 1), color="black",
-										   font_size='25sp', button_radius=10, button_color=(1, 1, 1, 1),
+										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/record_icon.png",
 										   always_release=True, on_release=lambda x: self.initiaterecording())
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
@@ -592,7 +600,7 @@ class IVS_Accessory_Framework(App):
 			# 				  on_release=lambda x: self.initiatedisableprivacy())
 			btn = RoundedShadowButtonWithImage(id='privacy_button', text="Room Locked", size_hint=(1, 1),
 											   color="black",
-											   font_size='25sp', button_radius=10, button_color=(1, 1, 1, 1),
+											   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 											   button_down_color=(0, 0, 1, 1), img_source="images/locked_icon.png",
 											   always_release=True, on_release=lambda x: self.initiatedisableprivacy())
 		else:
@@ -611,7 +619,7 @@ class IVS_Accessory_Framework(App):
 			# 				  on_release=lambda x: self.initiateprivacy())
 			btn = RoundedShadowButtonWithImage(id='privacy_button', text="Room Unlocked", size_hint=(1, 1),
 											   color="black",
-											   font_size='25sp', button_radius=10, button_color=(1, 1, 1, 1),
+											   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 											   button_down_color=(0, 0, 1, 1), img_source="images/unlocked_icon.png",
 											   always_release=True, on_release=lambda x: self.initiateprivacy())
 		else:
@@ -629,7 +637,7 @@ class IVS_Accessory_Framework(App):
 		# 				  always_release=True, on_release=lambda x: self.initiatepause())
 		btn = RoundedShadowButtonWithImage(id='pause_button', text="Pause", size_hint=(1, 1),
 										   color="black",
-										   font_size='25sp', button_radius=10, button_color=(1, 1, 1, 1),
+										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/pause_icon.png",
 										   always_release=True, on_release=lambda x: self.initiatepause())
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
@@ -638,7 +646,7 @@ class IVS_Accessory_Framework(App):
 		# 				  always_release=True, on_release=lambda x: self.initiatestop())
 		btn = RoundedShadowButtonWithImage(id='stop_button', text="Stop", size_hint=(1, 1),
 										   color="black",
-										   font_size='25sp', button_radius=10, button_color=(1, 1, 1, 1),
+										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/stop_icon.png",
 										   always_release=True, on_release=lambda x: self.initiatestop())
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
@@ -651,9 +659,9 @@ class IVS_Accessory_Framework(App):
 		# btn = ImageButton(size_hint=(1, 1), source=self.imagepath + 'resume.png', upimage=self.imagepath + 'resume.png',
 		# 				  downimage=self.imagepath + 'resume_down.png', always_release=True,
 		# 				  on_release=lambda x: self.initiateresume())
-		btn = RoundedShadowButtonWithImage(id='resume_button', text="Resume Recording", size_hint=(1, 1),
+		btn = RoundedShadowButtonWithImage(id='resume_button', text="Resume", size_hint=(1, 1),
 										   color="black",
-										   font_size='25sp', button_radius=10, button_color=(1, 1, 1, 1),
+										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/resume_icon.png",
 										   always_release=True, on_release=lambda x: self.initiateresume())
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
@@ -680,23 +688,26 @@ class IVS_Accessory_Framework(App):
 						self.addlockbutton()
 
 	def getnetworkinfo(self):
-		lblwidth = 100
+		lblwidth = sp(100)
+		lblheight = sp(30)
+		self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].clear_widgets()
 		for nic in netifaces.interfaces():
 			# print(nic)
 			if nic != 'lo':
 				# ivs.log(nic, self.logpath)
-				lbl = HeaderLabel(text=nic, size_hint_y=None, height=30, font_size=self.standardfontsize)
+				lbl = Label(text=nic, size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
-				layout = StandardGridLayout(cols=2, row_default_height=30, size_hint_x=1, size_hint_y=None, spacing=10)
+				# layout = StandardGridLayout(cols=2, row_default_height=30, size_hint_x=1, size_hint_y=None, spacing=10)
+				layout = StandardGridLayout(cols=2, size_hint_x=1, size_hint_y=None, spacing=10)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(layout)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'] = layout
 				lbl = StandardTextLabel(text="MAC Address:", width=lblwidth, size_hint_x=None, size_hint_y=None,
-										font_size=self.standardfontsize)
+										font_size=self.standardfontsize,height=lblheight)
 				try:
 					macaddress = netifaces.ifaddresses(nic)[netifaces.AF_LINK][0]['addr']
 				except:
 					macaddress = "Unable to Retrieve"
-				textbox = DisabledTextInput(text=macaddress, size_hint_y=None, font_size=self.standardfontsize)
+				textbox = DisabledTextInput(text=macaddress, size_hint_y=None, font_size=self.standardfontsize,height=lblheight)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(
 					lbl)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(
@@ -706,34 +717,34 @@ class IVS_Accessory_Framework(App):
 						# try:
 						if ivs.is_ipv4(x['addr']):
 							lbl = StandardTextLabel(text="IP:", width=lblwidth, size_hint_x=None, size_hint_y=None,
-													font_size=self.standardfontsize)
+													font_size=self.standardfontsize,height=lblheight)
 							textbox = DisabledTextInput(text=x['addr'], size_hint_y=None,
-														font_size=self.standardfontsize)
+														font_size=self.standardfontsize,height=lblheight)
 							self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[
 								nic + '_layout'].add_widget(lbl)
 							self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[
 								nic + '_layout'].add_widget(textbox)
 							if "netmask" in x:
 								lbl = StandardTextLabel(text="Subnet Mask:", width=lblwidth, size_hint_x=None,
-														size_hint_y=None, font_size=self.standardfontsize)
+														size_hint_y=None, font_size=self.standardfontsize,height=lblheight)
 								textbox = DisabledTextInput(text=x['netmask'], size_hint_y=None,
-															font_size=self.standardfontsize)
+															font_size=self.standardfontsize,height=lblheight)
 								self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[
 									nic + '_layout'].add_widget(lbl)
 								self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[
 									nic + '_layout'].add_widget(textbox)
 					# except:
 					#		pass
-				lbl = StandardTextLabel(size_hint_y=None, height=30)
+				lbl = StandardTextLabel(size_hint_y=None,height=lblheight)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 		try:
 			gateway = netifaces.gateways()['default'][netifaces.AF_INET][0]
 		except:
 			gateway = "None"
-		lbl = HeaderLabel(text="Default Gateway", size_hint_y=None, height=30, font_size=self.standardfontsize)
+		lbl = HeaderLabel(text="Default Gateway", size_hint_y=None, font_size=self.standardfontsize,height=lblheight)
 		self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
-		lbl = StandardTextLabel(text=gateway, size_hint_y=None, height=30, halign='center',
-								font_size=self.standardfontsize)
+		lbl = StandardTextLabel(text=gateway, size_hint_y=None, halign='center',
+								font_size=self.standardfontsize,height=lblheight)
 		self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 		self.screenmgmt.current = 'About_Screen'
 
@@ -1259,7 +1270,8 @@ class IVS_Accessory_Framework(App):
 			except:
 				pass
 			self.homescreen = self.orientation + "_Home_Screen"
-			self.screenmgmt.current = self.homescreen
+			if self.screenmgmt.current != 'About_Screen':
+				self.screenmgmt.current = self.homescreen
 			if oldorientation != "":
 				# self.reinitialize()
 				self.load_app_window()
@@ -1277,5 +1289,8 @@ class IVS_Accessory_Framework(App):
 		# if curroomstatus != self.lastroomstatus:
 		# 	self.lastroomstatus = curroomstatus
 		self.updroomstatus(curroomstatus)
+
+	def error_message(self,current_error_message):
+		self.update_feedback(current_error_message,(1,0,0,1))
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()

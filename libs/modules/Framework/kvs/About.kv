@@ -12,10 +12,10 @@
         HeaderLabel:
             text: "Network Information"
             size_hint: 1,None
-            height: 50
+            height: "30sp"
         BackgroundScrollView:
             size_hint: 1,None
-            height:self.parent.height-240
+            height:self.parent.height-sp(160)
             background_color: utils.get_color_from_hex('#D4D6D9')
             #bar_pos_y: "right"
             #do_scroll: True
@@ -30,26 +30,27 @@
         HeaderLabel:
             text: "System Information"
             size_hint: 1,None
-            height: 50
+            height: '30sp'
         StandardGridLayout:
-            row_default_height:30
+            row_default_height:'30sp'
             size_hint: 1,None
             cols: 2
             spacing: 10
-            padding: 20
-            height: 30
+            padding: 0
+            height: self.minimum_height
             StandardTextLabel:
                 text: "Version:"
                 size_hint_x: None
-                width: 100
-                font_size: 15
+                width: '100sp'
+                font_size: '15sp'
             DisabledTextInput:
                 id: firmware
+                height: self.minimum_height
                 text: "Not Available"
-                font_size: 15
+                font_size: '15sp'
         Button:
             text: 'Done'
-            height: 30
+            height: '30sp'
             size_hint: 1,None
             on_release: app.go_to_home_screen()
 #		Label:

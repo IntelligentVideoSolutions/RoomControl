@@ -70,20 +70,20 @@ class CameraControl(RelativeLayout):
 	@mainthread
 	def build_camera_list(self):
 		if type(self.cameralist).__name__ == 'list':
-			dropdown = DropDown()
+			self.camera_dropdown = DropDown()
 			for camera in self.cameralist:
 				# btn = StandardButton(id=camera["id"], text=camera["name"], size_hint_y=None, height=44, color="white",background_color=(247/255,142/255,48/255,1),background_normal='', font_size='30sp')
 				# btn = RoundedShadowButton(id=camera["id"], text=camera["name"], size_hint_y=None, height=44, color="black",font_size='30sp',button_radius=10, button_color=(247/255,142/255,48/255,1))
-				btn = RoundedButton(id=camera["id"], text=camera["name"], size_hint_y=None, height=44, color="white",font_size='30sp',button_radius=10, button_color=(247/255,142/255,48/255,1),button_down_color=(247/255,142/255,48/255,1),always_release=True)
-				btn.bind(on_release=lambda btn: dropdown.select(btn.id))
-				dropdown.add_widget(btn)
-			dropdown.bind(on_select=lambda instance, x: self.selectcamera(x))
-			dropdown.container.spacing = 10
-			dropdown.container.padding = 10
+				btn = RoundedButton(id=camera["id"], text=camera["name"], size_hint_y=None, height=44, color="white",font_size='20sp',button_radius=10, button_color=(247/255,142/255,48/255,1),button_down_color=(247/255,142/255,48/255,1),always_release=True)
+				btn.bind(on_release=lambda btn: self.camera_dropdown.select(btn.id))
+				self.camera_dropdown.add_widget(btn)
+			self.camera_dropdown.bind(on_select=lambda instance, x: self.selectcamera(x))
+			self.camera_dropdown.container.spacing = 10
+			self.camera_dropdown.container.padding = 10
 			self.selectcamera(self.cameralist[0]["id"])
-			mainbutton = RoundedShadowButton(text='Select Camera', size_hint=(1, 1), selected_id=self.camera_id,font_size='30sp',button_radius=10, button_color=(1,1,1,1),color="black",button_down_color=(247/255,142/255,48/255,1),always_release=True)
+			mainbutton = RoundedShadowButton(text='Select Camera', size_hint=(1, 1), selected_id=self.camera_id,font_size='20sp',button_radius=10, button_color=(1,1,1,1),color="black",button_down_color=(247/255,142/255,48/255,1),always_release=True)
 			# mainbutton = DropDownButton(text='Select Camera', size_hint=(1, 1), selected_id=self.camera_id,font_size='30sp')
-			mainbutton.bind(on_release=dropdown.open)
+			mainbutton.bind(on_release=self.camera_dropdown.open)
 			self.ids['camera_selector'] = mainbutton
 			self.ids['select_layout'].add_widget(mainbutton)
 	def selectcamera(self,cameraid):
