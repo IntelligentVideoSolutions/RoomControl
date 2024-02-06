@@ -19,7 +19,7 @@ class Keypad(RelativeLayout):
 	def build(self):
 		print(self.ids["display_label"].text)
 	def PressButton(self,instance):
-		if instance.text == "Backspace":
+		if instance.text == "Del":
 			curlen = len(self.ids["display_label"].text)
 			self.ids["display_label"].text = self.ids["display_label"].text[0:curlen-1]
 		elif instance.text == "Clear":
@@ -51,6 +51,9 @@ class Keypad(RelativeLayout):
 			elif curroomstatus == 2:
 				# self.event_start_recording = Clock.schedule_once(self.stop_recording, .5)
 				threading.Thread(target=self.stop_recording).start()
+			elif curroomstatus == 3:
+				self.update_display_label("Room is Paused")
+				self.event_clear_display_label_status = Clock.schedule_once(self.clear_display_label, 2)
 			else:
 				self.update_display_label("Room is Busy")
 				self.event_clear_display_label_status = Clock.schedule_once(self.clear_display_label, 2)
