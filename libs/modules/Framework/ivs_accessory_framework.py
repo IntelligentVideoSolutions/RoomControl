@@ -1,5 +1,5 @@
 # IVS Accessory Framework
-# Version 2.1
+# Version 2.2.1
 # Last Updated: 1/24/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
