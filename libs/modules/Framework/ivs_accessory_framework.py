@@ -1284,6 +1284,7 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.get_screen(screenname).ids['recording_layout'].clear_widgets()
 		self.screenmgmt.get_screen(screenname).ids['privacy_layout'].clear_widgets()
 		self.screenmgmt.get_screen(screenname).ids['app_window'].clear_widgets()
+		self.screenmgmt.get_screen(screenname).ids['recording_time'].text = ""
 	def room_status_change(self,curroomstatus):
 		# ivs.log("Room Status Changed! New Status Is: " + str(curroomstatus))
 		# if curroomstatus != self.lastroomstatus:

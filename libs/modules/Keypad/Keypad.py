@@ -3,11 +3,14 @@ from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty, NumericProperty
 from libs.modules.ivs import ivs
 import threading
+import time
 from libs.pys.RoundedButton import RoundedButton
 from libs.pys.RoundedShadowButton import RoundedShadowButton
 class Keypad(RelativeLayout):
 	recordingname = StringProperty("Test Recording")
 	pinlength = NumericProperty(6)
+	last_push_time = 0
+	push_clear_time = 10 # Time in seconds to wait between button presses before clearing entry.
 	def __init__(self, valt, room, **kwargs):
 		super(Keypad, self).__init__(**kwargs)
 		self.valt = valt
@@ -16,7 +19,16 @@ class Keypad(RelativeLayout):
 	def build(self):
 		print(self.ids["display_label"].text)
 	def PressButton(self,instance):
-		self.ids["display_label"].text = self.ids["display_label"].text + instance.text
+		if instance.text == "Backspace":
+			curlen = len(self.ids["display_label"].text)
+			self.ids["display_label"].text = self.ids["display_label"].text[0:curlen-1]
+		elif instance.text == "Clear":
+			self.ids["display_label"].text = ""
+		else:
+			self.ids["display_label"].text = self.ids["display_label"].text + instance.text
+			if self.last_push_time == 0:
+				self.event_check_push_time = Clock.schedule_interval(self.check_push_time, 1)
+			self.last_push_time = time.time()
 		if len(self.ids["display_label"].text) == self.pinlength:
 			# self.event_Pin_Entered = Clock.schedule_once(self.PinEntered, .25)
 			threading.Thread(target=self.PinEntered).start()
@@ -74,9 +86,11 @@ class Keypad(RelativeLayout):
 		self.ids["7_button"].disabled = False
 		self.ids["8_button"].disabled = False
 		self.ids["9_button"].disabled = False
-		self.ids["asterisk_button"].disabled = False
 		self.ids["0_button"].disabled = False
-		self.ids["pound_button"].disabled = False
+		# self.ids["pound_button"].disabled = False
+		# self.ids["asterisk_button"].disabled = False
+		self.ids["backspace_button"].disabled = False
+		self.ids["clear_button"].disabled = False
 	def disable_input(self,dt):
 		self.ids["1_button"].disabled = True
 		self.ids["2_button"].disabled = True
@@ -87,10 +101,17 @@ class Keypad(RelativeLayout):
 		self.ids["7_button"].disabled = True
 		self.ids["8_button"].disabled = True
 		self.ids["9_button"].disabled = True
-		self.ids["asterisk_button"].disabled = True
 		self.ids["0_button"].disabled = True
-		self.ids["pound_button"].disabled = True
+		# self.ids["asterisk_button"].disabled = True
+		# self.ids["pound_button"].disabled = True
+		self.ids["backspace_button"].disabled = True
+		self.ids["clear_button"].disabled = True
 	def on_recordingname(self,instance,value):
 		self.recordingname = value
 	def on_pinlength(self,instance,value):
 		self.pinlength = value
+	def check_push_time(self,b):
+		if time.time()-self.last_push_time >= self.push_clear_time:
+			self.event_check_push_time.cancel()
+			self.last_push_time = 0
+			self.ids["display_label"].text = ""

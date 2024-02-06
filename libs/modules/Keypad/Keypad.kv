@@ -133,11 +133,22 @@
                 button_radius: btnrad
                 always_release: True
                 on_release: root.PressButton(self)
+#            RoundedShadowButton:
+#                id: asterisk_button
+#                size_hint: 1,1
+#                text: '*'
+#                font_size: btnfontsize
+#                color: btntxtcol
+#                button_color: btncol
+#                button_down_color: btndowncol
+#                button_radius: btnrad
+#                always_release: True
+#                on_release: root.PressButton(self)
             RoundedShadowButton:
-                id: asterisk_button
+                id: backspace_button
                 size_hint: 1,1
-                text: '*'
-                font_size: btnfontsize
+                text: 'Backspace'
+                font_size: '40sp'
                 color: btntxtcol
                 button_color: btncol
                 button_down_color: btndowncol
@@ -155,15 +166,25 @@
                 button_radius: btnrad
                 always_release: True
                 on_release: root.PressButton(self)
+#            RoundedShadowButton:
+#                id: pound_button
+#                size_hint: 1,1
+#                text: '#'
+#                font_size: btnfontsize
+#                color: btntxtcol
+#                button_color: btncol
+#                button_down_color: btndowncol
+#                button_radius: btnrad
+#                always_release: True
+#                on_release: root.PressButton(self)
             RoundedShadowButton:
-                id: pound_button
+                id: clear_button
                 size_hint: 1,1
-                text: '#'
-                font_size: btnfontsize
+                text: "Clear"
+                font_size: '40sp'
                 color: btntxtcol
                 button_color: btncol
                 button_down_color: btndowncol
                 button_radius: btnrad
                 always_release: True
                 on_release: root.PressButton(self)
-
