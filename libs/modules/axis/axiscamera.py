@@ -7,7 +7,8 @@ import urllib.parse
 import threading
 from libs.modules.ThreadWithReturnValue.ThreadWithReturnValue import ThreadWithReturnValue
 import time
-
+import socket
+import libs.modules.ivs.ivs as ivs
 
 class AxisCamera:
 	#username = ""
@@ -15,7 +16,6 @@ class AxisCamera:
 	#authtype = 0
 	#ptz = 0
 	#privacy = 0
-	connected = False
 	def __init__(self, ip, un, pw):
 		self.privacy_capable = False
 		self.ptz_capable = False
@@ -23,14 +23,37 @@ class AxisCamera:
 		self.ptz = 0
 		self.privacy = 0
 		self.baseurl = 'http://' + ip + '/axis-cgi/'
+		self.camera_address = ip
 		self.username = un
 		self.password = pw
 		self.httptimeout = 5
-		threading.Thread(target=self.connect_to_camera).start()
+		self._connected = False
+		self._connected_observers = []
+		self.connected_check_time = 5
+		self.debug = False
+		self.kill_threads = False
+
+		self.camera_connect_thread = threading.Thread(target=self.connect_to_camera)
+		self.camera_connect_thread.daemon = True
+		self.camera_connect_thread.start()
 		# self.digestthread = ThreadWithReturnValue(target=self.connect_to_camera)
 		# self.digestthread.start()
 		# threading.Timer(1,self.check_camera_config).start()
-
+	def change_camera(self, ip, un, pw):
+		self.privacy_capable = False
+		self.ptz_capable = False
+		self.authtype = 0
+		self.ptz = 0
+		self.privacy = 0
+		self.baseurl = 'http://' + ip + '/axis-cgi/'
+		self.camera_address = ip
+		self.username = un
+		self.password = pw
+		self.connected = False
+		self.run_camera_status_check = False
+		self.camera_connect_thread = threading.Thread(target=self.connect_to_camera)
+		self.camera_connect_thread.daemon = True
+		self.camera_connect_thread.start()
 	def isdigest(self):
 		# time.sleep(30)
 		url = self.baseurl + 'param.cgi?action=list&group=root.Properties'
@@ -67,16 +90,22 @@ class AxisCamera:
 		else:
 			return 1
 	def connect_to_camera(self):
+		if self.debug:
+			ivs.log("Connecting to Camera: " + str(self.camera_address))
 		digest = 0
-		while digest == 0:
+		while digest == 0 and not self.kill_threads:
 			# print(self.connected)
 			digest = self.isdigest()
+			if self.debug:
+				ivs.log("Digest Status: " + str(digest))
 			if digest == 0:
 				time.sleep(10)
-		self.connected = True
+
 		self.authtype = digest
 		# print(self.connected)
 		self.check_camera_config()
+		self.connected = True
+		self.start_camera_check_thread()
 	def check_camera_config(self):
 		# self.authtype = self.digestthread.join()
 		#		print(self.authtype)
@@ -366,6 +395,51 @@ class AxisCamera:
 		print(connected)
 	def handle_error(self,error):
 		self.connected = False
+		print(error)
 		threading.Thread(target=self.connect_to_camera).start()
 		# self.digestthread = ThreadWithReturnValue(target=self.connect_to_camera).start()
 		# threading.Timer(1,self.check_camera_config).start()
+	def port_check(self,host,port):
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		s.settimeout(2) #Timeout in case of port not open
+		try:
+			s.connect((host, port)) #Port ,Here 22 is port
+			return True
+		except:
+			return False
+	def check_camera_status(self):
+		while not self.kill_threads:
+			if self.run_camera_status_check:
+				port_status = (self.port_check(self.camera_address, 80))
+				if not port_status:
+					if self.connected != False:
+						self.connected = False
+				else:
+					if not self.connected:
+						self.run_camera_status_check = False
+						threading.Thread(target=self.connect_to_camera).start()
+				if self.debug:
+					ivs.log("Camera Connected Check Status: " + str(self.connected))
+			time.sleep(self.connected_check_time)
+	def start_camera_check_thread(self):
+		self.run_camera_status_check = True
+		if self.debug:
+			ivs.log("Camera Connected Check Thread Started")
+		if not hasattr(self,'camera_check_thread'):
+			self.camera_check_thread = threading.Thread(target=self.check_camera_status)
+			self.camera_check_thread.daemon = True
+			self.camera_check_thread.start()
+	@property
+	def connected(self):
+		return self._connected
+	@connected.setter
+	def connected(self,new_status):
+		self._connected = new_status
+		for callback in self._connected_observers:
+			callback(self._connected)
+		if self.debug:
+			ivs.log('Camera connected status updated to ' + str(new_status))
+	def bind_to_connected(self,callback):
+		self._connected_observers.append(callback)
+	def disconnect(self):
+		self.kill_threads = True

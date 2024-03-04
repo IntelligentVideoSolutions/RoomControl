@@ -30,7 +30,7 @@ class VALT:
 		self.accesstoken = 0
 		self.httptimeout = 5
 		self.debug = False
-
+		self.kill_threads = False
 		self.auth()
 		self._selected_room_status = 99
 		self.room_check_interval = 5
@@ -1094,7 +1094,7 @@ class VALT:
 						return 0
 
 	def check_room_status(self):
-		while True:
+		while not self.kill_threads:
 			if self.run_check_room_status:
 				if self.debug:
 					ivs.log("Access Token: " + str(self.accesstoken))
@@ -1107,12 +1107,13 @@ class VALT:
 						self.errormsg = None
 						self.selected_room_status = temp_room_status
 					if self.debug:
-						ivs.log("Checking " + str(self.selected_room) + " current status is " + str(self.selected_room_status))
+						ivs.log("Checking Room " + str(self.selected_room) + " current status is " + str(self.selected_room_status))
 			time.sleep(self.room_check_interval)
 	def start_room_check_thread(self):
+		self.kill_threads = False
 		self.run_check_room_status = True
 		if self.debug:
-			ivs.log("Thread Started")
+			ivs.log("Room Check Thread Started")
 		if not hasattr(self,'room_check_thread'):
 			self.room_check_thread = threading.Thread(target=self.check_room_status)
 			self.room_check_thread.daemon = True
@@ -1120,12 +1121,7 @@ class VALT:
 
 
 	def stop_room_check_thread(self):
-		if hasattr(self, 'room_check_thread'):
-			if self.room_check_thread.is_alive():
-				self.run_check_room_status = False
-				if self.debug:
-					ivs.log("Thread Stopped")
-				# self.room_check_thread.stop()
+		self.kill_threads = True
 	@property
 	def selected_room_status(self):
 		return self._selected_room_status
@@ -1148,3 +1144,5 @@ class VALT:
 			callback(self._errormsg)
 	def bind_to_errormg(self,callback):
 		self._errormsg_observers.append(callback)
+	def disconnect(self):
+		self.kill_threads = True

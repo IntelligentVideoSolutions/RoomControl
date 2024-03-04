@@ -51,9 +51,9 @@ class Keypad(RelativeLayout):
 			elif curroomstatus == 2:
 				# self.event_start_recording = Clock.schedule_once(self.stop_recording, .5)
 				threading.Thread(target=self.stop_recording).start()
-			elif curroomstatus == 3:
-				self.update_display_label("Room is Paused")
-				self.event_clear_display_label_status = Clock.schedule_once(self.clear_display_label, 2)
+			# elif curroomstatus == 3:
+			# 	self.update_display_label("Room is Paused)
+			# 	self.event_clear_display_label_status = Clock.schedule_once(self.clear_display_label, 2)
 			else:
 				self.update_display_label("Room is Busy")
 				self.event_clear_display_label_status = Clock.schedule_once(self.clear_display_label, 2)

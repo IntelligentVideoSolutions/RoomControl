@@ -4,7 +4,7 @@ from kivy.clock import Clock, mainthread
 from kivy.uix.dropdown import DropDown
 from kivy.uix.label import Label
 from kivy.uix.video import Video
-import threading
+import threading,time
 from libs.modules.axis import axiscamera
 from libs.pys.RoundedShadowButton import RoundedShadowButton
 from libs.pys.RoundedButton import RoundedButton
@@ -17,6 +17,9 @@ class CameraControl(RelativeLayout):
 	resolution = StringProperty("800x450")
 	volume = NumericProperty(0)
 	my_camera = None
+	debug = False
+	camstatus = None
+	camera_control = None
 	def on_vidtype(self,instance,value):
 		self.vidtype = value
 		if self.my_camera != None:
@@ -130,37 +133,47 @@ class CameraControl(RelativeLayout):
 			self.ids['zoom_in_button'].disabled = True
 			self.ids['zoom_out_button'].disabled = True
 	def connect_to_camera(self):
-		try:
-			self.event_check_camera_connection_status.cancel()
-		except:
-			pass
-		self.camera_control = axiscamera.AxisCamera(self.camera_address, self.camera_username, self.camera_password)
-		if self.vidtype == "MJPG":
-			self.my_camera = Video(source='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + str(self.fps), state='play', preview='images/splash.png', volume=self.volume)
-		elif self.vidtype == "H264":
-			self.my_camera = Video(source='rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + str(self.fps), state='play', preview='images/splash.png', volume=self.volume)
+		# try:
+		# 	self.event_check_camera_connection_status.cancel()
+		# except:
+		# 	pass
+		if self.camera_control == None:
+			self.camera_control = axiscamera.AxisCamera(self.camera_address, self.camera_username, self.camera_password)
+			if self.debug:
+				self.camera_control.debug = True
+			self.camera_control.bind_to_connected(self.camera_status_change)
+		else:
+			# self.camera_control.disconnect()
+			self.camera_control.change_camera(self.camera_address, self.camera_username, self.camera_password)
+		# self.connect_video_feed()
 			# self.my_camera.bind(on_preview=self.my_camera.texture_update())
 		# self.ids['cam_window'].clear_widgets()
 		# self.ids['cam_window'].add_widget(self.my_camera)
 		# label = Label(text='Connecting to Camera. Please Wait...',color='black')
 		# self.ids['cam_window'].add_widget(label)
-		self.event_check_camera_connection_status = Clock.schedule_interval(self.check_camera_connection_status, 1)
+
+		# self.event_check_camera_connection_status = Clock.schedule_interval(self.check_camera_connection_status, 1)
+
 		# self.enable_camera_controls()
 	def check_camera_connection_status(self,dt):
-		# ivs.log("Camera Connected: " + str(self.camera_control.connected))
-		# ivs.log(self.my_camera)
+		# Deprecated Routine
+		if self.debug:
+			ivs.log("Camera Connected: " + str(self.camera_control.connected))
+			ivs.log(self.my_camera)
 		if self.my_camera != None:
-			# ivs.log("Video Loaded: " + str(self.my_camera.loaded))
+			if self.debug:
+				ivs.log("Video Loaded: " + str(self.my_camera.loaded))
 			if self.my_camera.loaded != self.last_camera_loaded:
 				if self.my_camera.loaded:
 					self.ids['cam_window'].clear_widgets()
 					self.ids['cam_window'].add_widget(self.my_camera)
-					ivs.log("reload")
+					if self.debug:
+						ivs.log("reload")
 				else:
 					self.ids['cam_window'].clear_widgets()
 					label = Label(text='Connecting to Camera. Please Wait...',color='black')
 					self.ids['cam_window'].add_widget(label)
-			self.last_camera_loaded = self.my_camera.loaded
+				self.last_camera_loaded = self.my_camera.loaded
 		if self.camera_control.connected:
 			if self.camera_control.ptz == 1:
 				self.enable_camera_controls()
@@ -173,8 +186,11 @@ class CameraControl(RelativeLayout):
 			# if self.camera_control.ptz != 0 and self.camera_control.privacy !=0:
 			# 	self.event_check_camera_connection_status.cancel()
 			if self.my_camera == None:
-				self.connect_to_camera()
+				# self.connect_to_camera()
+				self.connect_video_feed()
 		else:
+			if self.debug:
+				ivs.log("Clearing Camera Connection")
 			self.disable_camera_controls()
 			self.disable_privacy_button()
 			self.ids['cam_window'].clear_widgets()
@@ -280,3 +296,55 @@ class CameraControl(RelativeLayout):
 		# print(self.ids['volume_slider'].value)
 		# if self.my_camera != None:
 		# 	self.my_camera.volume = self.ids['volume_slider'].value
+	def connect_video_feed(self):
+		if self.debug:
+			ivs.log("Connecting to Video Feed")
+		if self.vidtype == "MJPG":
+			self.my_camera = Video(source='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + str(self.fps), state='play', preview='images/splash.png', volume=self.volume)
+		elif self.vidtype == "H264":
+			self.my_camera = Video(source='rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + str(self.fps), state='play', preview='images/splash.png', volume=self.volume)
+		self.video_feed_thread = threading.Thread(target=self.wait_for_video_feed)
+		self.video_feed_thread.daemon = True
+		self.video_feed_thread.start()
+	def wait_for_video_feed(self):
+		while not self.my_camera.loaded:
+			if self.debug:
+				ivs.log("Waiting for Video Feed to be Ready")
+			time.sleep(1)
+		self.display_video_feed()
+	@mainthread
+	def display_video_feed(self):
+		if self.my_camera.loaded:
+			self.ids['cam_window'].clear_widgets()
+			self.ids['cam_window'].add_widget(self.my_camera)
+			if self.debug:
+				ivs.log("Added Camera Video Feed")
+	@mainthread
+	def camera_status_change(self,curcamstatus):
+		if self.camstatus != curcamstatus:
+			if curcamstatus:
+				self.connect_video_feed()
+				# print(self.camera_control.ptz)
+				if self.camera_control.ptz == 1:
+					self.enable_camera_controls()
+				if self.camera_control.privacy == 2:
+					self.ids['privacy_button'].text = 'Enable Privacy'
+					self.enable_privacy_button()
+				elif self.camera_control.privacy == 1:
+					self.ids['privacy_button'].text = 'Disable Privacy'
+					self.enable_privacy_button()
+			else:
+				if self.debug:
+					ivs.log("Clearing Camera Connection")
+				self.disable_camera_controls()
+				self.disable_privacy_button()
+				self.ids['cam_window'].clear_widgets()
+				label = Label(text='Connecting to Camera. Please Wait...',color='black')
+				self.ids['cam_window'].add_widget(label)
+			self.camstatus = curcamstatus
+	def disconnect(self):
+		try:
+			self.camera_control.disconnect()
+			del self.my_camera
+		except:
+			pass

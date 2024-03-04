@@ -1,701 +1,1144 @@
-2024-01-25T08:21:17Z Initializing Application
-2024-01-25T08:21:18Z Authenticated to VALT
-2024-01-25T08:21:18Z Connection Successful
-2024-01-25T08:33:49Z Initializing Application
-2024-01-25T08:33:50Z Authenticated to VALT
-2024-01-25T08:33:50Z Connection Successful
-2024-01-25T08:42:47Z Initializing Application
-2024-01-25T08:42:48Z Authenticated to VALT
-2024-01-25T08:42:48Z Connection Successful
-2024-01-25T08:46:14Z Initializing Application
-2024-01-25T08:46:14Z Authenticated to VALT
-2024-01-25T08:46:15Z Connection Successful
-2024-01-25T08:46:23Z Initializing Application
-2024-01-25T08:46:23Z Authenticated to VALT
-2024-01-25T08:46:24Z Connection Successful
-2024-01-25T08:46:30Z Initializing Application
-2024-01-25T08:46:31Z Authenticated to VALT
-2024-01-25T08:46:31Z Connection Successful
-2024-01-25T08:46:38Z Initializing Application
-2024-01-25T08:46:38Z Authenticated to VALT
-2024-01-25T08:46:39Z Connection Successful
-2024-01-25T08:46:53Z Initializing Application
-2024-01-25T08:46:54Z Authenticated to VALT
-2024-01-25T08:46:54Z Connection Successful
-2024-01-25T08:47:09Z Initializing Application
-2024-01-25T08:47:10Z Authenticated to VALT
-2024-01-25T08:47:10Z Connection Successful
-2024-01-25T08:51:46Z Initializing Application
-2024-01-25T08:51:47Z Authenticated to VALT
-2024-01-25T08:51:47Z Connection Successful
-2024-01-25T09:33:32Z Initializing Application
-2024-01-25T09:33:33Z Authenticated to VALT
-2024-01-25T09:33:33Z Connection Successful
-2024-01-25T09:33:48Z Initializing Application
-2024-01-25T09:33:49Z Authenticated to VALT
-2024-01-25T09:33:49Z Connection Successful
-2024-01-25T09:34:07Z Initializing Application
-2024-01-25T09:34:07Z Authenticated to VALT
-2024-01-25T09:34:07Z Connection Successful
-2024-01-25T09:34:22Z Initializing Application
-2024-01-25T09:34:22Z Authenticated to VALT
-2024-01-25T09:34:22Z Connection Successful
-2024-01-25T09:38:35Z Initializing Application
-2024-01-25T09:38:36Z Authenticated to VALT
-2024-01-25T09:38:36Z Connection Successful
-2024-01-25T09:39:12Z Initializing Application
-2024-01-25T09:39:12Z Authenticated to VALT
-2024-01-25T09:39:12Z Connection Successful
-2024-01-25T09:40:00Z Initializing Application
-2024-01-25T09:40:05Z Authentication FAILED
-2024-01-25T09:40:27Z Initializing Application
-2024-01-25T09:40:27Z Authenticated to VALT
-2024-01-25T09:40:28Z Connection Successful
-2024-01-25T09:40:57Z Initializing Application
-2024-01-25T09:40:58Z Authenticated to VALT
-2024-01-25T09:40:58Z Connection Successful
-2024-01-25T09:42:14Z Initializing Application
-2024-01-25T09:42:15Z Authenticated to VALT
-2024-01-25T09:42:15Z Connection Successful
-2024-01-25T09:42:45Z Initializing Application
-2024-01-25T09:42:46Z Authenticated to VALT
-2024-01-25T09:42:46Z Connection Successful
-2024-01-25T09:43:39Z Initializing Application
-2024-01-25T09:43:40Z Authenticated to VALT
-2024-01-25T09:43:40Z Connection Successful
-2024-01-25T09:43:58Z Initializing Application
-2024-01-25T09:43:58Z Authenticated to VALT
-2024-01-25T09:43:58Z Connection Successful
-2024-01-25T09:44:10Z Initializing Application
-2024-01-25T09:44:11Z Authenticated to VALT
-2024-01-25T09:44:11Z Connection Successful
-2024-01-25T09:44:58Z Initializing Application
-2024-01-25T09:44:59Z Authenticated to VALT
-2024-01-25T09:44:59Z Connection Successful
-2024-01-25T09:45:10Z Initializing Application
-2024-01-25T09:45:11Z Authenticated to VALT
-2024-01-25T09:45:11Z Connection Successful
-2024-01-25T09:46:27Z Initializing Application
-2024-01-25T09:46:28Z Authenticated to VALT
-2024-01-25T09:46:28Z Connection Successful
-2024-01-25T09:46:55Z Initializing Application
-2024-01-25T09:46:55Z Authenticated to VALT
-2024-01-25T09:46:55Z Connection Successful
-2024-01-25T09:48:27Z Initializing Application
-2024-01-25T09:48:27Z Authenticated to VALT
-2024-01-25T09:48:28Z Connection Successful
-2024-01-25T09:49:19Z Initializing Application
-2024-01-25T09:49:19Z Authenticated to VALT
-2024-01-25T09:49:19Z Connection Successful
-2024-01-25T09:49:31Z Initializing Application
-2024-01-25T09:49:32Z Authenticated to VALT
-2024-01-25T09:49:32Z Connection Successful
-2024-01-25T09:49:38Z Initializing Application
-2024-01-25T09:49:39Z Authenticated to VALT
-2024-01-25T09:49:39Z Connection Successful
-2024-01-25T09:50:22Z Initializing Application
-2024-01-25T09:50:23Z Authenticated to VALT
-2024-01-25T09:50:23Z Connection Successful
-2024-01-25T09:50:53Z Initializing Application
-2024-01-25T09:50:53Z Authenticated to VALT
-2024-01-25T09:50:53Z Connection Successful
-2024-01-25T09:51:03Z Initializing Application
-2024-01-25T09:51:04Z Authenticated to VALT
-2024-01-25T09:51:04Z Connection Successful
-2024-01-25T09:51:20Z Initializing Application
-2024-01-25T09:51:21Z Authenticated to VALT
-2024-01-25T09:51:21Z Connection Successful
-2024-01-25T09:52:19Z Initializing Application
-2024-01-25T09:52:20Z Authenticated to VALT
-2024-01-25T09:52:20Z Connection Successful
-2024-01-25T09:52:31Z Room 3 Locked
-2024-01-25T09:52:35Z Room 3 Unlocked
-2024-01-25T09:54:12Z Initializing Application
-2024-01-25T09:54:13Z Authenticated to VALT
-2024-01-25T09:54:13Z Connection Successful
-2024-01-25T09:55:31Z Initializing Application
-2024-01-25T09:55:31Z Authenticated to VALT
-2024-01-25T09:55:31Z Connection Successful
-2024-01-25T09:57:47Z Initializing Application
-2024-01-25T09:57:47Z Authenticated to VALT
-2024-01-25T09:57:47Z Connection Successful
-2024-01-25T09:57:57Z Initializing Application
-2024-01-25T09:57:57Z Authenticated to VALT
-2024-01-25T09:57:57Z Connection Successful
-2024-01-25T09:58:07Z Initializing Application
-2024-01-25T09:58:08Z Authenticated to VALT
-2024-01-25T09:58:08Z Connection Successful
-2024-01-25T09:58:25Z Initializing Application
-2024-01-25T09:58:26Z Authenticated to VALT
-2024-01-25T09:58:26Z Connection Successful
-2024-01-25T09:58:33Z Initializing Application
-2024-01-25T09:58:34Z Authenticated to VALT
-2024-01-25T09:58:34Z Connection Successful
-2024-01-25T10:01:10Z Initializing Application
-2024-01-25T10:01:11Z Authenticated to VALT
-2024-01-25T10:01:11Z Connection Successful
-2024-01-25T10:01:15Z Recording Accessory Recording started in Room 3
-2024-01-25T10:01:26Z Recording stopped in Room 3
-2024-01-25T10:01:51Z Initializing Application
-2024-01-25T10:01:52Z Authenticated to VALT
-2024-01-25T10:01:52Z Connection Successful
-2024-01-25T10:01:55Z Recording Accessory Recording started in Room 3
-2024-01-25T10:02:07Z Recording stopped in Room 3
-2024-01-25T10:02:45Z Initializing Application
-2024-01-25T10:02:45Z Authenticated to VALT
-2024-01-25T10:02:46Z Connection Successful
-2024-01-25T10:02:50Z Recording Accessory Recording started in Room 3
-2024-01-25T10:02:56Z Recording stopped in Room 3
-2024-01-25T10:04:00Z Initializing Application
-2024-01-25T10:04:03Z Authenticated to VALT
-2024-01-25T10:04:03Z Connection Successful
-2024-01-25T10:04:12Z Initializing Application
-2024-01-25T10:04:13Z Authenticated to VALT
-2024-01-25T10:04:13Z Connection Successful
-2024-01-25T10:06:50Z Initializing Application
-2024-01-25T10:06:51Z Authenticated to VALT
-2024-01-25T10:06:51Z Connection Successful
-2024-01-25T10:07:03Z Recording Accessory Recording started in Room 3
-2024-01-25T10:07:14Z Recording stopped in Room 3
-2024-01-25T10:28:35Z Initializing Application
-2024-01-25T10:28:36Z Authenticated to VALT
-2024-01-25T10:28:36Z Connection Successful
-2024-01-25T10:28:44Z Initializing Application
-2024-01-25T10:28:45Z Authenticated to VALT
-2024-01-25T10:28:45Z Connection Successful
-2024-01-25T10:30:44Z Initializing Application
-2024-01-25T10:30:45Z Authenticated to VALT
-2024-01-25T10:30:45Z Connection Successful
-2024-01-25T10:30:49Z Recording Accessory Recording started in Room 3
-2024-01-25T10:32:08Z Initializing Application
-2024-01-25T10:32:08Z Authenticated to VALT
-2024-01-25T10:32:08Z Connection Successful
-2024-01-25T10:32:31Z Initializing Application
-2024-01-25T10:32:32Z Authenticated to VALT
-2024-01-25T10:32:32Z Connection Successful
-2024-01-25T10:33:16Z Initializing Application
-2024-01-25T10:33:17Z Authenticated to VALT
-2024-01-25T10:33:17Z Connection Successful
-2024-01-25T10:33:26Z Recording stopped in Room 3
-2024-01-25T10:36:04Z Initializing Application
-2024-01-25T10:36:05Z Authenticated to VALT
-2024-01-25T10:36:05Z Connection Successful
-2024-01-25T10:36:48Z Recording Accessory Recording started in Room 3
-2024-01-25T10:37:24Z Recording stopped in Room 3
-2024-01-25T11:42:51Z Initializing Application
-2024-01-25T11:42:52Z Authenticated to VALT
-2024-01-25T11:42:52Z Connection Successful
-2024-01-25T13:00:43Z Initializing Application
-2024-01-25T13:00:44Z Authenticated to VALT
-2024-01-25T13:00:44Z Connection Successful
-2024-01-25T13:01:52Z Initializing Application
-2024-01-25T13:01:52Z Authenticated to VALT
-2024-01-25T13:01:53Z Connection Successful
-2024-01-25T13:11:45Z Authenticated to VALT
-2024-01-25T13:42:47Z Initializing Application
-2024-01-25T13:42:48Z Authenticated to VALT
-2024-01-25T13:42:48Z Connection Successful
-2024-01-25T13:44:18Z Initializing Application
-2024-01-25T13:44:18Z Authenticated to VALT
-2024-01-25T13:44:18Z Connection Successful
-2024-01-25T14:00:38Z Initializing Application
-2024-01-25T14:00:39Z Authenticated to VALT
-2024-01-25T14:00:39Z Connection Successful
-2024-01-25T14:01:18Z Initializing Application
-2024-01-25T14:01:19Z Authenticated to VALT
-2024-01-25T14:01:19Z Connection Successful
-2024-01-25T14:02:01Z Initializing Application
-2024-01-25T14:02:03Z Authenticated to VALT
-2024-01-25T14:02:03Z Connection Successful
-2024-01-25T14:02:51Z Initializing Application
-2024-01-25T14:02:51Z Authenticated to VALT
-2024-01-25T14:02:51Z Connection Successful
-2024-01-25T14:02:56Z Recording Accessory Recording started in Room 3
-2024-01-25T14:03:07Z Recording stopped in Room 3
-2024-01-25T14:09:39Z Initializing Application
-2024-01-25T14:09:40Z Authenticated to VALT
-2024-01-25T14:09:40Z Connection Successful
-2024-01-25T14:09:45Z Initializing Application
-2024-01-25T14:09:46Z Authenticated to VALT
-2024-01-25T14:09:46Z Connection Successful
-2024-01-25T14:09:59Z Initializing Application
-2024-01-25T14:09:59Z Authenticated to VALT
-2024-01-25T14:10:00Z Connection Successful
-2024-01-25T14:10:14Z Initializing Application
-2024-01-25T14:10:14Z Authenticated to VALT
-2024-01-25T14:10:14Z Connection Successful
-2024-01-25T14:10:34Z Initializing Application
-2024-01-25T14:10:35Z Authenticated to VALT
-2024-01-25T14:10:35Z Connection Successful
-2024-01-25T14:16:32Z Initializing Application
-2024-01-25T14:16:33Z Authenticated to VALT
-2024-01-25T14:16:33Z Connection Successful
-2024-01-25T14:28:21Z Initializing Application
-2024-01-25T14:28:22Z Authenticated to VALT
-2024-01-25T14:28:22Z Connection Successful
-2024-01-25T14:30:01Z Initializing Application
-2024-01-25T14:30:06Z Authentication FAILED
-2024-01-25T14:31:45Z Initializing Application
-2024-01-25T14:31:45Z Authenticated to VALT
-2024-01-25T14:31:45Z Connection Successful
-2024-01-25T14:32:26Z Recording Accessory Recording started in Room 3
-2024-01-25T14:32:49Z Recording stopped in Room 3
-2024-01-25T14:32:54Z Recording Accessory Recording started in Room 3
-2024-01-25T14:33:01Z Recording stopped in Room 3
-2024-01-25T14:33:07Z Authenticated to VALT
-2024-01-25T14:33:08Z Connection Successful
-2024-01-25T14:40:51Z Initializing Application
-2024-01-25T14:41:35Z Initializing Application
-2024-01-25T14:41:35Z Authenticated to VALT
-2024-01-25T14:41:36Z Connection Successful
-2024-01-25T14:41:47Z Recording Accessory Recording started in Room 1
-2024-01-25T14:41:56Z Recording stopped in Room 1
-2024-01-25T14:42:02Z Recording Accessory Recording started in Room 1
-2024-01-25T14:42:09Z Recording paused in Room 1
-2024-01-25T14:42:15Z Recording resumed in Room 1
-2024-01-25T14:42:22Z Recording stopped in Room 1
-2024-01-25T14:42:35Z Recording Accessory Recording started in Room 1
-2024-01-25T14:42:41Z Recording stopped in Room 1
-2024-01-25T14:43:16Z Recording Accessory Recording started in Room 1
-2024-01-25T14:43:24Z Recording stopped in Room 1
-2024-01-25T14:45:46Z Initializing Application
-2024-01-25T14:45:47Z Authenticated to VALT
-2024-01-25T14:45:47Z Connection Successful
-2024-01-25T14:46:02Z Initializing Application
-2024-01-25T14:46:03Z Authenticated to VALT
-2024-01-25T14:46:04Z Connection Successful
-2024-01-25T14:46:04Z Current Room Status: 1
-2024-01-25T14:46:19Z Recording Accessory Recording started in Room 1
-2024-01-25T14:46:19Z Current Room Status: 2
-2024-01-25T14:46:31Z Recording stopped in Room 1
-2024-01-25T14:46:31Z Current Room Status: 1
-2024-01-25T14:49:08Z Initializing Application
-2024-01-25T14:49:08Z Authenticated to VALT
-2024-01-25T14:49:08Z Connection Successful
-2024-01-25T14:49:10Z Current Room Status: 1
-2024-01-25T14:49:59Z Recording Accessory Recording started in Room 1
-2024-01-25T14:49:59Z Current Room Status: 2
-2024-01-25T14:50:08Z Current Room Status: 0
-2024-01-25T14:50:13Z Recording stopped in Room 1
-2024-01-25T14:50:13Z Current Room Status: 1
-2024-01-25T14:50:36Z Recording Accessory Recording started in Room 1
-2024-01-25T14:50:36Z Current Room Status: 2
-2024-01-25T14:50:43Z Recording stopped in Room 1
-2024-01-25T14:50:43Z Current Room Status: 1
-2024-01-25T14:52:12Z Initializing Application
-2024-01-25T14:52:13Z Authenticated to VALT
-2024-01-25T14:52:13Z Connection Successful
-2024-01-25T14:52:14Z Current Room Status: 1
-2024-01-25T14:52:54Z Initializing Application
-2024-01-25T14:52:54Z Authenticated to VALT
-2024-01-25T14:52:54Z Connection Successful
-2024-01-25T14:52:55Z Current Room Status: 1
-2024-01-25T14:53:51Z Recording Accessory Recording started in Room 1
-2024-01-25T14:53:51Z Current Room Status: 2
-2024-01-25T14:53:58Z Recording stopped in Room 1
-2024-01-25T14:53:58Z Current Room Status: 1
-2024-01-25T14:54:20Z Recording Accessory Recording started in Room 1
-2024-01-25T14:54:21Z Current Room Status: 2
-2024-01-25T14:54:29Z Recording stopped in Room 1
-2024-01-25T14:54:29Z Current Room Status: 1
-2024-01-25T14:55:41Z Initializing Application
-2024-01-25T14:55:42Z Authenticated to VALT
-2024-01-25T14:55:42Z Connection Successful
-2024-01-25T14:55:43Z Current Room Status: 1
-2024-01-25T14:55:57Z Initializing Application
-2024-01-25T14:55:57Z Authenticated to VALT
-2024-01-25T14:55:58Z Connection Successful
-2024-01-25T14:55:58Z Current Room Status: 1
-2024-01-25T14:56:15Z Current Room Status: 1
-2024-01-25T14:56:29Z Recording Accessory Recording started in Room 1
-2024-01-25T14:56:29Z Current Room Status: 2
-2024-01-25T14:56:43Z Current Room Status: 1
-2024-01-25T14:58:28Z Recording Accessory Recording started in Room 1
-2024-01-25T14:58:28Z Current Room Status: 2
-2024-01-25T14:58:38Z Recording stopped in Room 1
-2024-01-25T14:58:38Z Current Room Status: 1
-2024-01-25T14:58:45Z Current Room Status: 1
-2024-01-25T14:59:07Z Current Room Status: 1
-2024-01-25T15:02:06Z Initializing Application
-2024-01-25T15:02:07Z Authenticated to VALT
-2024-01-25T15:02:07Z Connection Successful
-2024-01-25T15:02:08Z Current Room Status: 1
-2024-01-25T15:02:50Z Initializing Application
-2024-01-25T15:02:50Z Authenticated to VALT
-2024-01-25T15:02:50Z Connection Successful
-2024-01-25T15:02:51Z Current Room Status: 1
-2024-01-25T15:03:32Z https://ivstest3.ad.ipivs.com/api/v3/
-2024-01-25T15:03:32Z admin
-2024-01-25T15:03:33Z Authenticated to VALT
-2024-01-25T15:03:33Z Connection Successful
-2024-01-25T15:03:38Z Current Room Status: 1
-2024-01-25T15:03:47Z Initializing Application
-2024-01-25T15:03:47Z Authenticated to VALT
-2024-01-25T15:03:48Z Connection Successful
-2024-01-25T15:03:48Z Current Room Status: 1
-2024-01-25T15:05:07Z Initializing Application
-2024-01-25T15:05:08Z Authenticated to VALT
-2024-01-25T15:05:09Z Connection Successful
-2024-01-25T15:05:10Z Current Room Status: 1
-2024-01-25T15:14:22Z Initializing Application
-2024-01-25T15:14:23Z Authenticated to VALT
-2024-01-25T15:14:23Z Connection Successful
-2024-01-25T15:14:23Z Current Room Status: 1
-2024-01-25T15:16:03Z Initializing Application
-2024-01-25T15:16:04Z Authenticated to VALT
-2024-01-25T15:16:04Z Connection Successful
-2024-01-25T15:16:05Z Current Room Status: 1
-2024-01-25T15:17:48Z Initializing Application
-2024-01-25T15:17:49Z Authenticated to VALT
-2024-01-25T15:17:49Z Connection Successful
-2024-01-25T15:17:50Z Current Room Status: 1
-2024-01-25T15:20:59Z Initializing Application
-2024-01-25T15:21:00Z Authenticated to VALT
-2024-01-25T15:21:00Z Connection Successful
-2024-01-25T15:21:02Z Current Room Status: 1
-2024-01-25T15:23:00Z Initializing Application
-2024-01-25T15:23:02Z Authenticated to VALT
-2024-01-25T15:23:03Z Connection Successful
-2024-01-25T15:23:03Z Current Room Status: 1
-2024-01-25T15:25:24Z Initializing Application
-2024-01-25T15:25:25Z Authenticated to VALT
-2024-01-25T15:25:25Z Connection Successful
-2024-01-25T15:25:26Z Current Room Status: 1
-2024-01-25T15:38:49Z Initializing Application
-2024-01-25T15:38:49Z Authenticated to VALT
-2024-01-25T15:38:49Z Connection Successful
-2024-01-25T15:38:50Z Current Room Status: 1
-2024-01-25T15:39:15Z Initializing Application
-2024-01-25T15:39:15Z Authenticated to VALT
-2024-01-25T15:39:15Z Connection Successful
-2024-01-25T15:39:16Z Current Room Status: 1
-2024-01-25T15:39:41Z Initializing Application
-2024-01-25T15:39:42Z Authenticated to VALT
-2024-01-25T15:39:42Z Connection Successful
-2024-01-25T15:39:43Z Current Room Status: 1
-2024-01-25T15:40:09Z Initializing Application
-2024-01-25T15:40:10Z Authenticated to VALT
-2024-01-25T15:40:11Z Connection Successful
-2024-01-25T15:40:12Z Current Room Status: 1
-2024-01-25T15:41:39Z Initializing Application
-2024-01-25T15:41:40Z Authenticated to VALT
-2024-01-25T15:41:40Z Connection Successful
-2024-01-25T15:41:41Z Current Room Status: 1
-2024-01-25T15:42:16Z Initializing Application
-2024-01-25T15:42:16Z Authenticated to VALT
-2024-01-25T15:42:17Z Connection Successful
-2024-01-25T15:42:17Z Current Room Status: 1
-2024-01-25T15:42:26Z Initializing Application
-2024-01-25T15:42:27Z Authenticated to VALT
-2024-01-25T15:42:27Z Connection Successful
-2024-01-25T15:42:28Z Current Room Status: 1
-2024-01-25T15:50:11Z Initializing Application
-2024-01-25T15:50:12Z Authenticated to VALT
-2024-01-25T15:50:12Z Connection Successful
-2024-01-25T15:50:13Z Current Room Status: 1
-2024-01-25T15:53:22Z Current Room Status: 2
-2024-01-25T15:53:28Z Current Room Status: 1
-2024-01-25T15:53:45Z Current Room Status: 2
-2024-01-25T15:54:25Z Current Room Status: 3
-2024-01-25T15:54:30Z Current Room Status: 2
-2024-01-25T15:54:41Z Initializing Application
-2024-01-25T15:54:42Z Authenticated to VALT
-2024-01-25T15:54:42Z Connection Successful
-2024-01-25T15:54:43Z Current Room Status: 2
-2024-01-25T15:54:54Z Current Room Status: 1
-2024-01-25T15:56:26Z Initializing Application
-2024-01-25T15:56:27Z Authenticated to VALT
-2024-01-25T15:56:27Z Connection Successful
-2024-01-25T15:56:28Z Current Room Status: 1
-2024-01-25T15:58:49Z Initializing Application
-2024-01-25T15:58:50Z Authenticated to VALT
-2024-01-25T15:58:50Z Connection Successful
-2024-01-25T15:58:51Z Current Room Status: 1
-2024-01-25T15:59:21Z Initializing Application
-2024-01-25T15:59:21Z Authenticated to VALT
-2024-01-25T15:59:21Z Connection Successful
-2024-01-25T15:59:22Z Current Room Status: 1
-2024-01-25T16:00:20Z Initializing Application
-2024-01-25T16:00:20Z Authenticated to VALT
-2024-01-25T16:00:20Z Connection Successful
-2024-01-25T16:00:21Z Current Room Status: 1
-2024-01-25T16:02:00Z Initializing Application
-2024-01-25T16:02:01Z Authenticated to VALT
-2024-01-25T16:02:01Z Connection Successful
-2024-01-25T16:02:03Z Current Room Status: 1
-2024-01-25T16:02:21Z Initializing Application
-2024-01-25T16:02:22Z Authenticated to VALT
-2024-01-25T16:02:22Z Connection Successful
-2024-01-25T16:02:23Z Current Room Status: 1
-2024-01-25T16:02:33Z Initializing Application
-2024-01-25T16:02:34Z Authenticated to VALT
-2024-01-25T16:02:34Z Connection Successful
-2024-01-25T16:02:35Z Current Room Status: 1
-2024-01-25T16:03:08Z Initializing Application
-2024-01-25T16:03:09Z Authenticated to VALT
-2024-01-25T16:03:09Z Connection Successful
-2024-01-25T16:03:10Z Current Room Status: 1
-2024-01-25T16:03:31Z Initializing Application
-2024-01-25T16:03:31Z Authenticated to VALT
-2024-01-25T16:03:31Z Connection Successful
-2024-01-25T16:03:32Z Current Room Status: 1
-2024-01-25T16:03:45Z Initializing Application
-2024-01-25T16:03:46Z Authenticated to VALT
-2024-01-25T16:03:46Z Connection Successful
-2024-01-25T16:03:47Z Current Room Status: 1
-2024-01-26T08:02:56Z Initializing Application
-2024-01-26T08:02:56Z Authenticated to VALT
-2024-01-26T08:02:56Z Connection Successful
-2024-01-26T08:02:57Z Current Room Status: 1
-2024-01-26T08:03:14Z Initializing Application
-2024-01-26T08:03:15Z Authenticated to VALT
-2024-01-26T08:03:15Z Connection Successful
-2024-01-26T08:03:16Z Current Room Status: 1
-2024-01-26T08:05:08Z Initializing Application
-2024-01-26T08:05:09Z Authenticated to VALT
-2024-01-26T08:05:09Z Connection Successful
-2024-01-26T08:05:10Z Current Room Status: 1
-2024-01-26T08:06:35Z Initializing Application
-2024-01-26T08:06:35Z Authenticated to VALT
-2024-01-26T08:06:35Z Connection Successful
-2024-01-26T08:06:36Z Current Room Status: 1
-2024-01-26T08:12:09Z Initializing Application
-2024-01-26T08:12:10Z Authenticated to VALT
-2024-01-26T08:12:10Z Connection Successful
-2024-01-26T08:12:11Z Current Room Status: 1
-2024-01-26T08:13:32Z Initializing Application
-2024-01-26T08:13:32Z Authenticated to VALT
-2024-01-26T08:13:32Z Connection Successful
-2024-01-26T08:13:33Z Current Room Status: 1
-2024-01-26T08:13:59Z Initializing Application
-2024-01-26T08:13:59Z Authenticated to VALT
-2024-01-26T08:14:00Z Connection Successful
-2024-01-26T08:14:00Z Current Room Status: 1
-2024-01-26T08:34:07Z Initializing Application
-2024-01-26T08:34:08Z Authenticated to VALT
-2024-01-26T08:34:08Z Connection Successful
-2024-01-26T08:34:09Z Current Room Status: 1
-2024-01-26T08:37:33Z Initializing Application
-2024-01-26T08:37:34Z Authenticated to VALT
-2024-01-26T08:37:34Z Connection Successful
-2024-01-26T08:37:35Z Current Room Status: 1
-2024-01-26T08:39:57Z Initializing Application
-2024-01-26T08:39:58Z Authenticated to VALT
-2024-01-26T08:39:58Z Connection Successful
-2024-01-26T08:39:59Z Current Room Status: 1
-2024-01-26T08:40:09Z Initializing Application
-2024-01-26T08:40:10Z Authenticated to VALT
-2024-01-26T08:40:10Z Connection Successful
-2024-01-26T08:40:11Z Current Room Status: 1
-2024-01-26T08:42:36Z Initializing Application
-2024-01-26T08:42:36Z Authenticated to VALT
-2024-01-26T08:42:36Z Connection Successful
-2024-01-26T08:42:37Z Current Room Status: 1
-2024-01-26T08:54:08Z Initializing Application
-2024-01-26T08:54:09Z Authenticated to VALT
-2024-01-26T08:54:09Z Connection Successful
-2024-01-26T08:54:10Z Current Room Status: 1
-2024-01-26T08:59:16Z Initializing Application
-2024-01-26T08:59:16Z Authenticated to VALT
-2024-01-26T08:59:16Z Connection Successful
-2024-01-26T08:59:17Z Current Room Status: 1
-2024-01-26T08:59:54Z Initializing Application
-2024-01-26T08:59:54Z Authenticated to VALT
-2024-01-26T08:59:54Z Connection Successful
-2024-01-26T08:59:55Z Current Room Status: 1
-2024-01-26T09:09:22Z Initializing Application
-2024-01-26T09:09:23Z Authenticated to VALT
-2024-01-26T09:09:23Z Connection Successful
-2024-01-26T09:09:24Z Current Room Status: 1
-2024-01-26T09:09:53Z Initializing Application
-2024-01-26T09:09:53Z Authenticated to VALT
-2024-01-26T09:09:53Z Connection Successful
-2024-01-26T09:09:54Z Current Room Status: 1
-2024-01-26T09:16:55Z Initializing Application
-2024-01-26T09:16:56Z Authenticated to VALT
-2024-01-26T09:16:56Z Connection Successful
-2024-01-26T09:16:56Z Current Room Status: 1
-2024-01-26T09:22:24Z Initializing Application
-2024-01-26T09:22:24Z Authenticated to VALT
-2024-01-26T09:22:25Z Connection Successful
-2024-01-26T09:22:25Z Current Room Status: 1
-2024-01-26T09:22:59Z Initializing Application
-2024-01-26T09:23:00Z Authenticated to VALT
-2024-01-26T09:23:00Z Connection Successful
-2024-01-26T09:23:03Z Current Room Status: 1
-2024-01-26T09:23:10Z Initializing Application
-2024-01-26T09:23:11Z Authenticated to VALT
-2024-01-26T09:23:11Z Connection Successful
-2024-01-26T09:23:12Z Current Room Status: 1
-2024-01-26T09:23:24Z Initializing Application
-2024-01-26T09:23:24Z Authenticated to VALT
-2024-01-26T09:23:24Z Connection Successful
-2024-01-26T09:23:25Z Current Room Status: 1
-2024-01-26T09:23:49Z Initializing Application
-2024-01-26T09:23:50Z Authenticated to VALT
-2024-01-26T09:23:50Z Connection Successful
-2024-01-26T09:23:50Z Current Room Status: 1
-2024-01-26T09:24:00Z Initializing Application
-2024-01-26T09:24:02Z Authenticated to VALT
-2024-01-26T09:24:02Z Connection Successful
-2024-01-26T09:24:04Z Current Room Status: 1
-2024-01-26T09:24:34Z Initializing Application
-2024-01-26T09:24:34Z Authenticated to VALT
-2024-01-26T09:24:34Z Connection Successful
-2024-01-26T09:24:35Z Current Room Status: 1
-2024-01-26T09:25:09Z Initializing Application
-2024-01-26T09:25:09Z Authenticated to VALT
-2024-01-26T09:25:09Z Connection Successful
-2024-01-26T09:25:10Z Current Room Status: 1
-2024-01-26T09:25:26Z Initializing Application
-2024-01-26T09:25:26Z Authenticated to VALT
-2024-01-26T09:25:26Z Connection Successful
-2024-01-26T09:25:27Z Current Room Status: 1
-2024-01-26T09:25:48Z Initializing Application
-2024-01-26T09:25:49Z Authenticated to VALT
-2024-01-26T09:25:49Z Connection Successful
-2024-01-26T09:25:50Z Current Room Status: 1
-2024-01-26T11:20:49Z Initializing Application
-2024-01-26T11:20:50Z Authenticated to VALT
-2024-01-26T11:20:50Z Connection Successful
-2024-01-26T11:21:02Z Initializing Application
-2024-01-26T11:21:03Z Authenticated to VALT
-2024-01-26T11:21:03Z Connection Successful
-2024-01-26T11:21:26Z Initializing Application
-2024-01-26T11:21:26Z Authenticated to VALT
-2024-01-26T11:21:27Z Connection Successful
-2024-01-26T11:22:31Z Initializing Application
-2024-01-26T11:22:31Z Authenticated to VALT
-2024-01-26T11:22:32Z Connection Successful
-2024-01-26T11:23:04Z Authenticated to VALT
-2024-01-26T11:23:05Z Connection Successful
-2024-01-26T11:25:31Z Initializing Application
-2024-01-26T11:25:31Z Authenticated to VALT
-2024-01-26T11:25:31Z Connection Successful
-2024-01-26T11:27:13Z Initializing Application
-2024-01-26T11:27:13Z Authenticated to VALT
-2024-01-26T11:27:14Z Connection Successful
-2024-01-26T11:45:35Z Authenticated to VALT
-2024-01-26T12:00:36Z Authenticated to VALT
-2024-01-26T12:00:36Z Authenticated to VALT
-2024-01-26T12:05:37Z Authenticated to VALT
-2024-01-26T12:10:36Z Authenticated to VALT
-2024-01-26T12:10:36Z Authenticated to VALT
-2024-01-26T12:10:37Z Connection Successful
-2024-01-26T12:20:36Z Authenticated to VALT
-2024-01-26T12:20:37Z Connection Successful
-2024-01-26T12:20:37Z Authenticated to VALT
-2024-01-26T12:30:35Z Authenticated to VALT
-2024-01-26T12:40:36Z Authenticated to VALT
-2024-01-26T12:40:39Z Authenticated to VALT
-2024-01-26T12:51:17Z Initializing Application
-2024-01-26T12:51:18Z Authenticated to VALT
-2024-01-26T12:51:18Z Connection Successful
-2024-01-26T13:20:36Z Authenticated to VALT
-2024-01-26T13:20:36Z Connection Successful
-2024-01-26T13:21:09Z Initializing Application
-2024-01-26T13:21:09Z Authenticated to VALT
-2024-01-26T13:21:10Z Connection Successful
-2024-01-26T13:24:34Z Initializing Application
-2024-01-26T13:24:34Z Authenticated to VALT
-2024-01-26T13:24:34Z Connection Successful
-2024-01-26T13:25:17Z Authenticated to VALT
-2024-01-26T13:25:17Z Connection Successful
-2024-02-06T09:07:11Z Initializing Application
-2024-02-06T09:07:12Z Authenticated to VALT
-2024-02-06T09:07:12Z Connection Successful
-2024-02-06T09:07:19Z Initializing Application
-2024-02-06T09:07:19Z Authenticated to VALT
-2024-02-06T09:07:19Z Connection Successful
-2024-02-06T09:07:31Z Initializing Application
-2024-02-06T09:07:31Z Authenticated to VALT
-2024-02-06T09:07:31Z Connection Successful
-2024-02-06T09:08:11Z Initializing Application
-2024-02-06T09:08:12Z Authenticated to VALT
-2024-02-06T09:08:12Z Connection Successful
-2024-02-06T09:08:27Z Initializing Application
-2024-02-06T09:08:28Z Authenticated to VALT
-2024-02-06T09:08:28Z Connection Successful
-2024-02-06T09:12:21Z Initializing Application
-2024-02-06T09:12:22Z Authenticated to VALT
-2024-02-06T09:12:22Z Connection Successful
-2024-02-06T09:12:42Z Initializing Application
-2024-02-06T09:12:43Z Authenticated to VALT
-2024-02-06T09:12:43Z Connection Successful
-2024-02-06T09:13:02Z Initializing Application
-2024-02-06T09:13:02Z Authenticated to VALT
-2024-02-06T09:13:02Z Connection Successful
-2024-02-06T09:13:37Z Initializing Application
-2024-02-06T09:13:38Z Authenticated to VALT
-2024-02-06T09:13:38Z Connection Successful
-2024-02-06T09:14:41Z Initializing Application
-2024-02-06T09:14:41Z Authenticated to VALT
-2024-02-06T09:14:41Z Connection Successful
-2024-02-06T09:14:49Z Recording Accessory Recording started in Room 1 by admin
-2024-02-06T09:15:16Z Initializing Application
-2024-02-06T09:15:17Z Authenticated to VALT
-2024-02-06T09:15:17Z Connection Successful
-2024-02-06T09:15:26Z Recording stopped in Room 1
-2024-02-06T09:15:36Z Recording Accessory Recording started in Room 1 by admin
-2024-02-06T09:15:45Z Recording stopped in Room 1
-2024-02-06T09:22:56Z Initializing Application
-2024-02-06T09:22:57Z Authenticated to VALT
-2024-02-06T09:22:57Z Connection Successful
-2024-02-06T09:23:23Z Initializing Application
-2024-02-06T09:23:23Z Authenticated to VALT
-2024-02-06T09:23:24Z Connection Successful
-2024-02-06T09:23:50Z Initializing Application
-2024-02-06T09:23:51Z Authenticated to VALT
-2024-02-06T09:23:51Z Connection Successful
-2024-02-06T09:24:21Z Initializing Application
-2024-02-06T09:24:21Z Authenticated to VALT
-2024-02-06T09:24:21Z Connection Successful
-2024-02-06T09:24:53Z Initializing Application
-2024-02-06T09:24:54Z Authenticated to VALT
-2024-02-06T09:24:54Z Connection Successful
-2024-02-06T09:26:17Z Initializing Application
-2024-02-06T09:26:17Z Authenticated to VALT
-2024-02-06T09:26:17Z Connection Successful
-2024-02-06T09:34:52Z Recording Accessory Recording started in Room 1
-2024-02-06T09:43:13Z Initializing Application
-2024-02-06T09:43:14Z Authenticated to VALT
-2024-02-06T09:43:14Z Connection Successful
-2024-02-06T09:43:22Z Recording Accessory Recording started in Room 1
-2024-02-06T09:43:39Z Recording stopped in Room 1
-2024-02-06T09:43:57Z Recording Accessory Recording started in Room 1
-2024-02-06T09:44:09Z Recording stopped in Room 1
-2024-02-06T09:47:37Z Initializing Application
-2024-02-06T09:47:37Z Authenticated to VALT
-2024-02-06T09:47:37Z Connection Successful
-2024-02-06T09:48:32Z Initializing Application
-2024-02-06T09:48:32Z Authenticated to VALT
-2024-02-06T09:48:33Z Connection Successful
-2024-02-06T09:48:47Z Initializing Application
-2024-02-06T09:48:48Z Authenticated to VALT
-2024-02-06T09:48:48Z Connection Successful
-2024-02-06T09:50:52Z Recording Accessory Recording started in Room 1
-2024-02-06T09:51:08Z Recording paused in Room 1
-2024-02-06T09:51:31Z Recording paused in Room 1
-2024-02-06T09:51:48Z Recording stopped in Room 1
-2024-02-06T09:52:13Z Recording stopped in Room 1
-2024-02-06T09:52:26Z Recording Accessory Recording started in Room 1
-2024-02-06T09:52:35Z Recording stopped in Room 1
-2024-02-06T09:54:57Z Authenticated to VALT
-2024-02-06T09:55:12Z Room 1 Locked
-2024-02-06T09:55:27Z Recording stopped in Room 1
-2024-02-06T09:55:31Z Room 1 Unlocked
-2024-02-06T10:31:01Z Initializing Application
-2024-02-06T10:31:02Z Authenticated to VALT
-2024-02-06T10:31:02Z Connection Successful
-2024-02-06T10:31:14Z Initializing Application
-2024-02-06T10:31:14Z Authenticated to VALT
-2024-02-06T10:31:14Z Connection Successful
-2024-02-06T10:31:29Z Initializing Application
-2024-02-06T10:31:30Z Authenticated to VALT
-2024-02-06T10:31:30Z Connection Successful
-2024-02-06T11:18:08Z Initializing Application
-2024-02-06T11:18:09Z Authenticated to VALT
-2024-02-06T11:18:09Z Connection Successful
-2024-02-06T11:18:26Z Initializing Application
-2024-02-06T11:18:26Z Authenticated to VALT
-2024-02-06T11:18:26Z Connection Successful
+2024-02-06T11:24:14Z Initializing Application
+2024-02-06T11:24:14Z Authenticated to VALT
+2024-02-06T11:24:15Z Connection Successful
+2024-02-06T11:24:23Z Recording Accessory Recording started in Room 1 by admin
+2024-02-06T11:27:26Z Initializing Application
+2024-02-06T11:27:27Z Authenticated to VALT
+2024-02-06T11:27:27Z Connection Successful
+2024-02-06T11:27:40Z Recording stopped in Room 1
+2024-02-06T11:29:39Z Recording Accessory Recording started in Room 1 by admin
+2024-02-06T11:30:04Z Recording stopped in Room 1
+2024-02-06T11:31:04Z Recording Accessory Recording started in Room 1
+2024-02-06T11:31:13Z Recording stopped in Room 1
+2024-02-06T11:31:18Z Recording Accessory Recording started in Room 1
+2024-02-06T11:31:24Z Recording paused in Room 1
+2024-02-06T11:33:06Z Recording resumed in Room 1
+2024-02-06T11:33:15Z Recording stopped in Room 1
+2024-02-06T11:33:36Z Initializing Application
+2024-02-06T11:33:37Z Authenticated to VALT
+2024-02-06T11:33:37Z Connection Successful
+2024-02-06T11:33:43Z Recording Accessory Recording started in Room 1
+2024-02-06T11:33:49Z Recording paused in Room 1
+2024-02-06T11:34:17Z Initializing Application
+2024-02-06T11:34:17Z Authenticated to VALT
+2024-02-06T11:34:17Z Connection Successful
+2024-02-06T11:54:11Z Initializing Application
+2024-02-06T11:54:12Z Authenticated to VALT
+2024-02-06T11:54:12Z Connection Successful
+2024-02-06T11:54:50Z Initializing Application
+2024-02-06T11:54:51Z Authenticated to VALT
+2024-02-06T11:54:51Z Connection Successful
+2024-02-06T11:55:02Z Initializing Application
+2024-02-06T11:55:04Z Authenticated to VALT
+2024-02-06T11:55:04Z Connection Successful
+2024-02-08T10:08:57Z Initializing Application
+2024-02-08T10:08:58Z Authenticated to VALT
+2024-02-08T10:08:58Z Connection Successful
+2024-02-19T14:43:04Z Initializing Application
+2024-02-19T14:43:05Z Authenticated to VALT
+2024-02-19T14:43:05Z Connection Successful
+2024-02-19T14:43:21Z Authentication FAILED
+2024-02-19T14:43:52Z Authentication FAILED
+2024-02-19T14:44:22Z Authentication FAILED
+2024-02-19T14:44:37Z Authenticated to VALT
+2024-02-19T14:44:38Z Connection Successful
+2024-02-19T14:44:38Z Connection Successful
+2024-02-19T14:44:41Z Authenticated to VALT
+2024-02-19T14:44:41Z Connection Successful
+2024-02-19T14:48:32Z Authenticated to VALT
+2024-02-19T14:48:33Z Connection Successful
+2024-02-19T14:49:13Z Authenticated to VALT
+2024-02-19T14:49:13Z Connection Successful
+2024-02-19T15:03:10Z Initializing Application
+2024-02-19T15:03:10Z Authenticated to VALT
+2024-02-19T15:03:10Z Connection Successful
+2024-02-19T15:03:32Z Initializing Application
+2024-02-19T15:03:32Z Authenticated to VALT
+2024-02-19T15:03:32Z Connection Successful
+2024-02-19T15:04:55Z Initializing Application
+2024-02-19T15:04:55Z Authenticated to VALT
+2024-02-19T15:04:55Z Connection Successful
+2024-02-19T15:05:41Z Recording Accessory Recording started in Therapy Room 3 by admin
+2024-02-19T15:05:52Z Recording paused in Therapy Room 3
+2024-02-19T15:06:00Z Recording resumed in Therapy Room 3
+2024-02-19T15:06:08Z Recording stopped in Therapy Room 3
+2024-02-19T15:08:58Z Recording Accessory Recording started in Therapy Room 3 by admin
+2024-02-19T15:09:09Z Recording stopped in Therapy Room 3
+2024-02-19T15:10:09Z Initializing Application
+2024-02-19T15:10:10Z Authenticated to VALT
+2024-02-19T15:10:10Z Connection Successful
+2024-02-19T15:10:32Z Initializing Application
+2024-02-19T15:10:32Z Authenticated to VALT
+2024-02-19T15:10:32Z Connection Successful
+2024-02-19T15:11:19Z Initializing Application
+2024-02-19T15:11:19Z Authenticated to VALT
+2024-02-19T15:11:19Z Connection Successful
+2024-02-19T15:12:30Z Recording Accessory Recording started in Therapy Room 3
+2024-02-19T15:12:38Z Recording stopped in Therapy Room 3
+2024-02-19T15:12:41Z Therapy Room 3 Locked
+2024-02-19T15:13:45Z Therapy Room 3 Unlocked
+2024-02-19T15:14:27Z Recording Accessory Recording started in Therapy Room 3
+2024-02-19T15:14:36Z Recording stopped in Therapy Room 3
+2024-02-19T15:15:01Z Therapy Room 3 Locked
+2024-02-19T15:16:25Z Initializing Application
+2024-02-19T15:16:25Z Authenticated to VALT
+2024-02-19T15:16:26Z Connection Successful
+2024-02-19T15:16:37Z Initializing Application
+2024-02-19T15:16:37Z Authenticated to VALT
+2024-02-19T15:16:37Z Connection Successful
+2024-02-19T15:21:38Z Authenticated to VALT
+2024-02-19T15:21:39Z Connection Successful
+2024-02-19T15:22:00Z Authenticated to VALT
+2024-02-19T15:22:00Z Connection Successful
+2024-02-19T15:25:46Z Authenticated to VALT
+2024-02-19T15:25:46Z Connection Successful
+2024-02-19T15:27:21Z Initializing Application
+2024-02-19T15:27:21Z Authenticated to VALT
+2024-02-19T15:27:21Z Connection Successful
+2024-02-19T15:27:32Z Initializing Application
+2024-02-19T15:27:33Z Authenticated to VALT
+2024-02-19T15:27:33Z Connection Successful
+2024-02-22T12:55:59Z Initializing Application
+2024-02-22T12:55:59Z Authenticated to VALT
+2024-02-22T12:55:59Z Connection Successful
+2024-02-22T12:56:07Z Initializing Application
+2024-02-22T12:56:07Z Authenticated to VALT
+2024-02-22T12:56:07Z Connection Successful
+2024-02-22T13:03:51Z Authenticated to VALT
+2024-02-22T13:03:52Z Connection Successful
+2024-02-22T13:04:26Z Initializing Application
+2024-02-22T13:04:26Z Authenticated to VALT
+2024-02-22T13:04:26Z Connection Successful
+2024-02-22T13:05:52Z Initializing Application
+2024-02-22T13:05:52Z Authenticated to VALT
+2024-02-22T13:05:52Z Connection Successful
+2024-02-22T13:37:26Z Authentication FAILED
+2024-02-22T13:37:56Z Authenticated to VALT
+2024-02-22T13:37:56Z Connection Successful
+2024-02-22T14:12:59Z Initializing Application
+2024-02-22T14:12:59Z Authenticated to VALT
+2024-02-22T14:12:59Z Connection Successful
+2024-02-22T14:13:20Z Initializing Application
+2024-02-22T14:13:21Z Authenticated to VALT
+2024-02-22T14:13:21Z Connection Successful
+2024-02-22T14:13:43Z Initializing Application
+2024-02-22T14:13:43Z Authenticated to VALT
+2024-02-22T14:13:43Z Connection Successful
+2024-02-22T14:14:00Z Authenticated to VALT
+2024-02-22T14:14:01Z Connection Successful
+2024-02-22T14:14:36Z Authenticated to VALT
+2024-02-22T14:14:36Z Connection Successful
+2024-02-22T14:14:54Z Authenticated to VALT
+2024-02-22T14:14:54Z Connection Successful
+2024-02-22T14:15:11Z Authenticated to VALT
+2024-02-22T14:15:11Z Connection Successful
+2024-02-22T14:15:32Z Authenticated to VALT
+2024-02-22T14:15:32Z Connection Successful
+2024-02-22T14:17:22Z Authenticated to VALT
+2024-02-22T14:17:22Z Connection Successful
+2024-02-22T14:22:15Z Authenticated to VALT
+2024-02-22T14:23:40Z Initializing Application
+2024-02-22T14:23:40Z Authenticated to VALT
+2024-02-22T14:23:40Z Connection Successful
+2024-02-22T14:24:25Z Authenticated to VALT
+2024-02-22T14:24:25Z Connection Successful
+2024-02-22T14:26:59Z Initializing Application
+2024-02-22T14:27:01Z Authenticated to VALT
+2024-02-22T14:27:01Z Connection Successful
+2024-02-22T14:28:21Z Authenticated to VALT
+2024-02-22T14:28:21Z Connection Successful
+2024-02-22T14:42:43Z Initializing Application
+2024-02-22T14:42:44Z Authenticated to VALT
+2024-02-22T14:42:44Z Connection Successful
+2024-02-22T15:26:01Z Initializing Application
+2024-02-22T15:26:01Z Authenticated to VALT
+2024-02-22T15:26:01Z Connection Successful
+2024-02-22T15:26:41Z Initializing Application
+2024-02-22T15:26:41Z Authenticated to VALT
+2024-02-22T15:26:41Z Connection Successful
+2024-02-22T15:28:13Z Authenticated to VALT
+2024-02-22T15:28:13Z Connection Successful
+2024-02-22T15:28:40Z Authenticated to VALT
+2024-02-22T15:28:40Z Connection Successful
+2024-02-22T15:28:52Z Authenticated to VALT
+2024-02-22T15:28:52Z Connection Successful
+2024-02-22T15:51:00Z Initializing Application
+2024-02-22T15:51:00Z Authenticated to VALT
+2024-02-22T15:51:00Z Connection Successful
+2024-02-22T15:51:45Z Initializing Application
+2024-02-22T15:51:46Z Authenticated to VALT
+2024-02-22T15:51:46Z Connection Successful
+2024-02-22T15:52:18Z Initializing Application
+2024-02-22T15:52:19Z Authenticated to VALT
+2024-02-22T15:52:19Z Connection Successful
+2024-02-22T15:52:55Z Initializing Application
+2024-02-22T15:52:55Z Authenticated to VALT
+2024-02-22T15:52:56Z Connection Successful
+2024-02-22T15:53:15Z Initializing Application
+2024-02-22T15:53:15Z Authenticated to VALT
+2024-02-22T15:53:15Z Connection Successful
+2024-02-22T15:55:10Z Initializing Application
+2024-02-22T15:55:10Z Authenticated to VALT
+2024-02-22T15:55:10Z Connection Successful
+2024-02-22T15:56:22Z Initializing Application
+2024-02-22T15:56:23Z Authenticated to VALT
+2024-02-22T15:56:23Z Connection Successful
+2024-02-23T00:08:03Z Authenticated to VALT
+2024-02-23T08:08:03Z Authenticated to VALT
+2024-02-23T14:21:20Z Initializing Application
+2024-02-23T14:21:20Z Authenticated to VALT
+2024-02-23T14:21:20Z Connection Successful
+2024-02-23T14:21:57Z Authenticated to VALT
+2024-02-23T14:21:57Z Connection Successful
+2024-02-23T14:27:50Z Initializing Application
+2024-02-23T14:27:50Z Authenticated to VALT
+2024-02-23T14:27:51Z Connection Successful
+2024-02-23T14:28:05Z Initializing Application
+2024-02-23T14:28:05Z Authenticated to VALT
+2024-02-23T14:28:05Z Connection Successful
+2024-02-23T14:37:38Z Initializing Application
+2024-02-23T14:37:38Z Authenticated to VALT
+2024-02-23T14:37:38Z Connection Successful
+2024-02-23T16:53:10Z Initializing Application
+2024-02-23T16:53:10Z Authenticated to VALT
+2024-02-23T16:53:10Z Connection Successful
+2024-02-23T16:53:24Z Initializing Application
+2024-02-23T16:53:24Z Authenticated to VALT
+2024-02-23T16:53:24Z Connection Successful
+2024-02-23T16:53:35Z Initializing Application
+2024-02-23T16:53:35Z Authenticated to VALT
+2024-02-23T16:53:35Z Connection Successful
+2024-02-23T16:56:10Z Initializing Application
+2024-02-23T16:56:10Z Authenticated to VALT
+2024-02-23T16:56:10Z Connection Successful
+2024-02-26T08:16:36Z Initializing Application
+2024-02-26T08:16:36Z Authenticated to VALT
+2024-02-26T08:16:36Z Connection Successful
+2024-02-26T08:35:37Z Initializing Application
+2024-02-26T08:35:37Z Authenticated to VALT
+2024-02-26T08:35:38Z Connection Successful
+2024-02-26T08:35:38Z Current Room Status: 1
+2024-02-26T08:42:21Z Initializing Application
+2024-02-26T08:42:21Z Authenticated to VALT
+2024-02-26T08:42:21Z Connection Successful
+2024-02-26T08:42:21Z Current Room Status: 1
+2024-02-26T08:42:55Z Initializing Application
+2024-02-26T08:42:55Z Authenticated to VALT
+2024-02-26T08:42:56Z Connection Successful
+2024-02-26T08:42:56Z Current Room Status: 1
+2024-02-26T08:53:40Z Initializing Application
+2024-02-26T08:53:40Z Authenticated to VALT
+2024-02-26T08:53:40Z Connection Successful
+2024-02-26T08:53:40Z Current Room Status: 1
+2024-02-26T08:55:22Z Initializing Application
+2024-02-26T08:55:22Z Authenticated to VALT
+2024-02-26T08:55:22Z Connection Successful
+2024-02-26T08:55:22Z Current Room Status: 1
+2024-02-27T11:46:05Z Initializing Application
+2024-02-27T11:46:05Z Authenticated to VALT
+2024-02-27T11:46:05Z Connection Successful
+2024-02-27T11:46:05Z Current Room Status: 1
+2024-02-27T11:46:22Z Initializing Application
+2024-02-27T11:46:22Z Authenticated to VALT
+2024-02-27T11:46:22Z Connection Successful
+2024-02-27T11:46:23Z Current Room Status: 1
+2024-02-27T11:46:35Z Initializing Application
+2024-02-27T11:46:35Z Authenticated to VALT
+2024-02-27T11:46:35Z Connection Successful
+2024-02-27T11:46:36Z Current Room Status: 1
+2024-02-29T11:20:10Z Initializing Application
+2024-02-29T11:20:11Z Authenticated to VALT
+2024-02-29T11:20:11Z Connection Successful
+2024-02-29T11:20:11Z Current Room Status: 1
+2024-02-29T11:20:28Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T11:20:28Z admin
+2024-02-29T11:20:29Z Authentication FAILED
+2024-02-29T11:20:32Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T11:20:32Z admin
+2024-02-29T11:20:33Z Authentication FAILED
+2024-02-29T11:20:39Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T11:20:39Z admin
+2024-02-29T11:20:39Z Authenticated to VALT
+2024-02-29T11:20:40Z Connection Successful
+2024-02-29T11:20:41Z Connection Successful
+2024-02-29T11:20:42Z Current Room Status: 0
+2024-02-29T11:20:44Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T11:20:44Z admin
+2024-02-29T11:20:44Z Authenticated to VALT
+2024-02-29T11:20:45Z Connection Successful
+2024-02-29T11:20:48Z Current Room Status: 1
+2024-02-29T11:21:22Z Initializing Application
+2024-02-29T11:21:23Z Authenticated to VALT
+2024-02-29T11:21:23Z Connection Successful
+2024-02-29T11:21:24Z Current Room Status: 1
+2024-02-29T11:30:06Z Current Room Status: 0
+2024-02-29T11:30:36Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T11:30:36Z admin
+2024-02-29T11:30:37Z Authenticated to VALT
+2024-02-29T11:30:42Z Current Room Status: 1
+2024-02-29T13:02:35Z Initializing Application
+2024-02-29T13:02:36Z Authenticated to VALT
+2024-02-29T13:02:36Z Connection Successful
+2024-02-29T13:02:37Z Current Room Status: 1
+2024-02-29T13:05:00Z Initializing Application
+2024-02-29T13:05:04Z Authenticated to VALT
+2024-02-29T13:05:05Z Connection Successful
+2024-02-29T13:05:07Z Current Room Status: 1
+2024-02-29T13:05:34Z Initializing Application
+2024-02-29T13:05:34Z Authenticated to VALT
+2024-02-29T13:05:34Z Connection Successful
+2024-02-29T13:05:35Z Current Room Status: 1
+2024-02-29T13:06:26Z Initializing Application
+2024-02-29T13:06:27Z Authenticated to VALT
+2024-02-29T13:06:27Z Connection Successful
+2024-02-29T13:06:28Z Current Room Status: 1
+2024-02-29T13:08:35Z Initializing Application
+2024-02-29T13:08:36Z Authenticated to VALT
+2024-02-29T13:08:36Z Connection Successful
+2024-02-29T13:08:37Z Current Room Status: 1
+2024-02-29T13:10:35Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T13:10:35Z admin
+2024-02-29T13:10:36Z Authenticated to VALT
+2024-02-29T13:10:37Z Connection Successful
+2024-02-29T13:15:19Z Initializing Application
+2024-02-29T13:15:20Z Authenticated to VALT
+2024-02-29T13:15:20Z Connection Successful
+2024-02-29T13:15:20Z Current Room Status: 1
+2024-02-29T13:16:32Z Initializing Application
+2024-02-29T13:16:32Z Authenticated to VALT
+2024-02-29T13:16:32Z Connection Successful
+2024-02-29T13:16:33Z Current Room Status: 1
+2024-02-29T13:18:12Z Initializing Application
+2024-02-29T13:18:13Z Authenticated to VALT
+2024-02-29T13:18:13Z Connection Successful
+2024-02-29T13:18:14Z Current Room Status: 1
+2024-02-29T13:18:49Z Initializing Application
+2024-02-29T13:18:50Z Authenticated to VALT
+2024-02-29T13:18:50Z Connection Successful
+2024-02-29T13:18:51Z Current Room Status: 1
+2024-02-29T13:19:22Z Initializing Application
+2024-02-29T13:19:23Z Authenticated to VALT
+2024-02-29T13:19:23Z Connection Successful
+2024-02-29T13:19:25Z Current Room Status: 1
+2024-02-29T13:20:01Z Initializing Application
+2024-02-29T13:20:06Z Authentication FAILED
+2024-02-29T13:20:36Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T13:20:36Z admin
+2024-02-29T13:20:36Z Authenticated to VALT
+2024-02-29T13:20:37Z Connection Successful
+2024-02-29T13:20:41Z Current Room Status: 1
+2024-02-29T13:21:56Z Initializing Application
+2024-02-29T13:21:56Z Authenticated to VALT
+2024-02-29T13:21:57Z Connection Successful
+2024-02-29T13:21:57Z Current Room Status: 1
+2024-02-29T13:28:06Z Initializing Application
+2024-02-29T13:28:07Z Authenticated to VALT
+2024-02-29T13:28:07Z Connection Successful
+2024-02-29T13:28:08Z Current Room Status: 1
+2024-02-29T13:31:58Z Initializing Application
+2024-02-29T13:31:59Z Authenticated to VALT
+2024-02-29T13:31:59Z Connection Successful
+2024-02-29T13:32:00Z Current Room Status: 1
+2024-02-29T13:35:44Z Initializing Application
+2024-02-29T13:35:45Z Authenticated to VALT
+2024-02-29T13:35:46Z Connection Successful
+2024-02-29T13:35:46Z Current Room Status: 1
+2024-02-29T13:39:45Z Initializing Application
+2024-02-29T13:39:46Z Authenticated to VALT
+2024-02-29T13:39:46Z Connection Successful
+2024-02-29T13:39:46Z Current Room Status: 1
+2024-02-29T13:46:53Z Initializing Application
+2024-02-29T13:46:54Z Authenticated to VALT
+2024-02-29T13:46:54Z Connection Successful
+2024-02-29T13:46:55Z Current Room Status: 1
+2024-02-29T13:52:14Z Initializing Application
+2024-02-29T13:52:14Z Authenticated to VALT
+2024-02-29T13:52:15Z Connection Successful
+2024-02-29T13:52:15Z Current Room Status: 1
+2024-02-29T14:00:46Z Initializing Application
+2024-02-29T14:00:47Z Authenticated to VALT
+2024-02-29T14:00:47Z Connection Successful
+2024-02-29T14:00:48Z Current Room Status: 1
+2024-02-29T14:01:15Z Initializing Application
+2024-02-29T14:01:16Z Authenticated to VALT
+2024-02-29T14:01:16Z Connection Successful
+2024-02-29T14:01:17Z Current Room Status: 1
+2024-02-29T14:10:13Z Initializing Application
+2024-02-29T14:10:14Z Authenticated to VALT
+2024-02-29T14:10:14Z Connection Successful
+2024-02-29T14:10:15Z Current Room Status: 1
+2024-02-29T14:10:54Z Initializing Application
+2024-02-29T14:10:55Z Authenticated to VALT
+2024-02-29T14:10:55Z Connection Successful
+2024-02-29T14:10:56Z Current Room Status: 1
+2024-02-29T14:11:36Z Initializing Application
+2024-02-29T14:11:36Z Authenticated to VALT
+2024-02-29T14:11:36Z Connection Successful
+2024-02-29T14:11:37Z Current Room Status: 1
+2024-02-29T14:12:14Z Initializing Application
+2024-02-29T14:12:15Z Authenticated to VALT
+2024-02-29T14:12:15Z Connection Successful
+2024-02-29T14:12:16Z Current Room Status: 1
+2024-02-29T14:12:29Z Initializing Application
+2024-02-29T14:12:30Z Authenticated to VALT
+2024-02-29T14:12:30Z Connection Successful
+2024-02-29T14:12:30Z Current Room Status: 1
+2024-02-29T14:18:10Z Initializing Application
+2024-02-29T14:18:11Z Authenticated to VALT
+2024-02-29T14:18:11Z Connection Successful
+2024-02-29T14:18:12Z Current Room Status: 1
+2024-02-29T14:22:03Z Initializing Application
+2024-02-29T14:22:03Z Authenticated to VALT
+2024-02-29T14:22:03Z Connection Successful
+2024-02-29T14:22:04Z Current Room Status: 1
+2024-02-29T14:30:37Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-02-29T14:30:37Z admin
+2024-02-29T14:30:37Z Authenticated to VALT
+2024-02-29T14:30:38Z Connection Successful
+2024-02-29T14:30:42Z Current Room Status: 1
+2024-02-29T14:34:15Z https://demo.valt.video/api/v3/
+2024-02-29T14:34:15Z admin
+2024-02-29T14:34:15Z Authentication FAILED
+2024-02-29T14:34:20Z https://demo.valt.video/api/v3/
+2024-02-29T14:34:20Z admin
+2024-02-29T14:34:20Z Authenticated to VALT
+2024-02-29T14:34:21Z Connection Successful
+2024-02-29T14:34:24Z Current Room Status: 0
+2024-02-29T14:34:26Z https://demo.valt.video/api/v3/
+2024-02-29T14:34:26Z admin
+2024-02-29T14:34:27Z Authenticated to VALT
+2024-02-29T14:34:27Z Connection Successful
+2024-02-29T14:34:30Z Current Room Status: 1
+2024-02-29T15:06:11Z Initializing Application
+2024-02-29T15:06:11Z Authenticated to VALT
+2024-02-29T15:06:11Z Connection Successful
+2024-02-29T15:06:11Z Current Room Status: 1
+2024-02-29T15:10:03Z Initializing Application
+2024-02-29T15:10:03Z Authenticated to VALT
+2024-02-29T15:10:04Z Connection Successful
+2024-02-29T15:10:04Z Current Room Status: 1
+2024-02-29T15:13:40Z Initializing Application
+2024-02-29T15:13:40Z Authenticated to VALT
+2024-02-29T15:13:41Z Connection Successful
+2024-02-29T15:13:41Z Current Room Status: 1
+2024-02-29T15:14:26Z Initializing Application
+2024-02-29T15:14:26Z Authenticated to VALT
+2024-02-29T15:14:26Z Connection Successful
+2024-02-29T15:14:27Z Current Room Status: 1
+2024-02-29T15:14:37Z Initializing Application
+2024-02-29T15:14:37Z Authenticated to VALT
+2024-02-29T15:14:37Z Connection Successful
+2024-02-29T15:14:37Z Current Room Status: 1
+2024-02-29T17:06:38Z Initializing Application
+2024-02-29T17:06:38Z Authenticated to VALT
+2024-02-29T17:06:38Z Connection Successful
+2024-02-29T17:06:38Z Current Room Status: 1
+2024-02-29T17:07:02Z Initializing Application
+2024-02-29T17:07:02Z Authenticated to VALT
+2024-02-29T17:07:03Z Connection Successful
+2024-02-29T17:07:03Z Current Room Status: 1
+2024-03-01T08:29:51Z Initializing Application
+2024-03-01T08:29:51Z Authenticated to VALT
+2024-03-01T08:29:51Z Connection Successful
+2024-03-01T08:29:51Z Current Room Status: 1
+2024-03-01T08:30:12Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T08:30:12Z admin
+2024-03-01T08:30:12Z Authentication FAILED
+2024-03-01T08:30:16Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T08:30:16Z admin
+2024-03-01T08:30:17Z Authenticated to VALT
+2024-03-01T08:30:18Z Connection Successful
+2024-03-01T08:30:19Z Connection Successful
+2024-03-01T08:30:22Z Current Room Status: 0
+2024-03-01T08:30:24Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T08:30:24Z admin
+2024-03-01T08:30:24Z Authenticated to VALT
+2024-03-01T08:30:25Z Connection Successful
+2024-03-01T08:30:28Z Current Room Status: 1
+2024-03-01T08:30:36Z Initializing Application
+2024-03-01T08:30:37Z Authenticated to VALT
+2024-03-01T08:30:37Z Connection Successful
+2024-03-01T08:30:38Z Current Room Status: 1
+2024-03-01T08:30:45Z Initializing Application
+2024-03-01T08:30:46Z Authenticated to VALT
+2024-03-01T08:30:46Z Connection Successful
+2024-03-01T08:30:46Z Current Room Status: 1
+2024-03-01T08:31:13Z Initializing Application
+2024-03-01T08:31:13Z Authenticated to VALT
+2024-03-01T08:31:13Z Connection Successful
+2024-03-01T08:31:14Z Current Room Status: 1
+2024-03-01T08:40:35Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T08:40:35Z admin
+2024-03-01T08:40:36Z Authenticated to VALT
+2024-03-01T08:40:37Z Connection Successful
+2024-03-01T08:40:41Z Current Room Status: 1
+2024-03-01T08:50:45Z Initializing Application
+2024-03-01T08:50:45Z Authenticated to VALT
+2024-03-01T08:50:46Z Connection Successful
+2024-03-01T08:50:46Z Current Room Status: 1
+2024-03-01T08:52:03Z Initializing Application
+2024-03-01T08:52:04Z Authenticated to VALT
+2024-03-01T08:52:04Z Connection Successful
+2024-03-01T08:52:05Z Current Room Status: 1
+2024-03-01T08:55:35Z Initializing Application
+2024-03-01T08:55:36Z Authenticated to VALT
+2024-03-01T08:55:36Z Connection Successful
+2024-03-01T08:55:37Z Current Room Status: 1
+2024-03-01T09:03:02Z Initializing Application
+2024-03-01T09:03:03Z Authenticated to VALT
+2024-03-01T09:03:03Z Connection Successful
+2024-03-01T09:03:37Z Initializing Application
+2024-03-01T09:03:38Z Authenticated to VALT
+2024-03-01T09:03:38Z Connection Successful
+2024-03-01T09:09:10Z Initializing Application
+2024-03-01T09:09:11Z Authenticated to VALT
+2024-03-01T09:09:11Z Connection Successful
+2024-03-01T09:09:54Z Initializing Application
+2024-03-01T09:09:55Z Authenticated to VALT
+2024-03-01T09:09:55Z Connection Successful
+2024-03-01T09:11:47Z Initializing Application
+2024-03-01T09:11:48Z Authenticated to VALT
+2024-03-01T09:11:48Z Connection Successful
+2024-03-01T09:12:54Z Initializing Application
+2024-03-01T09:12:54Z Authenticated to VALT
+2024-03-01T09:12:54Z Connection Successful
+2024-03-01T09:16:08Z Initializing Application
+2024-03-01T09:16:09Z Authenticated to VALT
+2024-03-01T09:16:09Z Connection Successful
+2024-03-01T09:17:43Z Initializing Application
+2024-03-01T09:17:44Z Authenticated to VALT
+2024-03-01T09:17:44Z Connection Successful
+2024-03-01T09:19:06Z Initializing Application
+2024-03-01T09:19:07Z Authenticated to VALT
+2024-03-01T09:19:07Z Connection Successful
+2024-03-01T09:20:21Z Initializing Application
+2024-03-01T09:20:22Z Authenticated to VALT
+2024-03-01T09:20:22Z Connection Successful
+2024-03-01T09:20:42Z Initializing Application
+2024-03-01T09:20:42Z Authenticated to VALT
+2024-03-01T09:20:43Z Connection Successful
+2024-03-01T09:21:19Z Initializing Application
+2024-03-01T09:21:20Z Authenticated to VALT
+2024-03-01T09:21:20Z Connection Successful
+2024-03-01T09:22:18Z Initializing Application
+2024-03-01T09:22:18Z Authenticated to VALT
+2024-03-01T09:22:18Z Connection Successful
+2024-03-01T09:23:30Z Initializing Application
+2024-03-01T09:23:31Z Authenticated to VALT
+2024-03-01T09:23:31Z Connection Successful
+2024-03-01T09:24:12Z Initializing Application
+2024-03-01T09:24:12Z Authenticated to VALT
+2024-03-01T09:24:12Z Connection Successful
+2024-03-01T09:24:25Z Initializing Application
+2024-03-01T09:24:26Z Authenticated to VALT
+2024-03-01T09:24:26Z Connection Successful
+2024-03-01T09:25:36Z Authenticated to VALT
+2024-03-01T09:27:27Z Initializing Application
+2024-03-01T09:27:27Z Authenticated to VALT
+2024-03-01T09:27:27Z Connection Successful
+2024-03-01T09:27:35Z Initializing Application
+2024-03-01T09:27:35Z Authenticated to VALT
+2024-03-01T09:27:36Z Connection Successful
+2024-03-01T09:30:39Z Initializing Application
+2024-03-01T09:30:40Z Authenticated to VALT
+2024-03-01T09:30:40Z Connection Successful
+2024-03-01T09:34:42Z Initializing Application
+2024-03-01T09:34:43Z Authenticated to VALT
+2024-03-01T09:34:43Z Connection Successful
+2024-03-01T09:35:36Z Authenticated to VALT
+2024-03-01T09:35:44Z Initializing Application
+2024-03-01T09:35:45Z Authenticated to VALT
+2024-03-01T09:35:45Z Connection Successful
+2024-03-01T09:39:13Z Initializing Application
+2024-03-01T09:39:14Z Authenticated to VALT
+2024-03-01T09:39:14Z Connection Successful
+2024-03-01T09:41:47Z Initializing Application
+2024-03-01T09:41:48Z Authenticated to VALT
+2024-03-01T09:41:48Z Connection Successful
+2024-03-01T09:42:28Z Initializing Application
+2024-03-01T09:42:29Z Authenticated to VALT
+2024-03-01T09:42:29Z Connection Successful
+2024-03-01T09:42:34Z Recording Accessory Recording started in Room 1
+2024-03-01T09:42:49Z Recording stopped in Room 1
+2024-03-01T09:44:52Z Initializing Application
+2024-03-01T09:44:53Z Authenticated to VALT
+2024-03-01T09:44:53Z Connection Successful
+2024-03-01T09:45:42Z Authenticated to VALT
+2024-03-01T09:45:55Z Recording stopped in Room 1
+2024-03-01T09:46:39Z Initializing Application
+2024-03-01T09:46:40Z Authenticated to VALT
+2024-03-01T09:46:40Z Connection Successful
+2024-03-01T09:46:56Z Recording Accessory Recording started in Room 1
+2024-03-01T09:47:10Z Recording stopped in Room 1
+2024-03-01T09:48:32Z Initializing Application
+2024-03-01T09:48:32Z Authenticated to VALT
+2024-03-01T09:48:32Z Connection Successful
+2024-03-01T09:48:58Z Recording Accessory Recording started in Room 1
+2024-03-01T09:50:46Z Initializing Application
+2024-03-01T09:50:46Z Authenticated to VALT
+2024-03-01T09:50:47Z Connection Successful
+2024-03-01T09:52:33Z Initializing Application
+2024-03-01T09:52:34Z Authenticated to VALT
+2024-03-01T09:52:34Z Connection Successful
+2024-03-01T09:53:12Z Initializing Application
+2024-03-01T09:53:13Z Authenticated to VALT
+2024-03-01T09:53:13Z Connection Successful
+2024-03-01T09:53:18Z Initializing Application
+2024-03-01T09:53:18Z Authenticated to VALT
+2024-03-01T09:53:18Z Connection Successful
+2024-03-01T09:57:54Z Initializing Application
+2024-03-01T09:57:55Z Authenticated to VALT
+2024-03-01T09:57:55Z Connection Successful
+2024-03-01T09:58:36Z Initializing Application
+2024-03-01T09:58:37Z Authenticated to VALT
+2024-03-01T09:58:37Z Connection Successful
+2024-03-01T10:00:35Z Authenticated to VALT
+2024-03-01T10:01:15Z Initializing Application
+2024-03-01T10:01:16Z Authenticated to VALT
+2024-03-01T10:01:16Z Connection Successful
+2024-03-01T10:01:32Z Initializing Application
+2024-03-01T10:01:32Z Authenticated to VALT
+2024-03-01T10:01:35Z Connection Successful
+2024-03-01T10:01:46Z Recording stopped in Room 1
+2024-03-01T10:02:34Z Initializing Application
+2024-03-01T10:02:35Z Authenticated to VALT
+2024-03-01T10:02:35Z Connection Successful
+2024-03-01T10:02:43Z Initializing Application
+2024-03-01T10:02:43Z Authenticated to VALT
+2024-03-01T10:02:44Z Connection Successful
+2024-03-01T10:02:52Z Initializing Application
+2024-03-01T10:02:53Z Authenticated to VALT
+2024-03-01T10:02:53Z Connection Successful
+2024-03-01T10:02:59Z Recording Accessory Recording started in Room 1
+2024-03-01T10:03:13Z Initializing Application
+2024-03-01T10:03:13Z Authenticated to VALT
+2024-03-01T10:03:14Z Connection Successful
+2024-03-01T10:05:37Z Authenticated to VALT
+2024-03-01T10:13:28Z Initializing Application
+2024-03-01T10:13:28Z Authenticated to VALT
+2024-03-01T10:13:29Z Connection Successful
+2024-03-01T10:14:17Z Authenticated to VALT
+2024-03-01T10:15:19Z Recording Accessory Recording started in Room 1
+2024-03-01T10:16:20Z Initializing Application
+2024-03-01T10:16:20Z Authenticated to VALT
+2024-03-01T10:16:21Z Connection Successful
+2024-03-01T10:18:35Z Initializing Application
+2024-03-01T10:18:36Z Authenticated to VALT
+2024-03-01T10:18:36Z Connection Successful
+2024-03-01T10:20:35Z Authenticated to VALT
+2024-03-01T10:20:37Z Connection Successful
+2024-03-01T10:42:20Z Initializing Application
+2024-03-01T10:42:21Z Authenticated to VALT
+2024-03-01T10:42:22Z Connection Successful
+2024-03-01T10:42:50Z Initializing Application
+2024-03-01T10:42:50Z Authenticated to VALT
+2024-03-01T10:42:51Z Connection Successful
+2024-03-01T10:43:04Z Initializing Application
+2024-03-01T10:43:04Z Authenticated to VALT
+2024-03-01T10:43:05Z Connection Successful
+2024-03-01T10:43:24Z Initializing Application
+2024-03-01T10:43:25Z Authenticated to VALT
+2024-03-01T10:43:26Z Connection Successful
+2024-03-01T10:44:08Z Initializing Application
+2024-03-01T10:44:09Z Authenticated to VALT
+2024-03-01T10:44:10Z Connection Successful
+2024-03-01T10:44:20Z Initializing Application
+2024-03-01T10:44:20Z Authenticated to VALT
+2024-03-01T10:44:21Z Connection Successful
+2024-03-01T10:44:44Z Initializing Application
+2024-03-01T10:44:45Z Authenticated to VALT
+2024-03-01T10:44:46Z Connection Successful
+2024-03-01T10:46:38Z Initializing Application
+2024-03-01T10:46:39Z Authenticated to VALT
+2024-03-01T10:46:40Z Connection Successful
+2024-03-01T10:49:51Z Initializing Application
+2024-03-01T10:49:52Z Authenticated to VALT
+2024-03-01T10:49:52Z Connection Successful
+2024-03-01T10:52:30Z Initializing Application
+2024-03-01T10:52:30Z Authenticated to VALT
+2024-03-01T10:52:31Z Connection Successful
+2024-03-01T10:52:54Z Recording stopped in Room 1
+2024-03-01T10:54:48Z Initializing Application
+2024-03-01T10:54:48Z Authenticated to VALT
+2024-03-01T10:54:49Z Connection Successful
+2024-03-01T10:55:54Z Initializing Application
+2024-03-01T10:55:54Z Authenticated to VALT
+2024-03-01T10:55:55Z Connection Successful
+2024-03-01T11:00:38Z Authenticated to VALT
+2024-03-01T11:00:39Z Connection Successful
+2024-03-01T11:10:36Z Authenticated to VALT
+2024-03-01T11:10:37Z Connection Successful
+2024-03-01T11:20:37Z Authenticated to VALT
+2024-03-01T11:20:39Z Connection Successful
+2024-03-01T11:28:28Z Initializing Application
+2024-03-01T11:28:29Z Authenticated to VALT
+2024-03-01T11:28:29Z Connection Successful
+2024-03-01T11:32:59Z Initializing Application
+2024-03-01T11:33:01Z Authenticated to VALT
+2024-03-01T11:33:03Z Connection Successful
+2024-03-01T11:34:06Z Initializing Application
+2024-03-01T11:34:07Z Authenticated to VALT
+2024-03-01T11:34:08Z Connection Successful
+2024-03-01T11:35:31Z Initializing Application
+2024-03-01T11:35:31Z Authenticated to VALT
+2024-03-01T11:35:32Z Connection Successful
+2024-03-01T11:36:27Z Initializing Application
+2024-03-01T11:36:27Z Authenticated to VALT
+2024-03-01T11:36:28Z Connection Successful
+2024-03-01T11:37:16Z Initializing Application
+2024-03-01T11:37:17Z Authenticated to VALT
+2024-03-01T11:37:18Z Connection Successful
+2024-03-01T11:37:42Z Initializing Application
+2024-03-01T11:37:43Z Authenticated to VALT
+2024-03-01T11:37:44Z Connection Successful
+2024-03-01T11:41:41Z Initializing Application
+2024-03-01T11:41:42Z Authenticated to VALT
+2024-03-01T11:41:43Z Connection Successful
+2024-03-01T11:41:52Z Initializing Application
+2024-03-01T11:41:52Z Authenticated to VALT
+2024-03-01T11:41:53Z Connection Successful
+2024-03-01T11:42:40Z Initializing Application
+2024-03-01T11:42:40Z Authenticated to VALT
+2024-03-01T11:42:41Z Connection Successful
+2024-03-01T11:44:13Z Initializing Application
+2024-03-01T11:44:14Z Authenticated to VALT
+2024-03-01T11:44:14Z Connection Successful
+2024-03-01T11:45:22Z Recording Accessory Recording started in Room 1
+2024-03-01T11:45:33Z Recording stopped in Room 1
+2024-03-01T11:45:59Z Initializing Application
+2024-03-01T11:46:00Z Authenticated to VALT
+2024-03-01T11:46:03Z Connection Successful
+2024-03-01T11:46:21Z Initializing Application
+2024-03-01T11:46:22Z Authenticated to VALT
+2024-03-01T11:46:23Z Connection Successful
+2024-03-01T11:47:14Z Initializing Application
+2024-03-01T11:47:15Z Authenticated to VALT
+2024-03-01T11:47:16Z Connection Successful
+2024-03-01T11:47:50Z Initializing Application
+2024-03-01T11:47:51Z Authenticated to VALT
+2024-03-01T11:47:52Z Connection Successful
+2024-03-01T11:48:03Z Initializing Application
+2024-03-01T11:48:03Z Authenticated to VALT
+2024-03-01T11:48:04Z Connection Successful
+2024-03-01T11:48:30Z Initializing Application
+2024-03-01T11:48:30Z Authenticated to VALT
+2024-03-01T11:48:31Z Connection Successful
+2024-03-01T11:48:40Z Initializing Application
+2024-03-01T11:48:40Z Authenticated to VALT
+2024-03-01T11:48:41Z Connection Successful
+2024-03-01T11:49:50Z Initializing Application
+2024-03-01T11:49:50Z Authenticated to VALT
+2024-03-01T11:49:51Z Connection Successful
+2024-03-01T11:51:51Z Initializing Application
+2024-03-01T11:51:51Z Authenticated to VALT
+2024-03-01T11:51:52Z Connection Successful
+2024-03-01T13:16:13Z Initializing Application
+2024-03-01T13:16:14Z Authenticated to VALT
+2024-03-01T13:16:15Z Connection Successful
+2024-03-01T13:19:53Z Initializing Application
+2024-03-01T13:19:54Z Authenticated to VALT
+2024-03-01T13:19:55Z Connection Successful
+2024-03-01T13:20:35Z Authenticated to VALT
+2024-03-01T13:20:37Z Connection Successful
+2024-03-01T13:21:56Z Initializing Application
+2024-03-01T13:21:56Z Authenticated to VALT
+2024-03-01T13:21:57Z Connection Successful
+2024-03-01T13:22:36Z Initializing Application
+2024-03-01T13:22:37Z Authenticated to VALT
+2024-03-01T13:22:38Z Connection Successful
+2024-03-01T13:23:05Z Initializing Application
+2024-03-01T13:23:05Z Authenticated to VALT
+2024-03-01T13:23:06Z Connection Successful
+2024-03-01T13:23:44Z Initializing Application
+2024-03-01T13:23:44Z Authenticated to VALT
+2024-03-01T13:23:45Z Connection Successful
+2024-03-01T13:26:52Z Initializing Application
+2024-03-01T13:26:52Z Authenticated to VALT
+2024-03-01T13:26:53Z Connection Successful
+2024-03-01T13:27:09Z Initializing Application
+2024-03-01T13:27:10Z Authenticated to VALT
+2024-03-01T13:27:11Z Connection Successful
+2024-03-01T13:27:34Z Initializing Application
+2024-03-01T13:27:35Z Authenticated to VALT
+2024-03-01T13:27:36Z Connection Successful
+2024-03-01T13:28:23Z Initializing Application
+2024-03-01T13:28:24Z Authenticated to VALT
+2024-03-01T13:28:25Z Connection Successful
+2024-03-01T13:29:34Z Initializing Application
+2024-03-01T13:29:34Z Authenticated to VALT
+2024-03-01T13:29:35Z Connection Successful
+2024-03-01T13:31:02Z Initializing Application
+2024-03-01T13:31:03Z Authenticated to VALT
+2024-03-01T13:31:04Z Connection Successful
+2024-03-01T13:31:21Z Initializing Application
+2024-03-01T13:31:21Z Authenticated to VALT
+2024-03-01T13:31:22Z Connection Successful
+2024-03-01T13:32:27Z Initializing Application
+2024-03-01T13:32:27Z Authenticated to VALT
+2024-03-01T13:32:28Z Connection Successful
+2024-03-01T13:33:14Z Initializing Application
+2024-03-01T13:33:14Z Authenticated to VALT
+2024-03-01T13:33:15Z Connection Successful
+2024-03-01T13:33:30Z Initializing Application
+2024-03-01T13:33:30Z Authenticated to VALT
+2024-03-01T13:33:31Z Connection Successful
+2024-03-01T13:34:51Z Initializing Application
+2024-03-01T13:34:51Z Authenticated to VALT
+2024-03-01T13:34:52Z Connection Successful
+2024-03-01T13:35:14Z Initializing Application
+2024-03-01T13:35:15Z Authenticated to VALT
+2024-03-01T13:35:16Z Connection Successful
+2024-03-01T13:35:24Z Initializing Application
+2024-03-01T13:35:24Z Authenticated to VALT
+2024-03-01T13:35:25Z Connection Successful
+2024-03-01T13:53:02Z Initializing Application
+2024-03-01T13:53:03Z Authenticated to VALT
+2024-03-01T13:53:04Z Connection Successful
+2024-03-01T13:54:43Z Initializing Application
+2024-03-01T13:54:44Z Authenticated to VALT
+2024-03-01T13:54:45Z Connection Successful
+2024-03-01T13:55:33Z Initializing Application
+2024-03-01T13:55:34Z Authenticated to VALT
+2024-03-01T13:55:35Z Connection Successful
+2024-03-01T14:00:49Z Initializing Application
+2024-03-01T14:00:50Z Authenticated to VALT
+2024-03-01T14:00:51Z Connection Successful
+2024-03-01T14:01:47Z Initializing Application
+2024-03-01T14:01:48Z Authenticated to VALT
+2024-03-01T14:01:49Z Connection Successful
+2024-03-01T14:02:29Z Initializing Application
+2024-03-01T14:02:30Z Authenticated to VALT
+2024-03-01T14:02:31Z Connection Successful
+2024-03-01T14:02:49Z Initializing Application
+2024-03-01T14:02:49Z Authenticated to VALT
+2024-03-01T14:02:50Z Connection Successful
+2024-03-01T14:02:58Z Recording Accessory Recording started in Room 1
+2024-03-01T14:03:08Z Recording stopped in Room 1
+2024-03-01T14:03:57Z Initializing Application
+2024-03-01T14:03:57Z Authenticated to VALT
+2024-03-01T14:03:58Z Connection Successful
+2024-03-01T14:04:06Z Recording Accessory Recording started in Room 1
+2024-03-01T14:04:17Z Initializing Application
+2024-03-01T14:04:18Z Authenticated to VALT
+2024-03-01T14:04:19Z Connection Successful
+2024-03-01T14:04:28Z Recording stopped in Room 1
+2024-03-01T14:49:16Z Initializing Application
+2024-03-01T14:49:16Z Authenticated to VALT
+2024-03-01T14:49:17Z Connection Successful
+2024-03-01T14:49:34Z Initializing Application
+2024-03-01T14:49:34Z Authenticated to VALT
+2024-03-01T14:49:35Z Connection Successful
+2024-03-01T14:49:36Z Current Room Status: 1
+2024-03-01T14:50:00Z Initializing Application
+2024-03-01T14:50:05Z Authentication FAILED
+2024-03-01T14:50:21Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T14:50:21Z admin
+2024-03-01T14:50:21Z Authenticated to VALT
+2024-03-01T14:50:22Z Connection Successful
+2024-03-01T14:50:23Z Connection Successful
+2024-03-01T14:50:26Z Current Room Status: 1
+2024-03-01T14:52:55Z Initializing Application
+2024-03-01T14:52:56Z Authenticated to VALT
+2024-03-01T14:52:56Z Connection Successful
+2024-03-01T14:52:57Z Current Room Status: 1
+2024-03-01T14:53:16Z Initializing Application
+2024-03-01T14:53:17Z Authenticated to VALT
+2024-03-01T14:53:17Z Connection Successful
+2024-03-01T14:53:18Z Current Room Status: 1
+2024-03-01T14:54:03Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T14:54:03Z admin
+2024-03-01T14:54:04Z Authenticated to VALT
+2024-03-01T14:54:05Z Connection Successful
+2024-03-01T14:54:19Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T14:54:19Z admin
+2024-03-01T14:54:20Z Authenticated to VALT
+2024-03-01T14:54:21Z Connection Successful
+2024-03-01T14:55:17Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T14:55:17Z admin
+2024-03-01T14:55:18Z Authenticated to VALT
+2024-03-01T14:55:19Z Connection Successful
+2024-03-01T14:56:43Z Initializing Application
+2024-03-01T14:56:44Z Authenticated to VALT
+2024-03-01T14:56:44Z Connection Successful
+2024-03-01T14:56:44Z Current Room Status: 1
+2024-03-01T14:57:27Z Initializing Application
+2024-03-01T14:57:28Z Authenticated to VALT
+2024-03-01T14:57:28Z Connection Successful
+2024-03-01T14:57:29Z Current Room Status: 1
+2024-03-01T14:57:39Z Initializing Application
+2024-03-01T14:57:40Z Authenticated to VALT
+2024-03-01T14:57:40Z Connection Successful
+2024-03-01T14:57:41Z Current Room Status: 1
+2024-03-01T15:01:11Z Initializing Application
+2024-03-01T15:02:01Z Initializing Application
+2024-03-01T15:02:03Z Authenticated to VALT
+2024-03-01T15:02:03Z Connection Successful
+2024-03-01T15:02:04Z Current Room Status: 1
+2024-03-01T15:07:40Z Initializing Application
+2024-03-01T15:07:41Z Authenticated to VALT
+2024-03-01T15:07:41Z Connection Successful
+2024-03-01T15:07:42Z Current Room Status: 1
+2024-03-01T15:08:15Z Initializing Application
+2024-03-01T15:08:15Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:08:15Z admin
+2024-03-01T15:08:15Z Authenticated to VALT
+2024-03-01T15:08:16Z Connection Successful
+2024-03-01T15:08:30Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:08:30Z admin
+2024-03-01T15:08:31Z Authenticated to VALT
+2024-03-01T15:08:33Z Connection Successful
+2024-03-01T15:08:38Z Current Room Status: 1
+2024-03-01T15:08:38Z Current Room Status: 1
+2024-03-01T15:08:58Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:08:58Z admin
+2024-03-01T15:08:59Z Authenticated to VALT
+2024-03-01T15:09:02Z Connection Successful
+2024-03-01T15:09:07Z Current Room Status: 1
+2024-03-01T15:09:07Z Current Room Status: 1
+2024-03-01T15:09:24Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:09:24Z admin
+2024-03-01T15:09:25Z Authenticated to VALT
+2024-03-01T15:09:27Z Connection Successful
+2024-03-01T15:09:30Z Current Room Status: 1
+2024-03-01T15:09:30Z Current Room Status: 1
+2024-03-01T15:09:36Z Current Room Status: 1
+2024-03-01T15:09:36Z Current Room Status: 1
+2024-03-01T15:09:42Z Initializing Application
+2024-03-01T15:09:43Z Authenticated to VALT
+2024-03-01T15:09:43Z Connection Successful
+2024-03-01T15:09:44Z Current Room Status: 1
+2024-03-01T15:10:06Z Initializing Application
+2024-03-01T15:10:06Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:10:06Z admin
+2024-03-01T15:10:08Z Authenticated to VALT
+2024-03-01T15:10:08Z Connection Successful
+2024-03-01T15:11:36Z Initializing Application
+2024-03-01T15:11:37Z Authenticated to VALT
+2024-03-01T15:11:37Z Connection Successful
+2024-03-01T15:11:37Z Current Room Status: 1
+2024-03-01T15:13:30Z Initializing Application
+2024-03-01T15:13:31Z Authenticated to VALT
+2024-03-01T15:13:31Z Connection Successful
+2024-03-01T15:13:32Z Current Room Status: 1
+2024-03-01T15:13:55Z Initializing Application
+2024-03-01T15:13:55Z Authenticated to VALT
+2024-03-01T15:13:55Z Connection Successful
+2024-03-01T15:13:56Z Current Room Status: 1
+2024-03-01T15:14:08Z Initializing Application
+2024-03-01T15:14:09Z Authenticated to VALT
+2024-03-01T15:14:09Z Connection Successful
+2024-03-01T15:14:10Z Current Room Status: 1
+2024-03-01T15:14:38Z https://demo.valt.video/api/v3/
+2024-03-01T15:14:38Z admin
+2024-03-01T15:14:38Z Authentication FAILED
+2024-03-01T15:14:45Z https://demo.valt.video/api/v3/
+2024-03-01T15:14:45Z admin
+2024-03-01T15:14:45Z Authentication FAILED
+2024-03-01T15:15:01Z https://demo.valt.video/api/v3/
+2024-03-01T15:15:01Z admin
+2024-03-01T15:15:01Z Authenticated to VALT
+2024-03-01T15:15:01Z Connection Successful
+2024-03-01T15:15:03Z Current Room Status: 0
+2024-03-01T15:15:10Z https://demo.valt.video/api/v3/
+2024-03-01T15:15:10Z admin
+2024-03-01T15:15:10Z Authenticated to VALT
+2024-03-01T15:15:10Z Connection Successful
+2024-03-01T15:15:14Z Current Room Status: 1
+2024-03-01T15:15:47Z Initializing Application
+2024-03-01T15:15:48Z Authenticated to VALT
+2024-03-01T15:15:48Z Connection Successful
+2024-03-01T15:15:48Z Current Room Status: 1
+2024-03-01T15:16:55Z Initializing Application
+2024-03-01T15:16:55Z Authenticated to VALT
+2024-03-01T15:16:55Z Connection Successful
+2024-03-01T15:16:56Z Current Room Status: 1
+2024-03-01T15:18:09Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:18:09Z admin
+2024-03-01T15:18:09Z Authentication FAILED
+2024-03-01T15:18:20Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:18:20Z admin
+2024-03-01T15:18:20Z Authenticated to VALT
+2024-03-01T15:18:21Z Connection Successful
+2024-03-01T15:18:22Z Connection Successful
+2024-03-01T15:18:23Z Current Room Status: 0
+2024-03-01T15:18:26Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:18:26Z admin
+2024-03-01T15:18:27Z Authenticated to VALT
+2024-03-01T15:18:27Z Connection Successful
+2024-03-01T15:18:29Z Current Room Status: 1
+2024-03-01T15:20:59Z Initializing Application
+2024-03-01T15:20:59Z Authenticated to VALT
+2024-03-01T15:20:59Z Connection Successful
+2024-03-01T15:21:00Z Current Room Status: 1
+2024-03-01T15:21:05Z Initializing Application
+2024-03-01T15:21:05Z Authenticated to VALT
+2024-03-01T15:21:06Z Connection Successful
+2024-03-01T15:21:06Z Current Room Status: 1
+2024-03-01T15:24:22Z Initializing Application
+2024-03-01T15:24:23Z Authenticated to VALT
+2024-03-01T15:24:26Z Initializing Application
+2024-03-01T15:24:27Z Authenticated to VALT
+2024-03-01T15:24:27Z Connection Successful
+2024-03-01T15:24:28Z Current Room Status: 1
+2024-03-01T15:25:36Z Initializing Application
+2024-03-01T15:25:37Z Authenticated to VALT
+2024-03-01T15:25:37Z Connection Successful
+2024-03-01T15:25:38Z Current Room Status: 1
+2024-03-01T15:26:45Z Initializing Application
+2024-03-01T15:26:45Z Authenticated to VALT
+2024-03-01T15:26:46Z Connection Successful
+2024-03-01T15:26:46Z Current Room Status: 1
+2024-03-01T15:30:26Z Initializing Application
+2024-03-01T15:30:27Z Authenticated to VALT
+2024-03-01T15:30:27Z Connection Successful
+2024-03-01T15:30:28Z Current Room Status: 1
+2024-03-01T15:31:05Z Initializing Application
+2024-03-01T15:31:05Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:31:05Z admin
+2024-03-01T15:31:06Z Authenticated to VALT
+2024-03-01T15:31:06Z Connection Successful
+2024-03-01T15:35:28Z Initializing Application
+2024-03-01T15:35:28Z Authenticated to VALT
+2024-03-01T15:35:29Z Connection Successful
+2024-03-01T15:35:29Z Current Room Status: 1
+2024-03-01T15:36:15Z https://demo.valt.video/api/v3/
+2024-03-01T15:36:15Z admin
+2024-03-01T15:36:15Z Authentication FAILED
+2024-03-01T15:36:45Z https://demo.valt.video/api/v3/
+2024-03-01T15:36:45Z admin
+2024-03-01T15:36:45Z Authentication FAILED
+2024-03-01T15:37:15Z https://demo.valt.video/api/v3/
+2024-03-01T15:37:15Z admin
+2024-03-01T15:37:15Z Authentication FAILED
+2024-03-01T15:37:45Z https://demo.valt.video/api/v3/
+2024-03-01T15:37:45Z admin
+2024-03-01T15:37:45Z Authentication FAILED
+2024-03-01T15:38:11Z https://demo.valt.video/api/v3/
+2024-03-01T15:38:11Z admin
+2024-03-01T15:38:11Z Authentication FAILED
+2024-03-01T15:38:32Z https://demo.valt.video/api/v3/
+2024-03-01T15:38:32Z admin
+2024-03-01T15:38:33Z Authenticated to VALT
+2024-03-01T15:38:33Z Connection Successful
+2024-03-01T15:38:35Z Current Room Status: 0
+2024-03-01T15:38:37Z https://demo.valt.video/api/v3/
+2024-03-01T15:38:37Z admin
+2024-03-01T15:38:37Z Authenticated to VALT
+2024-03-01T15:38:37Z Connection Successful
+2024-03-01T15:38:40Z Current Room Status: 1
+2024-03-01T15:40:17Z Initializing Application
+2024-03-01T15:40:17Z Authenticated to VALT
+2024-03-01T15:40:17Z Connection Successful
+2024-03-01T15:40:17Z Current Room Status: 1
+2024-03-01T15:40:51Z Initializing Application
+2024-03-01T15:40:51Z Authenticated to VALT
+2024-03-01T15:40:51Z Connection Successful
+2024-03-01T15:40:51Z Current Room Status: 1
+2024-03-01T15:44:42Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:44:42Z admin
+2024-03-01T15:44:42Z Authentication FAILED
+2024-03-01T15:44:47Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:44:47Z admin
+2024-03-01T15:44:47Z Authentication FAILED
+2024-03-01T15:44:54Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:44:54Z admin
+2024-03-01T15:44:54Z Authenticated to VALT
+2024-03-01T15:44:55Z Connection Successful
+2024-03-01T15:44:56Z Connection Successful
+2024-03-01T15:44:57Z Current Room Status: 1
+2024-03-01T15:44:58Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:44:58Z admin
+2024-03-01T15:44:59Z Authenticated to VALT
+2024-03-01T15:45:00Z Connection Successful
+2024-03-01T15:50:35Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-01T15:50:35Z admin
+2024-03-01T15:50:36Z Authenticated to VALT
+2024-03-01T15:50:36Z Connection Successful
+2024-03-01T15:50:41Z Current Room Status: 1
+2024-03-01T15:52:33Z Initializing Application
+2024-03-01T15:52:33Z Authenticated to VALT
+2024-03-01T15:52:34Z Connection Successful
+2024-03-01T15:52:35Z Current Room Status: 1
+2024-03-01T15:54:28Z Recording Accessory Recording started in Room 1
+2024-03-01T15:54:28Z Current Room Status: 2
+2024-03-01T15:54:35Z Recording paused in Room 1
+2024-03-01T15:54:35Z Current Room Status: 3
+2024-03-01T15:55:26Z Initializing Application
+2024-03-01T15:55:27Z Authenticated to VALT
+2024-03-01T15:55:27Z Connection Successful
+2024-03-01T15:55:27Z Current Room Status: 3
+2024-03-01T15:56:20Z Recording resumed in Room 1
+2024-03-01T15:56:20Z Current Room Status: 2
+2024-03-01T15:56:30Z Recording paused in Room 1
+2024-03-01T15:56:30Z Current Room Status: 3
+2024-03-01T15:56:35Z Recording resumed in Room 1
+2024-03-01T16:02:17Z Initializing Application
+2024-03-01T16:02:18Z Authenticated to VALT
+2024-03-01T16:02:18Z Connection Successful
+2024-03-01T16:02:19Z Current Room Status: 2
+2024-03-01T16:02:55Z Initializing Application
+2024-03-01T16:02:56Z Authenticated to VALT
+2024-03-01T16:02:56Z Connection Successful
+2024-03-01T16:02:57Z Current Room Status: 2
+2024-03-01T16:03:41Z Initializing Application
+2024-03-01T16:03:41Z Authenticated to VALT
+2024-03-01T16:03:42Z Connection Successful
+2024-03-01T16:03:43Z Current Room Status: 2
+2024-03-01T16:03:52Z Recording stopped in Room 1
+2024-03-01T16:03:52Z Current Room Status: 1
+2024-03-01T16:03:56Z Recording Accessory Recording started in Room 1
+2024-03-01T16:03:56Z Current Room Status: 2
+2024-03-01T16:04:06Z Recording paused in Room 1
+2024-03-01T16:04:06Z Current Room Status: 3
+2024-03-01T16:04:37Z Recording resumed in Room 1
+2024-03-01T16:04:37Z Current Room Status: 2
+2024-03-01T16:06:29Z Initializing Application
+2024-03-01T16:06:30Z Authenticated to VALT
+2024-03-01T16:06:30Z Connection Successful
+2024-03-01T16:06:31Z Current Room Status: 1
+2024-03-01T16:06:40Z Recording Accessory Recording started in Room 1
+2024-03-01T16:06:40Z Current Room Status: 2
+2024-03-01T16:06:48Z Recording stopped in Room 1
+2024-03-01T16:06:48Z Current Room Status: 1
+2024-03-01T16:06:58Z Initializing Application
+2024-03-01T16:06:58Z Authenticated to VALT
+2024-03-01T16:06:58Z Connection Successful
+2024-03-01T16:06:59Z Current Room Status: 1
+2024-03-01T16:07:04Z Initializing Application
+2024-03-01T16:07:04Z Authenticated to VALT
+2024-03-01T16:07:05Z Connection Successful
+2024-03-01T16:07:05Z Current Room Status: 1
+2024-03-01T16:27:31Z Initializing Application
+2024-03-01T16:27:31Z Authenticated to VALT
+2024-03-01T16:27:32Z Connection Successful
+2024-03-01T16:27:32Z Current Room Status: 1
+2024-03-01T16:28:27Z Initializing Application
+2024-03-01T16:28:27Z Authenticated to VALT
+2024-03-01T16:28:28Z Connection Successful
+2024-03-01T16:28:28Z Current Room Status: 1
+2024-03-01T16:45:46Z Initializing Application
+2024-03-01T16:45:47Z Authenticated to VALT
+2024-03-01T16:45:47Z Connection Successful
+2024-03-01T16:45:48Z Current Room Status: 1
+2024-03-01T16:51:18Z Initializing Application
+2024-03-01T16:51:18Z Authenticated to VALT
+2024-03-01T16:51:19Z Connection Successful
+2024-03-01T16:51:19Z Current Room Status: 1
+2024-03-04T08:22:59Z Initializing Application
+2024-03-04T08:22:59Z Authenticated to VALT
+2024-03-04T08:23:00Z Connection Successful
+2024-03-04T08:23:02Z Current Room Status: 1
+2024-03-04T08:24:06Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-04T08:24:06Z admin
+2024-03-04T08:24:06Z Authenticated to VALT
+2024-03-04T08:24:07Z Connection Successful
+2024-03-04T08:24:11Z Current Room Status: 1
+2024-03-04T08:30:48Z Initializing Application
+2024-03-04T08:30:48Z Authenticated to VALT
+2024-03-04T08:30:49Z Connection Successful
+2024-03-04T08:30:49Z Current Room Status: 1
+2024-03-04T08:31:42Z https://ivstest3.ad.ipivs.com/api/v3/
+2024-03-04T08:31:42Z admin
+2024-03-04T08:31:42Z Authenticated to VALT
+2024-03-04T08:31:43Z Connection Successful
+2024-03-04T08:31:48Z Current Room Status: 1

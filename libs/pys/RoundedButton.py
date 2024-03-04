@@ -21,6 +21,10 @@ class RoundedButton(ButtonBehavior, Label):
 		super(RoundedButton, self).__init__(**kwargs)
 		self.current_button_color = self.button_color
 		self.draw()
+		self.shorten = True
+		self.shorten_from = "right"
+		self.valign = "center"
+		self.halign = "center"
 	def draw(self,*args):
 		with self.canvas.before:
 			self.shape_color = Color(self.current_button_color)
@@ -30,6 +34,7 @@ class RoundedButton(ButtonBehavior, Label):
 	def update_shape(self, *args):
 		self.shape.pos = self.pos
 		self.shape.size = self.size
+		self.text_size = (self.width, self.height)
 	def on_button_radius(self,instance,value):
 		self.button_radius = value
 		if self.shape != None:

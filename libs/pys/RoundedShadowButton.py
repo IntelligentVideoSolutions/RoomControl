@@ -22,6 +22,10 @@ class RoundedShadowButton(ButtonBehavior, Label):
 		super(RoundedShadowButton, self).__init__(**kwargs)
 		self.current_button_color = self.button_color
 		self.draw()
+		self.shorten = True
+		self.shorten_from = "right"
+		self.valign = "center"
+		self.halign = "center"
 	def draw(self,*args):
 		with self.canvas.before:
 			self.shadow_color = Color(rgba=(0, 0, 0, 0.25))
@@ -35,6 +39,7 @@ class RoundedShadowButton(ButtonBehavior, Label):
 		self.shape.size = self.size
 		self.shadow.pos = self.pos
 		self.shadow.size = self.size
+		self.text_size = (self.width, self.height)
 	def on_button_radius(self,instance,value):
 		self.button_radius = value
 		if self.shape != None:

@@ -1,5 +1,5 @@
 # IVS Accessory Framework
-# Version 2.2.1
+# Version 2.2.2
 # Last Updated: 1/24/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
@@ -22,6 +22,7 @@ from kivy.uix.settings import SettingItem
 from kivy.metrics import dp,sp
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
+from kivy.utils import platform
 
 # Standard Python Imports
 import time, netifaces, os, json, threading
@@ -66,11 +67,6 @@ class IVS_Accessory_Framework(App):
 	configfilerechecktime = 5  # Interval in seconds to recheck config files for changes from the web interface.
 	updatedconfig = False
 	screenmgmt = ScreenManager(transition=SwapTransition())
-	imagepath = 'images/'
-	logpath = "logs/ivs.log"
-	timezonefilepath = 'config/timezones.json'
-	versionfilepath = 'config/version.json'
-	configfilepath = 'config/accessory.ini'
 	executedelay = .1  # Number of seconds to wait between a button press and execution of an API call. API calls "freeze" the application while waiting on a response, so this allows a screen update to be sent prior to the freeze. This should no longer be used as everything should now be utilizing threading.
 	standardfontsize = "15sp"  # default size of font used in text labels and field.
 	standardfontcolor = (98/255,98/255,98/255,1)
@@ -79,27 +75,21 @@ class IVS_Accessory_Framework(App):
 	roomchecktime = 5  # Number of seconds to wait between room status checks against the VALT server.
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
 	orientation = ""
-	debug = False
-	# if os.name == "nt":
-	# 	# kvpath = 'C:/Users/jbuttitta/PycharmProjects/'
-	# 	# imagepath = 'images\\'
-	# 	# logpath = "logs/ivs.log"
-	# 	# timezonefilepath = 'config\\timezones.json'
-	# 	# versionfilepath = 'config\\version.json'
-	# 	# configfilepath = 'config\\accessory.ini'
-	# 	pass
-	# else:
-	# 	# kvpath = '/usr/local/ivs/'
-	# 	# imagepath = '/usr/local/ivs/images/'
-	# 	logpath = "/usr/local/ivs/logs/ivs.log"
-	# 	timezonefilepath = '/usr/local/ivs/config/timezones.json'
-	# 	versionfilepath = '/usr/local/ivs/config/version.json'
-	# 	configfilepath = '/usr/local/ivs/config/accessory.ini'
+	debug = True
+	if platform == "linux":
+		working_path = str(os.path.dirname(__file__)) + "/../../../"
+	else:
+		working_path = ""
+	imagepath = working_path + 'images/'
+	logpath = working_path + "logs/ivs.log"
+	timezonefilepath = working_path + 'config/timezones.json'
+	versionfilepath = working_path + 'config/version.json'
+	configfilepath = working_path + 'config/accessory.ini'
 	def load_kv_files(self):
-		Builder.load_file('libs/modules/Framework/ivs_accessory_framework.kv')
-		Builder.load_file('libs/modules/CameraControl/CameraControl.kv')
-		Builder.load_file('libs/modules/ScheduleDisplay/ScheduleDisplay.kv')
-		Builder.load_file('libs/modules/Keypad/Keypad.kv')
+		Builder.load_file(self.working_path + 'libs/modules/Framework/ivs_accessory_framework.kv')
+		Builder.load_file(self.working_path + 'libs/modules/CameraControl/CameraControl.kv')
+		Builder.load_file(self.working_path + 'libs/modules/ScheduleDisplay/ScheduleDisplay.kv')
+		Builder.load_file(self.working_path + 'libs/modules/Keypad/Keypad.kv')
 
 	def build(self):
 		# self.icon=self.imagepath + 'valticon.png'
@@ -183,6 +173,7 @@ class IVS_Accessory_Framework(App):
 		pass
 
 	def valt_config_change(self, key, value, b):
+		self.close_apps()
 		self.valt.changeserver(self.config.get("valt", "server"), self.config.get("valt", "username"),
 							   self.config.get("valt", "password"))
 		valtrooms = self.valt.getrooms()
@@ -285,7 +276,8 @@ class IVS_Accessory_Framework(App):
 
 	def reinitialize(self):
 		self.notification = self.msgbox("Applying Changes. Please wait...", height='150dp', title="Notification")
-		self.event_initalize = Clock.schedule_once(self.initialize, self.executedelay)
+		self.close_apps()
+		self.event_initialize = Clock.schedule_once(self.initialize, self.executedelay)
 
 	def initialize(self, b):
 		ivs.log("Initializing Application", self.logpath)
@@ -294,8 +286,13 @@ class IVS_Accessory_Framework(App):
 		self.enable_disable_clock()
 
 	def connecttovalt(self):
-		self.valt = VALT(self.config.get("valt", "server"), self.config.get("valt", "username"),
-							 self.config.get("valt", "password"), self.logpath,room=self.config.get("valt", "room"))
+		#TODO: Change this so it doesn't reconnect to VALT if the settings are the same.
+		self.close_apps()
+		if not hasattr(self,"valt"):
+			self.valt = VALT(self.config.get("valt", "server"), self.config.get("valt", "username"), self.config.get("valt", "password"), self.logpath,room=self.config.get("valt", "room"))
+		else:
+			self.valt.changeserver(self.config.get("valt", "server"), self.config.get("valt", "username"),self.config.get("valt", "password"))
+			self.valt.room=self.config.get("valt", "room")
 		self.valt.bind_to_selected_room_status(self.room_status_change)
 		self.valt.bind_to_errormg(self.error_message)
 		if self.debug:
@@ -356,6 +353,7 @@ class IVS_Accessory_Framework(App):
 	@mainthread
 	def connfailure(self):
 		self.config.set('valt', 'status', 'Not Connected')
+		self.close_apps()
 		try:
 			self.event_checkvalt.cancel()
 		except:
@@ -458,8 +456,9 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.get_screen(self.homescreen).ids.recording_time.color = (1, 0, 0, 1)
 		self.screenmgmt.get_screen('Portrait_Home_Screen').ids['display_room_name'].color = (1, 0, 0, 1)
 		self.screenmgmt.get_screen('Landscape_Home_Screen').ids['display_room_name'].color = (1, 0, 0, 1)
-		if int(self.config.get('application', 'recbutton')):
-			self.addpausestopbuttons()
+		self.addremovebuttons()
+		# if int(self.config.get('application', 'recbutton')):
+		# 	self.addpausestopbuttons()
 		# lbl = Label(size_hint=(.6,1))
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(lbl)
 
@@ -478,10 +477,11 @@ class IVS_Accessory_Framework(App):
 	@mainthread
 	def updrecoff(self):
 		self.clear_feedback()
-		if int(self.config.get('application', 'recbutton')):
-			self.addrecordingbutton()
-		if int(self.config.get('application', 'privbutton')):
-			self.addlockbutton()
+		# if int(self.config.get('application', 'recbutton')):
+		# 	self.addrecordingbutton()
+		# if int(self.config.get('application', 'privbutton')):
+		# 	self.addlockbutton()
+		self.addremovebuttons()
 		try:
 			# print("test")
 			self.recevent.cancel()
@@ -675,17 +675,18 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
 		if self.config.get('valt', 'status') == "Connected":
 			if int(self.config.get('application', 'recbutton')):
-				if self.recstarttime == 0:
+				# if self.recstarttime == 0:
+				if self.valt.selected_room_status == 1:
 					self.addrecordingbutton()
-				else:
+				elif self.valt.selected_room_status == 2:
 					self.addpausestopbuttons()
+				elif self.valt.selected_room_status == 3:
+					self.addresumebutton()
 			if int(self.config.get('application', 'privbutton')):
-				if self.recstarttime == 0:
-					# if self.valt.getroomstatus(self.config.get("valt", "room")) == 4:
-					if self.valt.selected_room_status == 4:
-						self.addunlockbutton()
-					else:
-						self.addlockbutton()
+				if self.valt.selected_room_status == 1:
+					self.addlockbutton()
+				elif self.valt.selected_room_status == 4:
+					self.addunlockbutton()
 
 	def getnetworkinfo(self):
 		lblwidth = sp(100)
@@ -1207,6 +1208,8 @@ class IVS_Accessory_Framework(App):
 			self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
 							   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
 							   volume=self.config.get("application", "audio"))
+			if self.debug:
+				self.lw.debug = True
 		elif self.config.get("application", "mode") == "Schedule":
 			self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
 		elif self.config.get("application", "mode") == "Keypad":
@@ -1293,5 +1296,13 @@ class IVS_Accessory_Framework(App):
 
 	def error_message(self,current_error_message):
 		self.update_feedback(current_error_message,(1,0,0,1))
+
+	def close_apps(self):
+		if self.debug:
+			ivs.log("Terminating all Open Applications")
+		try:
+			self.lw.disconnect()
+		except:
+			pass
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()

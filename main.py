@@ -1,11 +1,11 @@
 from libs.modules.Framework import ivs_accessory_framework
 import os
 from kivy.utils import platform
-from jnius import autoclass
+# from jnius import autoclass
 # from multiprocessing.dummy import Process
 from kivy.clock import Clock
 
-__version__ = "2.2.1"
+__version__ = "2.2.2"
 
 
 if platform == "android":

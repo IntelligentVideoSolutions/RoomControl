@@ -162,3 +162,8 @@ class ScheduleDisplay(RelativeLayout):
 			pass
 	def ClearSchedule(self,dt):
 		self.schedgrid.clear_widgets()
+	def disconnect(self):
+		try:
+			self.event_buildschedule.cancel()
+		except:
+			pass

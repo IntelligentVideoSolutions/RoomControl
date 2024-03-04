@@ -30,12 +30,18 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 	def __init__(self,**kwargs):
 		super(RoundedShadowButtonWithImage, self).__init__(**kwargs)
 		self.lbl = Label(color=self.color, text=self.text, font_size=self.font_size,size_hint=(None,None),bold=True)
+		# self.lbl.size = self.lbl.texture_size
 		self.add_widget(self.lbl)
 		self.img = Image(source=self.img_source,size_hint=(None,None),height=self.img_height,width=self.img_width)
 		self.add_widget(self.img)
 		self.current_button_color = self.button_color
 		self.draw()
-		Clock.schedule_once(self.update_shape,-1)
+		# self.lbl.shorten = True
+		# self.lbl.shorten_from = "right"
+		# self.lbl.valign = "center"
+		# self.lbl.halign = "center"
+		self.lbl.bind(texture_size=self.update_shape)
+		# Clock.schedule_once(self.update_shape,-1)
 	def draw(self,*args):
 		with self.canvas.before:
 			self.shadow_color = Color(rgba=(0, 0, 0, 0.25))
@@ -49,11 +55,19 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 		self.shape.size = self.size
 		self.shadow.pos = (0,0)
 		self.shadow.size = self.size
+		max_size = self.width-self.img_width-self.buffer
 		self.lbl.size = self.lbl.texture_size
 		img_pos_x=(self.width-(self.lbl.texture_size[0] + self.img.width + self.buffer))/2
+		#img_pos_x=(self.width-(self.lbl.texture_size[0] + self.img.width))
 		self.img.pos=(img_pos_x,self.height/2-self.img.height/2)
 		lbl_pos_x = img_pos_x + self.img.width + self.buffer
 		self.lbl.pos=(lbl_pos_x,self.height/2-self.lbl.height/2)
+		# print("Text: " + str(self.lbl.text))
+		# print("Label Text Size: " + str(self.lbl.text_size))
+		# print("Shape Size: " + str(self.size))
+		# print("Label Texture Size: " + str(self.lbl.texture_size))
+		# print("Label Position: " + str(self.lbl.pos))
+		# print("Image Position: " + str(self.img.pos))
 
 	def on_button_radius(self,instance,value):
 		self.button_radius = value
@@ -81,6 +95,9 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 			self.btn.button_disabled_color = value
 	def on_text(self,instance,value):
 		self.text = value
+		if self.lbl != None:
+			self.lbl.text_size = (None,None)
+			print(self.lbl.texture_size)
 		if self.btn != None:
 			self.btn.text = value
 	def on_font_size(self,instance,value):
