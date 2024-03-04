@@ -75,7 +75,7 @@ class IVS_Accessory_Framework(App):
 	roomchecktime = 5  # Number of seconds to wait between room status checks against the VALT server.
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
 	orientation = ""
-	debug = True
+	debug = False
 	if platform == "linux":
 		working_path = str(os.path.dirname(__file__)) + "/../../../"
 	else:
