@@ -307,11 +307,14 @@ class CameraControl(RelativeLayout):
 		self.video_feed_thread.daemon = True
 		self.video_feed_thread.start()
 	def wait_for_video_feed(self):
-		while not self.my_camera.loaded:
-			if self.debug:
-				ivs.log("Waiting for Video Feed to be Ready")
-			time.sleep(1)
-		self.display_video_feed()
+		if self.my_camera != None:
+			while not self.my_camera.loaded:
+				if self.debug:
+					ivs.log("Waiting for Video Feed to be Ready")
+				time.sleep(1)
+			self.display_video_feed()
+		else:
+			ivs.log("Error Loading Camera Feed")
 	@mainthread
 	def display_video_feed(self):
 		if self.my_camera.loaded:

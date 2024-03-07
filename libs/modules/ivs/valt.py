@@ -1095,6 +1095,8 @@ class VALT:
 
 	def check_room_status(self):
 		while not self.kill_threads:
+			if self.debug:
+				ivs.log("Room Check Loop: " + str(self.run_check_room_status))
 			if self.run_check_room_status:
 				if self.debug:
 					ivs.log("Access Token: " + str(self.accesstoken))
@@ -1121,7 +1123,7 @@ class VALT:
 
 
 	def stop_room_check_thread(self):
-		self.kill_threads = True
+		self.run_check_room_status = False
 	@property
 	def selected_room_status(self):
 		return self._selected_room_status

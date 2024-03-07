@@ -5,7 +5,7 @@ from kivy.utils import platform
 # from multiprocessing.dummy import Process
 from kivy.clock import Clock
 
-__version__ = "2.2.2"
+__version__ = "2.2.3"
 
 
 if platform == "android":
