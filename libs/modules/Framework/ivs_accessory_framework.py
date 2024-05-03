@@ -1078,7 +1078,7 @@ class IVS_Accessory_Framework(App):
 	def build_system_settings(self):
 		self.systemjson = []
 		# self.build_settings_json(self.systemjson,settype="title",title="System")
-		self.build_settings_json(self.systemjson, settype="button", title="Reload Application", section="system",
+		self.build_settings_json(self.systemjson, settype="button", title="Exit Application", section="system",
 								 key="reload", default=None)
 		# self.build_settings_json(self.systemjson, settype="button", title="Reboot",section="system",key="reboot",default=None)
 		self.build_settings_json(self.systemjson, settype="button", title="Factory Default", section="system",
