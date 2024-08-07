@@ -1,6 +1,6 @@
 # VALT API Python Module
-# Version 2.8
-# Last Updated: 1/19/2024
+# Version 2.9
+# Last Updated: 8/7/2024
 # Compatible with Valt Versions 5.x
 
 import json
@@ -9,7 +9,7 @@ import os, ssl, time, threading
 from libs.modules.ivs import ivs
 
 class VALT:
-	def __init__(self, valt_address, valt_username, valt_password, logpath="ivs.log", **kwargs):
+	def __init__(self, valt_address, valt_username, valt_password, timeout=5,logpath="ivs.log", **kwargs):
 		if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
 			ssl._create_default_https_context = ssl._create_unverified_context
 		if valt_address != "None" and valt_address != "" and valt_address is not None:
@@ -28,7 +28,7 @@ class VALT:
 		self._errormsg = None
 		self.testmsg = None
 		self.accesstoken = 0
-		self.httptimeout = 5
+		self.httptimeout = int(timeout)
 		self.debug = False
 		self.kill_threads = False
 		self.auth()
@@ -1148,3 +1148,7 @@ class VALT:
 		self._errormsg_observers.append(callback)
 	def disconnect(self):
 		self.kill_threads = True
+
+	def change_timeout(self,new_timeout):
+		ivs.log("HTTP Timeout set to " + str(new_timeout))
+		self.httptimeout = int(new_timeout)

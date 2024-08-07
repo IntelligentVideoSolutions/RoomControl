@@ -1,6 +1,6 @@
 # IVS Accessory Framework
-# Version 2.2.3
-# Last Updated: 1/24/2024
+# Version 2.2.5
+# Last Updated: 8/7/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 from kivy.utils import platform
@@ -225,8 +225,11 @@ class IVS_Accessory_Framework(App):
 
 	def on_config_change(self, config, section, key, value):
 		if section == "valt":
-			self.notification = self.msgbox("Applying Changes. Please wait...", height='150dp', title="Notification")
-			self.event_valt_config_change = Clock.schedule_once(partial(self.valt_config_change, key, value),
+			if key == "timeout":
+				self.valt.change_timeout(value)
+			else:
+				self.notification = self.msgbox("Applying Changes. Please wait...", height='150dp', title="Notification")
+				self.event_valt_config_change = Clock.schedule_once(partial(self.valt_config_change, key, value),
 																self.executedelay)
 		elif section == "time":
 			if key == "region":
@@ -289,7 +292,7 @@ class IVS_Accessory_Framework(App):
 		#TODO: Change this so it doesn't reconnect to VALT if the settings are the same.
 		self.close_apps()
 		if not hasattr(self,"valt"):
-			self.valt = VALT(self.config.get("valt", "server"), self.config.get("valt", "username"), self.config.get("valt", "password"), self.logpath,room=self.config.get("valt", "room"))
+			self.valt = VALT(self.config.get("valt", "server"), self.config.get("valt", "username"), self.config.get("valt", "password"),self.config.get("valt", "timeout"), self.logpath,room=self.config.get("valt", "room"))
 		else:
 			self.valt.changeserver(self.config.get("valt", "server"), self.config.get("valt", "username"),self.config.get("valt", "password"))
 			self.valt.room=self.config.get("valt", "room")
@@ -1016,6 +1019,7 @@ class IVS_Accessory_Framework(App):
 								 key="recname")
 		self.build_settings_json(self.valtjson, settype="scrolloptions", title="Room", desc="VALT Room", section="valt",
 								 key="roomname", options=roomlist, default="None")
+		self.build_settings_json(self.valtjson, settype="numeric", title="Timeout", desc="Number of seconds to wait for a response from the VALT server", section="valt", key="timeout", default="5")
 
 	def build_application_settings(self):
 		self.applicationjson = []
@@ -1067,7 +1071,7 @@ class IVS_Accessory_Framework(App):
 											"webpassword": None, "recbutton": "1", "privbutton": "1",
 											"orientation": "Automatic", "streamtype": "H264", "clock": "1"}
 		self.defaultsjson['valt'] = {"server": None, "username": None, "password": None,
-									 "recname": "Accessory Recording", "roomname": None, "room": None, "status": None}
+									 "recname": "Accessory Recording", "roomname": None, "room": None, "status": None, "timeout": 5}
 		self.defaultsjson['time'] = {"region": "America", "timezone": "America/Chicago", "ntp": None}
 		self.defaultsjson['network'] = {"mode": "DHCP", "ipaddress": None, "subnet": "24", "gateway": None,
 										"dns1": None, "dns2": None, "ssid": None, "hidden": None, "authtype": "WPA2",
