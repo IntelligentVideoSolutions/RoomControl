@@ -40,6 +40,9 @@ from libs.modules.CameraControl.CameraControl import CameraControl
 from libs.modules.ScheduleDisplay.ScheduleDisplay import ScheduleDisplay
 from libs.modules.Keypad.Keypad import Keypad
 
+# Mikrotik API module Import
+import libs.modules.ros_api as ros_api
+
 # Custom Kivy Widget Imports
 from libs.pys.StandardTextLabel import StandardTextLabel
 from libs.pys.HeaderLabel import HeaderLabel
@@ -88,6 +91,7 @@ class IVS_Accessory_Framework(App):
 	roomchecktime = 5  # Number of seconds to wait between room status checks against the VALT server.
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
 	orientation = ""
+	roam=None
 	# debug = True
 
 	# removed in favor of os.getcwd()
@@ -133,16 +137,14 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.add_widget(screen)
 		self.set_orientation()
 
-		# TODO: Need to fix the log file path
-		# self.config.set('kivy', 'log_dir', self.logpath)
-		# Logger.info(__name__ + ":" + self.logpath)
-
 		if int(self.config.get("system", "debug")):
 			Logger.info("Debug Mode Enabled")
 			Config.set('kivy', 'log_level', 'debug')
 		self.initialize(1)
 		firmware = ivs.loadconfig(self.versionfilepath)
 		self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
+		threading.Thread(target=self.connect_to_roam).start()
+
 
 	# Uncomment to check config files periodically for external updates.
 	# self.event_checkconfigfiles = Clock.schedule_interval(self.checkconfigfiles,self.configfilerechecktime)
@@ -182,6 +184,7 @@ class IVS_Accessory_Framework(App):
 		self.build_valt_settings()
 		self.build_application_settings()
 		self.build_system_settings()
+		self.build_roam_settings()
 		settings.register_type("ip", SettingIP)
 		settings.register_type("scrolloptions", SettingScrollOptions)
 		settings.register_type("password", SettingPassword)
@@ -197,6 +200,7 @@ class IVS_Accessory_Framework(App):
 		# settings.add_json_panel('Network', self.config, data=json.dumps(self.networkjson))
 
 		settings.add_json_panel('System', self.config, data=json.dumps(self.systemjson))
+		settings.add_json_panel('ROAM', self.config, data=json.dumps(self.roamjson))
 
 	def refresh_settings(self):
 		panels = self.settings.interface.content.panels
@@ -325,7 +329,11 @@ class IVS_Accessory_Framework(App):
 				else:
 					Logger.info("Debug Mode Disabled")
 					Config.set('kivy', 'log_level', 'info')
-
+		elif section == "roam":
+			if key == "roamip" or key == "roamusername" or key == "roampassword":
+				threading.Thread(target=self.connect_to_roam).start()
+			else:
+				self.config_roam_wireless()
 
 		# os.system("sudo /usr/bin/php /usr/local/ivs/network.php")
 
@@ -340,6 +348,7 @@ class IVS_Accessory_Framework(App):
 		# self.config.read(self.configfilepath)
 		threading.Thread(target=self.connecttovalt).start()
 		self.enable_disable_clock()
+		# self.connect_to_roam()
 
 	def connecttovalt(self):
 		#TODO: Change this so it doesn't reconnect to VALT if the settings are the same.
@@ -757,6 +766,8 @@ class IVS_Accessory_Framework(App):
 		lblwidth = sp(100)
 		lblheight = sp(30)
 		self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].clear_widgets()
+		lbl = Label(text="Accessory Network Interfaces", size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
+		self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 		for nic in netifaces.interfaces():
 			# print(nic)
 			if nic != 'lo':
@@ -813,6 +824,7 @@ class IVS_Accessory_Framework(App):
 								font_size=self.standardfontsize,height=lblheight)
 		self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 		self.screenmgmt.current = 'About_Screen'
+		self.get_roam_network_info()
 
 	def checkroomstatusthread(self, dt):
 		threading.Thread(target=self.checkroomstatus).start()
@@ -1139,6 +1151,7 @@ class IVS_Accessory_Framework(App):
 										"wpamode": "Personal", "username": None, "password": None, "wpakey": "none",
 										"wpamethod": "peap"}
 		self.defaultsjson['system'] = {"reload": None, "reboot": None, "factory": None, "applynetwork": None, "debug": "0"}
+		self.defaultsjson['roam'] = {"freq":"2.4 GHz","roamip":"192.168.20.1","roamusername":"ivsadmin","roampassword":"@dmin51!!"}
 
 	def build_system_settings(self):
 		self.systemjson = []
@@ -1154,6 +1167,26 @@ class IVS_Accessory_Framework(App):
 								 key="factory", default=None)
 
 	# self.build_settings_json(self.systemjson, settype="button", title="Apply Network Configuration", section="system",key="applynetwork", default=None)
+
+	def build_roam_settings(self):
+		self.roamjson=[]
+		freqlist=["2.4 GHz","5 GHz"]
+		authlist=["wpa","wpa2-psk","wpa-eap", "wpa2-eap", "wpa3-psk", "wpa3-eap"]
+		eaplist=["peap","tls","ttls"]
+		self.build_settings_json(self.roamjson, settype="title", title="ROAM Bridge Config")
+		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Internal IP", section="roam", key="roamip",default="192.168.20.1")
+		self.build_settings_json(self.roamjson, settype="string", title="ROAM Username", section="roam", key="roamusername",default="ivsadmin")
+		self.build_settings_json(self.roamjson, settype="password", title="ROAM Password", section="roam",key="roampassword", default="@dmin51!!")
+		self.build_settings_json(self.roamjson, settype="title", title="ROAM Wifi Config")
+		self.build_settings_json(self.roamjson,settype="scrolloptions",title="Radio Frequency",section="roam",key="freq",default="2.4", options=freqlist)
+		self.build_settings_json(self.roamjson, settype="string", title="SSID", section="roam",key="ssid", default=None)
+		self.build_settings_json(self.roamjson, settype="scrolloptions", title="Authentication Type", section="roam", key="auth",default=None, options=authlist)
+		self.build_settings_json(self.roamjson, settype="password", title="Preshared Key", section="roam", key="psk",default=None,desc="Use with PSK Auth Modes Only!")
+		self.build_settings_json(self.roamjson, settype="scrolloptions", title="EAP Method", section="roam",key="eap", default=None, options=eaplist,desc="Use with EAP Auth Modes Only!")
+		self.build_settings_json(self.roamjson, settype="string", title="EAP Username", section="roam", key="wifiusername",default=None,desc="Use with EAP Auth Modes Only!")
+		self.build_settings_json(self.roamjson, settype="password", title="EAP Password", section="roam", key="wifipassword",default=None,desc="Use with EAP Auth Modes Only!")
+
+
 	def update_settings_options(self, object, searchterm, newvalues):
 		for child in object:
 			try:
@@ -1386,5 +1419,86 @@ class IVS_Accessory_Framework(App):
 	def close_logs(self):
 		self.go_to_home_screen()
 		self.open_settings()
+	def connect_to_roam(self):
+		try:
+			self.roam=ros_api.Api(self.config.get("roam","roamip"), user=self.config.get("roam","roamusername"), password=self.config.get("roam","roampassword"),use_ssl=False,port=8728,timeout=int(self.config.get("valt","timeout")))
+		except Exception as e:
+			Logger.warn("Failed to Connect to ROAM")
+			Logger.warn(e)
+			self.roam=None
+		else:
+			Logger.info("Connected to ROAM at " + self.config.get("roam","roamip"))
+	def config_roam_wireless(self):
+		if self.roam != None:
+			if self.config.get("roam","freq") == "5 GHz":
+				wifi_interface = "wifi1"
+				roam_command = '/interface/wifi/set =.id=wifi2 =disabled=yes'
+			else:
+				wifi_interface = "wifi2"
+				roam_command = '/interface/wifi/set =.id=wifi1 =disabled=yes'
+			self.send_command_to_roam(roam_command)
+
+			roam_command='/interface/wifi/set =.id=' + wifi_interface + ' =configuration.mode=station =configuration.ssid=' + self.config.get("roam","ssid") + ' =disabled=no'
+			if self.config.get("roam","auth") == "wpa-psk" or self.config.get("roam","auth") == "wpa2-psk" or self.config.get("roam","auth") == "wpa3-psk":
+				roam_command = roam_command + ' =security.authentication-types=' + self.config.get("roam","auth") + ' =security.passphrase=' + self.config.get(	"roam","psk")
+			else:
+				roam_command = roam_command + ' =security.authentication-types='+ self.config.get("roam","auth") +' =security.eap-anonymous-identity='+ self.config.get("roam","wifiusername") +' =security.eap-certificate-mode=dont-verify-certificate =security.eap-methods='+ self.config.get("roam","eap") +' =security.eap-password='+ self.config.get("roam","wifipassword") +' =security.eap-username='+ self.config.get("roam","wifiusername")
+			self.send_command_to_roam(roam_command)
+
+			roam_command = '/interface/wifi/set =.id=' + wifi_interface + ' =disabled=no'
+			self.send_command_to_roam(roam_command)
+	def get_roam_network_info(self):
+		lblwidth = sp(100)
+		lblheight = sp(30)
+		interfaces={}
+		if self.roam != None:
+			lbl = StandardTextLabel(size_hint_y=None, height=lblheight)
+			self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
+			lbl = Label(text="ROAM Network Interfaces", size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
+			self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
+
+			response = self.send_command_to_roam('/interface/wifi/radio/print')
+			Logger.debug(response)
+			for entry in response:
+				Logger.debug(entry)
+				interfaces[entry['interface']] = entry['radio-mac']
+
+			response = self.send_command_to_roam('/interface/bridge/host/print')
+			Logger.debug(response)
+			for entry in response:
+				Logger.debug(entry)
+				interfaces[entry['interface']] = entry['mac-address']
+
+			response = self.send_command_to_roam('/ip/address/print')
+			Logger.debug(response)
+			for entry in response:
+				nic= entry['interface']
+				ipaddress = entry['address'].split("/")
+				lbl = Label(text=nic, size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
+				layout = StandardGridLayout(cols=2, size_hint_x=1, size_hint_y=None, spacing=10)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(layout)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'] = layout
+				lbl = StandardTextLabel(text="MAC Address", width=lblwidth, size_hint_x=None, size_hint_y=None,	font_size=self.standardfontsize, height=lblheight)
+				textbox = DisabledTextInput(text=interfaces[nic], size_hint_y=None, font_size=self.standardfontsize,height=lblheight)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
+				lbl = StandardTextLabel(text="IP:", width=lblwidth, size_hint_x=None, size_hint_y=None, font_size=self.standardfontsize, height=lblheight)
+				textbox = DisabledTextInput(text=ipaddress[0], size_hint_y=None, font_size=self.standardfontsize,	height=lblheight)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
+				lbl = StandardTextLabel(text="Subnet Mask:", width=lblwidth, size_hint_x=None, size_hint_y=None, font_size=self.standardfontsize, height=lblheight)
+				textbox = DisabledTextInput(text=ipaddress[1], size_hint_y=None, font_size=self.standardfontsize,	height=lblheight)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
+				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
+	def send_command_to_roam(self,command):
+		Logger.debug(command)
+		try:
+			result = self.roam.talk(command)
+		except Exception as e:
+			Logger.warn(e)
+		else:
+			return result
+
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()

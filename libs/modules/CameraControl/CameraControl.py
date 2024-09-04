@@ -8,6 +8,7 @@ import threading,time
 from libs.modules.axis import axiscamera
 from libs.pys.RoundedShadowButton import RoundedShadowButton
 from libs.pys.RoundedButton import RoundedButton
+from libs.pys.TouchVideo import TouchVideo
 from libs.modules.ivs import ivs
 from kivy.properties import NumericProperty, StringProperty
 from kivy.logger import Logger
