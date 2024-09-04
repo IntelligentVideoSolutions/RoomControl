@@ -1,0 +1,47 @@
+<LogScreen>:
+#	BoxLayout:
+#		orientation: 'horizontal'
+#		size_hint: 1,1
+#		Label:
+#			size_hint: .25,1
+    BoxLayout:
+        size_hint: 1,1
+        orientation: 'vertical'
+        spacing: 5
+        padding: 10
+#        WrappedLabel:
+#            id: logs
+#            size_hint: 1,1
+#            color: 'black'
+#            text_size: self.width,self.height
+#            halign: "left"
+#            valign: "top"
+#            shorten: True
+#            shorten_from: "right"
+        HeaderLabel:
+            text: "Logs"
+            size_hint: 1,None
+            height: "15sp"
+        BackgroundScrollView:
+            id: log_scroll
+            size_hint: 1,None
+            height:self.parent.height-sp(75)
+            background_color: utils.get_color_from_hex('#D4D6D9')
+            #bar_pos_y: "right"
+            #do_scroll: True
+            #do_scroll_y: True
+            BoxLayout:
+                orientation: 'vertical'
+                id: log_layout
+                halign: "left"
+                height: self.minimum_height
+                size_hint: 1,None
+                spacing: 10
+                padding: 20
+        Button:
+            text: 'Done'
+            height: '30sp'
+            size_hint: 1,None
+            on_release: app.close_logs()
+#		Label:
+#			size_hint: .25,1

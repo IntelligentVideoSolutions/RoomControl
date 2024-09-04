@@ -9,6 +9,7 @@ from libs.modules.ThreadWithReturnValue.ThreadWithReturnValue import ThreadWithR
 import time
 import socket
 import libs.modules.ivs.ivs as ivs
+import logging
 
 class AxisCamera:
 	#username = ""
@@ -16,7 +17,7 @@ class AxisCamera:
 	#authtype = 0
 	#ptz = 0
 	#privacy = 0
-	def __init__(self, ip, un, pw):
+	def __init__(self, ip, un, pw,logpath="ivs.log"):
 		self.privacy_capable = False
 		self.ptz_capable = False
 		self.authtype = 0
@@ -30,9 +31,12 @@ class AxisCamera:
 		self._connected = False
 		self._connected_observers = []
 		self.connected_check_time = 5
-		self.debug = False
 		self.kill_threads = False
-
+		if logging.getLogger("kivy").hasHandlers():
+			self.logger = logging.getLogger("kivy").getChild(__name__)
+		else:
+			logging.getLogger(__name__)
+		self.log_level("info")
 		self.camera_connect_thread = threading.Thread(target=self.connect_to_camera)
 		self.camera_connect_thread.daemon = True
 		self.camera_connect_thread.start()
@@ -90,14 +94,12 @@ class AxisCamera:
 		else:
 			return 1
 	def connect_to_camera(self):
-		if self.debug:
-			ivs.log("Connecting to Camera: " + str(self.camera_address))
+		self.logger.debug(__name__ + ": " + "Connecting to Camera: " + str(self.camera_address))
 		digest = 0
 		while digest == 0 and not self.kill_threads:
 			# print(self.connected)
 			digest = self.isdigest()
-			if self.debug:
-				ivs.log("Digest Status: " + str(digest))
+			self.logger.debug(__name__ + ": " + "Digest Status: " + str(digest))
 			if digest == 0:
 				time.sleep(10)
 
@@ -418,13 +420,11 @@ class AxisCamera:
 					if not self.connected:
 						self.run_camera_status_check = False
 						threading.Thread(target=self.connect_to_camera).start()
-				if self.debug:
-					ivs.log("Camera Connected Check Status: " + str(self.connected))
+				self.logger.debug(__name__ + ": " + "Camera Connected Check Status: " + str(self.connected))
 			time.sleep(self.connected_check_time)
 	def start_camera_check_thread(self):
 		self.run_camera_status_check = True
-		if self.debug:
-			ivs.log("Camera Connected Check Thread Started")
+		self.logger.debug(__name__ + ": " + "Camera Connected Check Thread Started")
 		if not hasattr(self,'camera_check_thread'):
 			self.camera_check_thread = threading.Thread(target=self.check_camera_status)
 			self.camera_check_thread.daemon = True
@@ -437,9 +437,20 @@ class AxisCamera:
 		self._connected = new_status
 		for callback in self._connected_observers:
 			callback(self._connected)
-		if self.debug:
-			ivs.log('Camera connected status updated to ' + str(new_status))
+		self.logger.debug(__name__ + ": " + 'Camera connected status updated to ' + str(new_status))
 	def bind_to_connected(self,callback):
 		self._connected_observers.append(callback)
 	def disconnect(self):
 		self.kill_threads = True
+	def log_level(self,loglevel):
+		match loglevel:
+			case "debug":
+				self.logger.setLevel(10)
+			case "info":
+				self.logger.setLevel(20)
+			case "warn":
+				self.logger.setLevel(30)
+			case "error":
+				self.logger.setLevel(40)
+			case "critical":
+				self.logger.setLevel(50)

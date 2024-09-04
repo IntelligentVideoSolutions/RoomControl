@@ -1,10 +1,13 @@
 # IVS Accessory Framework
-# Version 2.2.5
+# Version 2.3
 # Last Updated: 8/7/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
+import logging
+
 from kivy.utils import platform
 from kivy.config import Config
+
 if platform != "android":
 	Config.set('kivy', 'keyboard_mode', 'systemanddock')
 
@@ -23,7 +26,8 @@ from kivy.metrics import dp,sp
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
 from kivy.utils import platform
-
+from kivy.logger import Logger
+from kivy.logger import LoggerHistory
 # Standard Python Imports
 import time, netifaces, os, json, threading
 from datetime import timedelta
@@ -46,13 +50,22 @@ from libs.pys.WrappedLabel import WrappedLabel
 from libs.pys.CustomSettings import SettingScrollOptions, SettingIP, SettingPassword, SettingStatus, SettingButton
 from libs.pys.RoundedShadowButtonWithImage import RoundedShadowButtonWithImage
 
+# Kivy Formatting
 Window.clearcolor = ("#E6E6E6")
 Window.keyboard_anim_args = {"d": .2, "t": "linear"}
 if platform == 'android':
 	Window.softinput_mode = "below_target"
 
+# Kivy Logging Config
+Config.set('kivy', 'log_name', "ivs_%y-%m-%d_%_.log")
+Config.set('kivy', 'log_dir', str(os.getcwd()) + "/logs")
+Config.set('kivy', 'log_enable',1)
+Config.set('kivy', 'log_level','info')
+
 # Kivy Screen Declarations
 class AboutScreen(Screen):
+	pass
+class LogScreen(Screen):
 	pass
 class LandscapeHome(Screen):
 	pass
@@ -75,13 +88,21 @@ class IVS_Accessory_Framework(App):
 	roomchecktime = 5  # Number of seconds to wait between room status checks against the VALT server.
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
 	orientation = ""
-	debug = False
-	if platform == "linux":
-		working_path = str(os.path.dirname(__file__)) + "/../../../"
-	else:
-		working_path = ""
+	# debug = True
+
+	# removed in favor of os.getcwd()
+	# if platform == "linux":
+	# 	working_path = str(os.path.dirname(__file__)) + "/../../../"
+	# else:
+	# 	# working_path = ""
+	#
+	# 	# This may not be a good way to get the working path. Also only works if nested in libs/modules. Might want to just pass the path from main.py or maybe there is a better way to do this.
+	# 	# working_path = str(Path(os.path.dirname(__file__)).parents[2])+"/"
+
+	working_path = str(os.getcwd()) + "/"
 	imagepath = working_path + 'images/'
-	logpath = working_path + "logs/ivs.log"
+	logpath = working_path + "logs/"
+
 	timezonefilepath = working_path + 'config/timezones.json'
 	versionfilepath = working_path + 'config/version.json'
 	configfilepath = working_path + 'config/accessory.ini'
@@ -91,6 +112,8 @@ class IVS_Accessory_Framework(App):
 		Builder.load_file(self.working_path + 'libs/modules/ScheduleDisplay/ScheduleDisplay.kv')
 		Builder.load_file(self.working_path + 'libs/modules/Keypad/Keypad.kv')
 
+	def get_application_config(self):
+		return super(IVS_Accessory_Framework, self).get_application_config(self.configfilepath)
 	def build(self):
 		# self.icon=self.imagepath + 'valticon.png'
 		self.icon = self.imagepath + 'ivsicon.png'
@@ -104,11 +127,19 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.add_widget(screen)
 		screen = AboutScreen(name='About_Screen')
 		self.screenmgmt.add_widget(screen)
-
+		screen = LogScreen(name='Log_Screen')
+		self.screenmgmt.add_widget(screen)
 		screen = PortraitHome(name='Portrait_Home_Screen')
 		self.screenmgmt.add_widget(screen)
 		self.set_orientation()
 
+		# TODO: Need to fix the log file path
+		# self.config.set('kivy', 'log_dir', self.logpath)
+		# Logger.info(__name__ + ":" + self.logpath)
+
+		if int(self.config.get("system", "debug")):
+			Logger.info("Debug Mode Enabled")
+			Config.set('kivy', 'log_level', 'debug')
 		self.initialize(1)
 		firmware = ivs.loadconfig(self.versionfilepath)
 		self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
@@ -129,11 +160,17 @@ class IVS_Accessory_Framework(App):
 
 		self.build_settings_defaults()
 		defaults = self.defaultsjson
-		self.config = Config
-		self.config.read(self.configfilepath)
+
+		# Commented out as this doesn't appear to be necessary?
+		# self.config = Config
+		# self.config.read(self.configfilepath)
+		#
+		# for section in defaults:
+		# 	self.config.setdefaults(section, defaults[section])
 
 		for section in defaults:
-			self.config.setdefaults(section, defaults[section])
+			config.setdefaults(section, defaults[section])
+		# self.config.set('Kivy', 'log_dir', self.logpath)
 
 	# self.create_settings()
 	def build_settings(self, settings):
@@ -275,6 +312,21 @@ class IVS_Accessory_Framework(App):
 				self.config.set("network", nic + "dns1", None)
 				self.config.set("network", nic + "dns2", None)
 				self.config.set("network", nic + "subnet", None)
+		elif section == "system":
+			if key == "debug":
+				# if int(value):
+				# 	ivs.log("Debug Mode Enabled",self.logpath)
+				# else:
+				# 	ivs.log("Debug Mode Disabled", self.logpath)
+				self.debug = int(value)
+				if self.debug:
+					Logger.info("Debug Mode Enabled")
+					Config.set('kivy', 'log_level', 'debug')
+				else:
+					Logger.info("Debug Mode Disabled")
+					Config.set('kivy', 'log_level', 'info')
+
+
 		# os.system("sudo /usr/bin/php /usr/local/ivs/network.php")
 
 	def reinitialize(self):
@@ -283,8 +335,9 @@ class IVS_Accessory_Framework(App):
 		self.event_initialize = Clock.schedule_once(self.initialize, self.executedelay)
 
 	def initialize(self, b):
-		ivs.log("Initializing Application", self.logpath)
-		self.config.read(self.configfilepath)
+		# ivs.log("Initializing Application", self.logpath, severity="INFO")
+		Logger.info(__name__ + ": " + "Initializing Application")
+		# self.config.read(self.configfilepath)
 		threading.Thread(target=self.connecttovalt).start()
 		self.enable_disable_clock()
 
@@ -298,8 +351,7 @@ class IVS_Accessory_Framework(App):
 			self.valt.room=self.config.get("valt", "room")
 		self.valt.bind_to_selected_room_status(self.room_status_change)
 		self.valt.bind_to_errormg(self.error_message)
-		if self.debug:
-			self.valt.debug = True
+
 		if self.valt.accesstoken != 0:
 			self.connsuccess()
 		else:
@@ -323,7 +375,8 @@ class IVS_Accessory_Framework(App):
 	def connsuccess(self):
 		# Add Widget to LeftWindow
 		self.load_app_window()
-		ivs.log("Connection Successful", self.logpath)
+		# ivs.log("Connection Successful", self.logpath, severity="INFO")
+		Logger.info(__name__ + ": " + "Connection Successful")
 		self.config.set('valt', 'status', 'Connected')
 		roomname = self.valt.getroomname(self.config.get("valt", "room"))
 		try:
@@ -525,8 +578,7 @@ class IVS_Accessory_Framework(App):
 
 	@mainthread
 	def updrectime(self, dt):
-		if self.debug:
-			ivs.log("Recording Time Updated")
+		Logger.debug(__name__ + ": " + "Recording Time Updated")
 		if self.orientation == "Landscape":
 			self.screenmgmt.get_screen(self.homescreen).ids.recording_time.text = "Recording: " + str(
 				timedelta(seconds=int(time.time() - self.recstarttime)))
@@ -672,6 +724,15 @@ class IVS_Accessory_Framework(App):
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].padding = 0
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].spacing = 0
 
+	def addmarkerbutton(self):
+		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
+		btn = RoundedShadowButtonWithImage(id='marker_button', text="Marker", size_hint=(1, 1),
+										   color="black",
+										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
+										   button_down_color=(0, 0, 1, 1), img_source="images/resume_icon.png",
+										   always_release=True, on_release=lambda x: self.addmarker())
+		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
+		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].ids['marker_button'] = btn
 	@mainthread
 	def addremovebuttons(self):
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
@@ -683,6 +744,7 @@ class IVS_Accessory_Framework(App):
 					self.addrecordingbutton()
 				elif self.valt.selected_room_status == 2:
 					self.addpausestopbuttons()
+					self.addmarkerbutton()
 				elif self.valt.selected_room_status == 3:
 					self.addresumebutton()
 			if int(self.config.get('application', 'privbutton')):
@@ -756,7 +818,7 @@ class IVS_Accessory_Framework(App):
 		threading.Thread(target=self.checkroomstatus).start()
 
 	def checkroomstatus(self):
-		print("THIS SHOULD NOT HAPPEN")
+		Logger.error(__name__ + ": " + "THIS SHOULD NEVER HAPPEN")
 		# curroomstatus = self.valt.getroomstatus(self.config.get("valt", "room"))
 		curroomstatus = self.valt.selected_room_status
 		# ivs.log("Check Room",self.logpath)
@@ -782,8 +844,7 @@ class IVS_Accessory_Framework(App):
 		else:
 			self.update_feedback(self.valt.errormsg, (1, 0, 0, 1))
 		if self.valt.accesstoken != 0:
-			if self.debug:
-				ivs.log("Current Room Status: " + str(curroomstatus),self.logpath)
+			Logger.debug(__name__ + ": " + "Current Room Status: " + str(curroomstatus))
 			if curroomstatus == 2:
 				if self.recstarttime == 0:
 					self.updrecon()
@@ -1077,11 +1138,15 @@ class IVS_Accessory_Framework(App):
 										"dns1": None, "dns2": None, "ssid": None, "hidden": None, "authtype": "WPA2",
 										"wpamode": "Personal", "username": None, "password": None, "wpakey": "none",
 										"wpamethod": "peap"}
-		self.defaultsjson['system'] = {"reload": None, "reboot": None, "factory": None, "applynetwork": None}
+		self.defaultsjson['system'] = {"reload": None, "reboot": None, "factory": None, "applynetwork": None, "debug": "0"}
 
 	def build_system_settings(self):
 		self.systemjson = []
 		# self.build_settings_json(self.systemjson,settype="title",title="System")
+		self.build_settings_json(self.systemjson, settype="bool", title="Debug Mode",
+								 desc="Enable/Disable the Debug Mode", section="system", key="debug")
+		self.build_settings_json(self.systemjson, settype="button", title="View Logs", section="system",
+								 key="logs", default=None)
 		self.build_settings_json(self.systemjson, settype="button", title="Exit Application", section="system",
 								 key="reload", default=None)
 		# self.build_settings_json(self.systemjson, settype="button", title="Reboot",section="system",key="reboot",default=None)
@@ -1107,8 +1172,7 @@ class IVS_Accessory_Framework(App):
 			# self.screenmgmt.current = "Factory_Default_Screen"
 			# self.close_settings()
 			# self.open_factory_default()
-			self.factorydefaultpopup = self.msgbox('Are you sure you want to reset the device to factory defaults?',
-												   yesno=True, yesaction=self.startfactorydefault, title="Confirmation")
+			self.factorydefaultpopup = self.msgbox('Are you sure you want to reset the device to factory defaults?', yesno=True, yesaction=self.startfactorydefault, title="Confirmation")
 		elif key == "applynetwork":
 			# self.screenmgmt.current = "Network_Save_In_Progress_Screen"
 			# self.close_settings()
@@ -1116,6 +1180,9 @@ class IVS_Accessory_Framework(App):
 		elif key.find("scan") >= 0:
 			# self.close_settings()
 			self.StartPopulateSSID(key[0:key.find("scan")])
+		elif key == "logs":
+			self.close_settings()
+			self.show_logs()
 
 	def msgbox(self, message, **kwargs):
 		content = BoxLayout(orientation='vertical', spacing='5dp')
@@ -1211,9 +1278,7 @@ class IVS_Accessory_Framework(App):
 		if self.config.get("application", "mode") == "Camera Control":
 			self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
 							   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
-							   volume=self.config.get("application", "audio"))
-			if self.debug:
-				self.lw.debug = True
+							   volume=self.config.get("application", "audio"), logpath=self.logpath)
 		elif self.config.get("application", "mode") == "Schedule":
 			self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
 		elif self.config.get("application", "mode") == "Keypad":
@@ -1302,11 +1367,24 @@ class IVS_Accessory_Framework(App):
 		self.update_feedback(current_error_message,(1,0,0,1))
 
 	def close_apps(self):
-		if self.debug:
-			ivs.log("Terminating all Open Applications")
+		Logger.debug(__name__ + ": " + "Terminating all Open Applications")
 		try:
 			self.lw.disconnect()
 		except:
 			pass
+	def addmarker(self):
+		self.valt.addmarker(self.config.get("valt", "room"),"Test")
+	def show_logs(self):
+		self.screenmgmt.get_screen('Log_Screen').ids['log_layout'].clear_widgets()
+		lblheight = sp(15)
+		for log in reversed(LoggerHistory.history):
+			lbl = Label(text=log.message, size_hint_y=None, size_hint_x=1, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight, halign="left")
+			self.screenmgmt.get_screen('Log_Screen').ids['log_layout'].add_widget(lbl)
+			lbl.text_size = (self.screenmgmt.width-sp(30), lbl.height)
+		self.screenmgmt.current = "Log_Screen"
+		self.screenmgmt.get_screen('Log_Screen').ids['log_scroll'].scroll_to(lbl)
+	def close_logs(self):
+		self.go_to_home_screen()
+		self.open_settings()
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()

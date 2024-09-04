@@ -10,11 +10,12 @@ from libs.pys.RoundedShadowButton import RoundedShadowButton
 from libs.pys.RoundedButton import RoundedButton
 from libs.modules.ivs import ivs
 from kivy.properties import NumericProperty, StringProperty
-
+from kivy.logger import Logger
 class CameraControl(RelativeLayout):
 	vidtype = StringProperty("H264")
 	fps = NumericProperty(30)
 	resolution = StringProperty("800x450")
+	logpath = StringProperty("ivs.log")
 	volume = NumericProperty(0)
 	my_camera = None
 	debug = False
@@ -138,9 +139,7 @@ class CameraControl(RelativeLayout):
 		# except:
 		# 	pass
 		if self.camera_control == None:
-			self.camera_control = axiscamera.AxisCamera(self.camera_address, self.camera_username, self.camera_password)
-			if self.debug:
-				self.camera_control.debug = True
+			self.camera_control = axiscamera.AxisCamera(self.camera_address, self.camera_username, self.camera_password,self.logpath)
 			self.camera_control.bind_to_connected(self.camera_status_change)
 		else:
 			# self.camera_control.disconnect()
@@ -157,18 +156,15 @@ class CameraControl(RelativeLayout):
 		# self.enable_camera_controls()
 	def check_camera_connection_status(self,dt):
 		# Deprecated Routine
-		if self.debug:
-			ivs.log("Camera Connected: " + str(self.camera_control.connected))
-			ivs.log(self.my_camera)
+		Logger.debug(__name__ + ": " + "Camera Connected: " + str(self.camera_control.connected))
+		Logger.debug(__name__ + ": " + str(self.my_camera))
 		if self.my_camera != None:
-			if self.debug:
-				ivs.log("Video Loaded: " + str(self.my_camera.loaded))
+			Logger.debug(__name__ + ": " + "Video Loaded: " + str(self.my_camera.loaded))
 			if self.my_camera.loaded != self.last_camera_loaded:
 				if self.my_camera.loaded:
 					self.ids['cam_window'].clear_widgets()
 					self.ids['cam_window'].add_widget(self.my_camera)
-					if self.debug:
-						ivs.log("reload")
+					Logger.debug(__name__ + ": " + "reload")
 				else:
 					self.ids['cam_window'].clear_widgets()
 					label = Label(text='Connecting to Camera. Please Wait...',color='black')
@@ -189,8 +185,7 @@ class CameraControl(RelativeLayout):
 				# self.connect_to_camera()
 				self.connect_video_feed()
 		else:
-			if self.debug:
-				ivs.log("Clearing Camera Connection")
+			Logger.debug(__name__ + ": " + "Clearing Camera Connection")
 			self.disable_camera_controls()
 			self.disable_privacy_button()
 			self.ids['cam_window'].clear_widgets()
@@ -297,31 +292,32 @@ class CameraControl(RelativeLayout):
 		# if self.my_camera != None:
 		# 	self.my_camera.volume = self.ids['volume_slider'].value
 	def connect_video_feed(self):
-		if self.debug:
-			ivs.log("Connecting to Video Feed")
+		Logger.debug(__name__ + ": " + "Connecting to Video Feed")
 		if self.vidtype == "MJPG":
-			self.my_camera = Video(source='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + str(self.fps), state='play', preview='images/splash.png', volume=self.volume)
+			sourcestring='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + str(self.fps)
+			Logger.debug(__name__ + ": " + sourcestring)
+			self.my_camera = Video(source=sourcestring, state='play', preview='images/splash.png', volume=self.volume)
 		elif self.vidtype == "H264":
-			self.my_camera = Video(source='rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + str(self.fps), state='play', preview='images/splash.png', volume=self.volume)
+			sourcestring = 'rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + str(self.fps)
+			Logger.debug(__name__ + ": " + sourcestring)
+			self.my_camera = Video(source=sourcestring, state='play', preview='images/splash.png', volume=self.volume)
 		self.video_feed_thread = threading.Thread(target=self.wait_for_video_feed)
 		self.video_feed_thread.daemon = True
 		self.video_feed_thread.start()
 	def wait_for_video_feed(self):
 		if self.my_camera != None:
 			while not self.my_camera.loaded:
-				if self.debug:
-					ivs.log("Waiting for Video Feed to be Ready")
+				Logger.debug(__name__ + ": " +"Waiting for Video Feed to be Ready")
 				time.sleep(1)
 			self.display_video_feed()
 		else:
-			ivs.log("Error Loading Camera Feed")
+			Logger.error(__name__ + ": " + "Error Loading Camera Feed")
 	@mainthread
 	def display_video_feed(self):
 		if self.my_camera.loaded:
 			self.ids['cam_window'].clear_widgets()
 			self.ids['cam_window'].add_widget(self.my_camera)
-			if self.debug:
-				ivs.log("Added Camera Video Feed")
+			Logger.debug(__name__ + ": " + "Added Camera Video Feed")
 	@mainthread
 	def camera_status_change(self,curcamstatus):
 		if self.camstatus != curcamstatus:
@@ -337,8 +333,7 @@ class CameraControl(RelativeLayout):
 					self.ids['privacy_button'].text = 'Disable Privacy'
 					self.enable_privacy_button()
 			else:
-				if self.debug:
-					ivs.log("Clearing Camera Connection")
+				Logger.debug(__name__ + ": " + "Clearing Camera Connection")
 				self.disable_camera_controls()
 				self.disable_privacy_button()
 				self.ids['cam_window'].clear_widgets()

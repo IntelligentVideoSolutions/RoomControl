@@ -1,6 +1,7 @@
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty, NumericProperty
+from kivy.logger import Logger
 from libs.modules.ivs import ivs
 import threading
 import time
@@ -40,7 +41,8 @@ class Keypad(RelativeLayout):
 	def PinEntered(self):
 		# print("pin entered")
 		enteredcode = self.ids["display_label"].text
-		ivs.log("PIN entered: " + enteredcode)
+		Logger.info(__name__ + ": " + "PIN entered: " + enteredcode)
+
 		self.author = self.getuserid(enteredcode, self.valt.getusers())
 		if self.author > 0:
 			self.update_display_label("Good Pin")

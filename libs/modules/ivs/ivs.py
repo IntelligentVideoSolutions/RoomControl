@@ -5,15 +5,21 @@
 
 import json
 import os, time, subprocess, ipaddress
-def log(message,logpath="ivs.log"):
+import logging
+def log(message,logpath="ivs.log", **kwargs):
 	# if os.name == "nt":
 	# 	#logpath="V:\Accessories\pi\FrameWork\standard\ivs\logs\ivs.log"
 	# 	logpath="ivs.log"
-	logfile = open(logpath,"a+")
-	timetup = time.localtime()
-	print(time.strftime('%Y-%m-%d %H:%M:%S', timetup) + " " + str(message))
-	logfile.write(time.strftime('%Y-%m-%dT%H:%M:%SZ', timetup) + " " + str(message) + "\n")
-	logfile.close()
+	# if 'severity' in kwargs:
+	# 	severity = kwargs['severity']
+	# else:
+	# 	severity = "INFO"
+	# logfile = open(logpath,"a+")
+	# timetup = time.localtime()
+	# print(time.strftime('%Y-%m-%d %H:%M:%S', timetup) + " " + severity + " " + str(message))
+	# logfile.write(time.strftime('%Y-%m-%dT%H:%M:%S', timetup) + " " + severity + " " + str(message) + "\n")
+	# logfile.close()
+	logging.info(__name__ + ": " + str(message))
 
 def factorydefault(factoryconfig,configfilepath,factorynetplan = "/usr/local/ivs/templates/ivs.yaml",netplanpath = "/etc/netplan/ivs.yaml", factorysystemconf="/usr/local/ivs/templates/system.cfg",systemconf = "/usr/local/ivs/config/system.cfg",factoryvaltconf="/usr/local/ivs/templates/valt.cfg",valtconf="/usr/local/ivs/config/valt.cfg"):
 	factorynetconf = "/usr/local/ivs/templates/network.cfg"

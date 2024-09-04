@@ -6,6 +6,7 @@
 import json
 import http.client, urllib.error, urllib.request, urllib.parse
 import os, ssl, time, threading
+import logging
 from libs.modules.ivs import ivs
 
 class VALT:
@@ -19,6 +20,11 @@ class VALT:
 				self.baseurl = valt_address + '/api/v3/'
 		else:
 			self.baseurl = None
+		if logging.getLogger("kivy").hasHandlers():
+			self.logger = logging.getLogger("kivy").getChild(__name__)
+		else:
+			logging.getLogger(__name__)
+		# self.log_level("info")
 		self.username = valt_username
 		self.password = valt_password
 		self.success_reauth_time = 28800
@@ -29,14 +35,12 @@ class VALT:
 		self.testmsg = None
 		self.accesstoken = 0
 		self.httptimeout = int(timeout)
-		self.debug = False
 		self.kill_threads = False
 		self.auth()
 		self._selected_room_status = 99
 		self.room_check_interval = 5
 		self.run_check_room_status = False
 		self._observers =  []
-
 
 		if 'room' in kwargs:
 			self.selected_room = kwargs['room']
@@ -52,9 +56,9 @@ class VALT:
 		if self.username != "None" and self.username != "" and self.username is not None and self.password != "None" and self.password != "" and self.password is not None and self.baseurl is not None:
 			values = {"username": self.username, "password": self.password}
 			params = json.dumps(values).encode('utf-8')
-			if self.debug:
-				ivs.log(self.baseurl, self.logpath)
-				ivs.log(self.username, self.logpath)
+			self.logger.debug(__name__ + ": " + self.baseurl)
+			self.logger.debug(__name__ + ": " + self.username)
+
 			self.lastauthtime = time.time()
 			try:
 				req = urllib.request.Request(self.baseurl + 'login')
@@ -62,22 +66,24 @@ class VALT:
 				response = urllib.request.urlopen(req, params, timeout=self.httptimeout)
 			except urllib.error.HTTPError as e:
 				self.accesstoken = 0
-				ivs.log("Authentication FAILED", self.logpath)
+				#ivs.log("Authentication FAILED", self.logpath, severity="WARN")
+				self.logger.error(__name__ + ": " + "Authentication FAILED")
 				self.handleerror(e)
 			# return 0
 			except urllib.error.URLError as e:
 				self.accesstoken = 0
-				ivs.log("Authentication FAILED", self.logpath)
+				#ivs.log("Authentication FAILED", self.logpath, severity="WARN")
+				self.logger.error(__name__ + ": " + "Authentication FAILED")
 				self.handleerror(e)
 			# return 0
 			except http.client.HTTPException as e:
 				self.accesstoken = 0
-				ivs.log("Authentication FAILED", self.logpath)
+				self.logger.error(__name__ + ": " + "Authentication FAILED")
 				self.handleerror(e)
 			# return 0
 			except Exception as e:
 				self.accesstoken = 0
-				ivs.log("Authentication FAILED", self.logpath)
+				self.logger.error(__name__ + ": " + "Authentication FAILED")
 				self.handleerror(e)
 			# return 0
 			else:
@@ -89,7 +95,8 @@ class VALT:
 					self.accesstoken = data['data']['access_token']
 					self.errormsg = None
 					# print("Authenticated to VALT")
-					ivs.log("Authenticated to VALT", self.logpath)
+					#ivs.log("Authenticated to VALT", self.logpath)
+					self.logger.info(__name__ + ": " + "Authenticated to VALT")
 					self.reauthenticate(self.success_reauth_time)
 
 	def isrecording(self, room):
@@ -201,10 +208,11 @@ class VALT:
 				else:
 					# print("Recording Started")
 					if 'author' in kwargs:
-						ivs.log("Recording " + name + " started in " + str(self.getroomname(room)) + " by " + str(
-							self.getusername(kwargs['author'])), self.logpath)
+						#ivs.log("Recording " + name + " started in " + str(self.getroomname(room)) + " by " + str(self.getusername(kwargs['author'])), self.logpath)
+						self.logger.info(__name__ + ": " + "Recording " + name + " started in " + str(self.getroomname(room)) + " by " + str(self.getusername(kwargs['author'])))
 					else:
-						ivs.log("Recording " + name + " started in " + str(self.getroomname(room)), self.logpath)
+						#ivs.log("Recording " + name + " started in " + str(self.getroomname(room)), self.logpath)
+						self.logger.info(__name__ + ": " + "Recording " + name + " started in " + str(self.getroomname(room)))
 					try:
 						data = json.load(response)
 					except Exception as e:
@@ -249,7 +257,8 @@ class VALT:
 					return 0
 				else:
 					# print("Recording Stopped")
-					ivs.log("Recording stopped in " + str(self.getroomname(room)), self.logpath)
+					#ivs.log("Recording stopped in " + str(self.getroomname(room)), self.logpath)
+					self.logger.info(__name__ + ": " + "Recording stopped in " + str(self.getroomname(room)))
 					try:
 						data = json.load(response)
 					except Exception as e:
@@ -294,7 +303,8 @@ class VALT:
 						return 0
 					else:
 						# print("Recording Paused")
-						ivs.log("Recording paused in " + str(self.getroomname(room)), self.logpath)
+						#ivs.log("Recording paused in " + str(self.getroomname(room)), self.logpath)
+						self.logger.info(__name__ + ": " + "Recording paused in " + str(self.getroomname(room)))
 						try:
 							data = json.load(response)
 						except Exception as e:
@@ -341,7 +351,8 @@ class VALT:
 						return 0
 					else:
 						# print("Recording Resumed")
-						ivs.log("Recording resumed in " + str(self.getroomname(room)), self.logpath)
+						#ivs.log("Recording resumed in " + str(self.getroomname(room)), self.logpath)
+						self.logger.info(__name__ + ": " + "Recording resumed in " + str(self.getroomname(room)))
 						try:
 							data = json.load(response)
 						except Exception as e:
@@ -390,7 +401,8 @@ class VALT:
 							return 0
 						else:
 							# print("Marker Added")
-							ivs.log("Marker " + markername + " added in " + str(self.getroomname(room)), self.logpath)
+							#ivs.log("Marker " + markername + " added in " + str(self.getroomname(room)), self.logpath)
+							self.logger.info(__name__ + ": " + "Marker " + markername + " added in " + str(self.getroomname(room)))
 							try:
 								data = json.load(response)
 							except Exception as e:
@@ -847,8 +859,10 @@ class VALT:
 				return 0
 			else:
 				# print("Sharing Permissions Updated")
-				ivs.log("Sharing Permissions Updated", self.logpath)
-				ivs.log(values, self.logpath)
+				#ivs.log("Sharing Permissions Updated", self.logpath)
+				#ivs.log(values, self.logpath)
+				self.logger.info(__name__ + ": " + "Sharing Permissions Updated")
+				self.logger.debug(__name__ + ": " + str(values))
 				try:
 					data = json.load(response)
 				except Exception as e:
@@ -886,7 +900,8 @@ class VALT:
 				return 0
 			else:
 				# print("Room " + str(room) + " Locked")
-				ivs.log(str(self.getroomname(room)) + " Locked", self.logpath)
+				#ivs.log(str(self.getroomname(room)) + " Locked", self.logpath)
+				self.logger.info(__name__ + ": " + str(self.getroomname(room)) + " Locked")
 				try:
 					data = json.load(response)
 				except Exception as e:
@@ -926,7 +941,8 @@ class VALT:
 				return 0
 			else:
 				# print("Room " + str(room) + " Unlocked")
-				ivs.log(str(self.getroomname(room)) + " Unlocked", self.logpath)
+				#ivs.log(str(self.getroomname(room)) + " Unlocked", self.logpath)
+				self.logger.info(__name__ + ": " + str(self.getroomname(room)) + " Unlocked")
 				try:
 					data = json.load(response)
 				except Exception as e:
@@ -939,7 +955,8 @@ class VALT:
 			return 0
 
 	def handleerror(self, e):
-		ivs.log(e)
+		#ivs.log(e,self.logpath, severity="WARN")
+		self.logger.error(__name__ + ": " + str(e))
 		if str(e) == "<urlopen error timed out>" or str(e) == "<urlopen error [Errno 11001] getaddrinfo failed>" or str(
 				e) == "HTTP Error 400: Bad Request" or str(
 				e) == "<urlopen error [Errno -3] Temporary failure in name resolution>":
@@ -988,7 +1005,8 @@ class VALT:
 			self.errormsg = "An Unknown Error Occurred"
 
 	def reauthenticate(self, reauthtime):
-		ivs.log("Next authentication attempt in " + str(reauthtime) + " seconds")
+		#ivs.log("Next authentication attempt in " + str(reauthtime) + " seconds",self.logpath)
+		self.logger.info(__name__ + ":" + "Next authentication attempt in " + str(reauthtime) + " seconds")
 		# ivs.log(self.accesstoken)
 		if hasattr(self, 'reauth'):
 			self.reauth.cancel()
@@ -1015,28 +1033,34 @@ class VALT:
 			valt_baseurl = 'http://' + valt_address + '/api/v3/'
 		else:
 			valt_baseurl = valt_address + '/api/v3/'
-		ivs.log(valt_baseurl, self.logpath)
-		ivs.log(valt_username, self.logpath)
-		ivs.log(valt_password, self.logpath)
+		# ivs.log(valt_baseurl, self.logpath)
+		# ivs.log(valt_username, self.logpath)
+		# ivs.log(valt_password, self.logpath)
+		self.logger.debug(__name__ + ": " + "Testing Connection to VALT server")
+		self.logger.debug(__name__ + ": " + valt_baseurl)
+		self.logger.debug(__name__ + ": " + valt_username)
+		self.logger.debug(__name__ + ": " + valt_password)
+
 		try:
 			req = urllib.request.Request(valt_baseurl + 'login')
 			req.add_header('Content-Type', 'application/json')
 			response = urllib.request.urlopen(req, params, timeout=self.httptimeout)
 		except urllib.error.HTTPError as e:
-			ivs.log(e)
+			#ivs.log(e,self.logpath, severity="WARN")
+			self.logger.warning(__name__ + ": " + str(e))
 			if str(e) == "HTTP Error 401: Unauthorized":
 				self.testmsg = "Invalid Username or Password"
 			return False
 		except urllib.error.URLError as e:
-			ivs.log(e)
+			self.logger.warning(__name__ + ": " + str(e))
 			self.testmsg = "Unable to Connect"
 			return False
 		except http.client.HTTPException as e:
-			ivs.log(e)
+			self.logger.warning(__name__ + ": " + str(e))
 			self.testmsg = "Unable to Connect"
 			return False
 		except Exception as e:
-			ivs.log(e)
+			self.logger.warning(__name__ + ": " + str(e))
 			self.testmsg = "Unable to Connect"
 			return False
 		else:
@@ -1095,11 +1119,9 @@ class VALT:
 
 	def check_room_status(self):
 		while not self.kill_threads:
-			if self.debug:
-				ivs.log("Room Check Loop: " + str(self.run_check_room_status))
+			self.logger.debug(__name__ + ": " + "Room Check Loop: " + str(self.run_check_room_status))
 			if self.run_check_room_status:
-				if self.debug:
-					ivs.log("Access Token: " + str(self.accesstoken))
+				self.logger.debug(__name__ + ": " + "Room Check Loop: " + "Access Token: " + str(self.accesstoken))
 				if self.accesstoken != 0 and self.selected_room != None:
 					temp_room_status = self.getroomstatus(self.selected_room)
 					if temp_room_status != self.selected_room_status:
@@ -1108,14 +1130,12 @@ class VALT:
 						print("Clear Error")
 						self.errormsg = None
 						self.selected_room_status = temp_room_status
-					if self.debug:
-						ivs.log("Checking Room " + str(self.selected_room) + " current status is " + str(self.selected_room_status))
+					self.logger.debug(__name__ + ": " + "Checking Room " + str(self.selected_room) + " current status is " + str(self.selected_room_status))
 			time.sleep(self.room_check_interval)
 	def start_room_check_thread(self):
 		self.kill_threads = False
 		self.run_check_room_status = True
-		if self.debug:
-			ivs.log("Room Check Thread Started")
+		self.logger.debug(__name__ + ": " + "Room Check Thread Started")
 		if not hasattr(self,'room_check_thread'):
 			self.room_check_thread = threading.Thread(target=self.check_room_status)
 			self.room_check_thread.daemon = True
@@ -1132,8 +1152,7 @@ class VALT:
 		self._selected_room_status = new_status
 		for callback in self._observers:
 			callback(self._selected_room_status)
-		if self.debug:
-			ivs.log(str(self.selected_room) + ' status updated to ' + str(new_status))
+		self.logger.debug(__name__ + ": " + str(self.selected_room) + ' status updated to ' + str(new_status))
 	def bind_to_selected_room_status(self,callback):
 		self._observers.append(callback)
 	@property
@@ -1150,5 +1169,7 @@ class VALT:
 		self.kill_threads = True
 
 	def change_timeout(self,new_timeout):
-		ivs.log("HTTP Timeout set to " + str(new_timeout))
+		#ivs.log("HTTP Timeout set to " + str(new_timeout),self.logpath)
+		self.logger.info(__name__ + ": " + "HTTP Timeout set to " + str(new_timeout))
 		self.httptimeout = int(new_timeout)
+
