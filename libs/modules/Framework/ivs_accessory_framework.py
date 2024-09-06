@@ -738,7 +738,7 @@ class IVS_Accessory_Framework(App):
 		btn = RoundedShadowButtonWithImage(id='marker_button', text="Marker", size_hint=(1, 1),
 										   color="black",
 										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
-										   button_down_color=(0, 0, 1, 1), img_source="images/resume_icon.png",
+										   button_down_color=(0, 0, 1, 1), img_source="images/comment.png",
 										   always_release=True, on_release=lambda x: self.addmarker())
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].ids['marker_button'] = btn
@@ -753,7 +753,8 @@ class IVS_Accessory_Framework(App):
 					self.addrecordingbutton()
 				elif self.valt.selected_room_status == 2:
 					self.addpausestopbuttons()
-					self.addmarkerbutton()
+					if int(self.config.get("application","markerbutton")):
+						self.addmarkerbutton()
 				elif self.valt.selected_room_status == 3:
 					self.addresumebutton()
 			if int(self.config.get('application', 'privbutton')):
@@ -953,7 +954,8 @@ class IVS_Accessory_Framework(App):
 		self.ssidnic = nic
 
 	def PopulateSSID(self, dt):
-		self.ssidlist = ivs.getSSIDs(self.ssidnic)
+		# self.ssidlist = ivs.getSSIDs(self.ssidnic)
+		self.ssidlist = self.roam_wireless_scan()
 		# self.ssidlist = ['Wifi 1','Wifi 2','Wifi 3','Wifi 4','Wifi 5','Wifi 6']
 		self.ssidpopup.ids['scrollbox'].clear_widgets()
 		for ssid in self.ssidlist:
@@ -965,8 +967,9 @@ class IVS_Accessory_Framework(App):
 
 	def set_ssid(self, ssid):
 		self.ssidpopup.dismiss()
-		self.config.set("network", self.ssidnic + "ssid", ssid)
+		self.config.set("roam","ssid", ssid)
 		self.write_config()
+		self.config_roam_wireless()
 		try:
 			self.refresh_settings()
 		except:
@@ -1137,11 +1140,13 @@ class IVS_Accessory_Framework(App):
 								 desc="Enable/Disable the Recording Button", section="application", key="recbutton")
 		self.build_settings_json(self.applicationjson, settype="bool", title="Lock Button",
 								 desc="Enable/Disable the Lock Button", section="application", key="privbutton")
+		self.build_settings_json(self.applicationjson, settype="bool", title="Marker Button",
+								 desc="Enable/Disable the Marker Button", section="application", key="markerbutton")
 
 	def build_settings_defaults(self):
 		self.defaultsjson = {}
 		self.defaultsjson['application'] = {"settingspassword": "admin51", "mode": "None", "webinterface": "1",
-											"webpassword": None, "recbutton": "1", "privbutton": "1",
+											"webpassword": None, "recbutton": "1", "privbutton": "1", "markerbutton": "0",
 											"orientation": "Automatic", "streamtype": "H264", "clock": "1"}
 		self.defaultsjson['valt'] = {"server": None, "username": None, "password": None,
 									 "recname": "Accessory Recording", "roomname": None, "room": None, "status": None, "timeout": 5}
@@ -1180,6 +1185,7 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="title", title="ROAM Wifi Config")
 		self.build_settings_json(self.roamjson,settype="scrolloptions",title="Radio Frequency",section="roam",key="freq",default="2.4", options=freqlist)
 		self.build_settings_json(self.roamjson, settype="string", title="SSID", section="roam",key="ssid", default=None)
+		self.build_settings_json(self.roamjson, settype="button", title="Scan for Wireless Networks", section="roam", key="scan", default=None)
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="Authentication Type", section="roam", key="auth",default=None, options=authlist)
 		self.build_settings_json(self.roamjson, settype="password", title="Preshared Key", section="roam", key="psk",default=None,desc="Use with PSK Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="EAP Method", section="roam",key="eap", default=None, options=eaplist,desc="Use with EAP Auth Modes Only!")
@@ -1421,7 +1427,7 @@ class IVS_Accessory_Framework(App):
 		self.open_settings()
 	def connect_to_roam(self):
 		try:
-			self.roam=ros_api.Api(self.config.get("roam","roamip"), user=self.config.get("roam","roamusername"), password=self.config.get("roam","roampassword"),use_ssl=False,port=8728,timeout=int(self.config.get("valt","timeout")))
+			self.roam=ros_api.Api(self.config.get("roam","roamip"), user=self.config.get("roam","roamusername"), password=self.config.get("roam","roampassword"),use_ssl=False,port=8728,timeout=15)
 		except Exception as e:
 			Logger.warn("Failed to Connect to ROAM")
 			Logger.warn(e)
@@ -1499,6 +1505,15 @@ class IVS_Accessory_Framework(App):
 			Logger.warn(e)
 		else:
 			return result
+	def roam_wireless_scan(self):
+		result = self.send_command_to_roam('/interface/wifi/scan =.id=0 =duration=10')
+		Logger.debug(result)
+		ssids=[]
+		for entry in result:
+			Logger.debug(entry)
+			if entry['ssid'] not in ssids and entry['ssid'] != "":
+				ssids.append(entry['ssid'])
+		return ssids
 
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()

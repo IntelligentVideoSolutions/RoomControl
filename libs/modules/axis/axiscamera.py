@@ -36,7 +36,6 @@ class AxisCamera:
 			self.logger = logging.getLogger("kivy").getChild(__name__)
 		else:
 			logging.getLogger(__name__)
-		self.log_level("info")
 		self.camera_connect_thread = threading.Thread(target=self.connect_to_camera)
 		self.camera_connect_thread.daemon = True
 		self.camera_connect_thread.start()
@@ -285,7 +284,7 @@ class AxisCamera:
 		threading.Thread(target=self.sendcmdtocamera,args=(url,)).start()
 
 	def sendcmdtocamera(self, url):
-		# print(url)
+		self.logger.debug(__name__ + ":" + url)
 		if self.authtype != 0:
 			passmgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 			passmgr.add_password(None, url, self.username, self.password)

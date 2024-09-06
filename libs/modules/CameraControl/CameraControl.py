@@ -68,6 +68,8 @@ class CameraControl(RelativeLayout):
 		threading.Thread(target=self.get_cameras).start()
 		label = Label(text='Connecting to Camera. Please Wait...',color='black')
 		self.ids['cam_window'].add_widget(label)
+		if self.volume == 0:
+			self.ids['volume_slider'].disabled = True
 	def get_cameras(self):
 		self.cameralist = self.valt.getcameras(self.room)
 		# print(type(self.cameralist))

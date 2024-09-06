@@ -383,6 +383,8 @@ class VALT:
 					if markertime > 0:
 						values = {"event": markername, "time": markertime, "color": color}
 						params = json.dumps(values).encode('utf-8')
+						self.logger.debug(__name__ + ":" + url)
+						self.logger.debug(__name__ + ":" + str(params))
 						try:
 							req = urllib.request.Request(url)
 							req.add_header('Content-Type', 'application/json')
