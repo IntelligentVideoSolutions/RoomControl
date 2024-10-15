@@ -32,7 +32,7 @@ from kivy.logger import LoggerHistory
 import time, netifaces, os, json, threading
 from datetime import timedelta
 from functools import partial
-
+from pathlib import Path
 # IVS Imports
 from libs.modules.ivs import ivs
 from libs.modules.ivs.valt import VALT
@@ -95,15 +95,15 @@ class IVS_Accessory_Framework(App):
 	# debug = True
 
 	# removed in favor of os.getcwd()
-	# if platform == "linux":
-	# 	working_path = str(os.path.dirname(__file__)) + "/../../../"
-	# else:
-	# 	# working_path = ""
-	#
-	# 	# This may not be a good way to get the working path. Also only works if nested in libs/modules. Might want to just pass the path from main.py or maybe there is a better way to do this.
-	# 	# working_path = str(Path(os.path.dirname(__file__)).parents[2])+"/"
+	if platform == "linux":
+		working_path = str(Path(os.path.dirname(__file__)).parents[2])+"/"
+	else:
+		working_path = str(os.getcwd()) + "/"
 
-	working_path = str(os.getcwd()) + "/"
+		# This may not be a good way to get the working path. Also only works if nested in libs/modules. Might want to just pass the path from main.py or maybe there is a better way to do this.
+		# working_path = str(Path(os.path.dirname(__file__)).parents[2])+"/"
+
+
 	imagepath = working_path + 'images/'
 	logpath = working_path + "logs/"
 
