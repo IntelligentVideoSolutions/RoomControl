@@ -1,7 +1,7 @@
 # VALT API Python Module
-# Version 2.9
+# Version 2.10
 # Last Updated: 8/7/2024
-# Compatible with Valt Versions 5.x
+# Compatible with Valt Versions 5.x and probably 6.x
 
 import json
 import http.client, urllib.error, urllib.request, urllib.parse
@@ -97,6 +97,8 @@ class VALT:
 					# print("Authenticated to VALT")
 					#ivs.log("Authenticated to VALT", self.logpath)
 					self.logger.info(__name__ + ": " + "Authenticated to VALT")
+					self.version = self.getversion()
+					self.logger.info(__name__ + ": " + "Valt Version: " + self.version)
 					self.reauthenticate(self.success_reauth_time)
 
 	def isrecording(self, room):
@@ -373,6 +375,7 @@ class VALT:
 		# Function to add a marker current recording in specified room.
 		# Returns 99 if not currently authenticated to VALT
 		# Returns 1 if successful.
+		# Returns 0 on failure.
 		if self.accesstoken == 0:
 			return 99
 		else:
@@ -405,6 +408,60 @@ class VALT:
 							# print("Marker Added")
 							#ivs.log("Marker " + markername + " added in " + str(self.getroomname(room)), self.logpath)
 							self.logger.info(__name__ + ": " + "Marker " + markername + " added in " + str(self.getroomname(room)))
+							try:
+								data = json.load(response)
+							except Exception as e:
+								self.handleerror(e)
+								return 0
+							else:
+								return 1
+			else:
+				self.handleerror("No Recording")
+				return 0
+
+	def addcomment(self, room, markername, color="red"):
+		# Function to add a comment current recording in specified room.
+		# Returns 99 if not currently authenticated to VALT
+		# Returns 1 if successful.
+		# Returns 0 on failure.
+		if self.accesstoken == 0:
+			return 99
+		else:
+			if self.isrecording(room) == True:
+				if self.version[0] == "6":
+					url = self.baseurl + 'rooms/' + str(room) + '/record/comments' + '?access_token=' + self.accesstoken
+				elif self.version[0] == "5":
+					url = self.baseurl + 'rooms/' + str(room) + '/record/markers' + '?access_token=' + self.accesstoken
+				else:
+					elf.logger.error(__name__ + ": Unable to Determine VALT version")
+					return 0
+				if self.isrecording(room):
+					markertime = self.getrecordingtime(room)
+					if markertime > 0:
+						values = {"event": markername, "time": markertime, "color": color}
+						params = json.dumps(values).encode('utf-8')
+						self.logger.debug(__name__ + ":" + url)
+						self.logger.debug(__name__ + ":" + str(params))
+						try:
+							req = urllib.request.Request(url)
+							req.add_header('Content-Type', 'application/json')
+							response = urllib.request.urlopen(req, params, timeout=self.httptimeout)
+						except urllib.error.HTTPError as e:
+							self.handleerror(e)
+							return 0
+						except urllib.error.URLError as e:
+							self.handleerror(e)
+							return 0
+						except http.client.HTTPException as e:
+							self.handleerror(e)
+							return 0
+						except Exception as e:
+							self.handleerror(e)
+							return 0
+						else:
+							# print("Marker Added")
+							#ivs.log("Marker " + markername + " added in " + str(self.getroomname(room)), self.logpath)
+							self.logger.info(__name__ + ": " + "Comment " + markername + " added in " + str(self.getroomname(room)))
 							try:
 								data = json.load(response)
 							except Exception as e:
@@ -1118,6 +1175,45 @@ class VALT:
 					else:
 						self.handleerror("No Records")
 						return 0
+	def getversion(self):
+		# Function to get the current active recording id in the specified room
+		# Returns true if the specified room is recording
+		# Returns False if the room is not recording
+		# Returns 2 if an error is encountered
+		# Returns 99 if not currently authenticated to VALT
+		if self.accesstoken == 0:
+			return 99
+		else:
+			url = self.baseurl + 'admin/general?access_token=' + self.accesstoken
+			try:
+				req = urllib.request.Request(url)
+				# req.add_header('Content-Type', 'application/json')
+				response = urllib.request.urlopen(req, timeout=self.httptimeout)
+			except urllib.error.HTTPError as e:
+				self.handleerror(e)
+				return 0
+			except urllib.error.URLError as e:
+				self.handleerror(e)
+				return 0
+			except http.client.HTTPException as e:
+				self.handleerror(e)
+				return 0
+			except Exception as e:
+				self.handleerror(e)
+				return 0
+			else:
+				try:
+					data = json.load(response)
+				except Exception as e:
+					self.handleerror(e)
+					return 0
+				else:
+					# print data
+					if "version" in data['data'].keys():
+						return data['data']['version']
+					else:
+						self.handleerror("No Version")
+						return 0
 
 	def check_room_status(self):
 		while not self.kill_threads:
@@ -1134,6 +1230,7 @@ class VALT:
 						self.selected_room_status = temp_room_status
 					self.logger.debug(__name__ + ": " + "Checking Room " + str(self.selected_room) + " current status is " + str(self.selected_room_status))
 			time.sleep(self.room_check_interval)
+
 	def start_room_check_thread(self):
 		self.kill_threads = False
 		self.run_check_room_status = True
@@ -1142,7 +1239,6 @@ class VALT:
 			self.room_check_thread = threading.Thread(target=self.check_room_status)
 			self.room_check_thread.daemon = True
 			self.room_check_thread.start()
-
 
 	def stop_room_check_thread(self):
 		self.run_check_room_status = False

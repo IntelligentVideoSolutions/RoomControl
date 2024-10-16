@@ -1,10 +1,10 @@
 # IVS Accessory Framework
-# Version 2.3
-# Last Updated: 8/7/2024
+# Version 2.3.4
+# Last Updated: 10/16/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
-
+from _version import __version__
 from kivy.utils import platform
 from kivy.config import Config
 
@@ -142,7 +142,8 @@ class IVS_Accessory_Framework(App):
 			Config.set('kivy', 'log_level', 'debug')
 		self.initialize(1)
 		firmware = ivs.loadconfig(self.versionfilepath)
-		self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
+		# self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
+		self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = __version__
 		threading.Thread(target=self.connect_to_roam).start()
 
 
@@ -191,7 +192,7 @@ class IVS_Accessory_Framework(App):
 		settings.register_type("status", SettingStatus)
 		settings.register_type("button", SettingButton)
 		settings.add_json_panel('Application', self.config, data=json.dumps(self.applicationjson))
-		settings.add_json_panel('VALT', self.config, data=json.dumps(self.valtjson))
+
 
 		# 1/8/2024: Disabled time panel in settings as there is no good way to set the time zone via python. As part of the migration to android, this feature has been deprecated.
 		# settings.add_json_panel('Time', self.config, data=json.dumps(self.timejson))
@@ -201,6 +202,7 @@ class IVS_Accessory_Framework(App):
 
 		settings.add_json_panel('System', self.config, data=json.dumps(self.systemjson))
 		settings.add_json_panel('ROAM', self.config, data=json.dumps(self.roamjson))
+		settings.add_json_panel('VALT', self.config, data=json.dumps(self.valtjson))
 
 	def refresh_settings(self):
 		panels = self.settings.interface.content.panels
@@ -452,6 +454,11 @@ class IVS_Accessory_Framework(App):
 		# self.event_startrecording = Clock.schedule_once(self.startrecording,self.executedelay)
 		self.valt.stop_room_check_thread()
 		threading.Thread(target=self.startrecording).start()
+
+	def initiatecomment(self):
+		if self.orientation == "Landscape":
+			self.update_feedback("Adding Comment", (0, 0, 0, 1))
+		threading.Thread(target=self.addmarker).start()
 
 	def initiatestop(self):
 		self.update_feedback("Stopping Recording", (0, 0, 0, 1))
@@ -735,11 +742,17 @@ class IVS_Accessory_Framework(App):
 
 	def addmarkerbutton(self):
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
-		btn = RoundedShadowButtonWithImage(id='marker_button', text="Marker", size_hint=(1, 1),
+		if self.orientation == "Landscape":
+			btn = RoundedShadowButtonWithImage(id='marker_button', text="Comment", size_hint=(1, 1),
 										   color="black",
 										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
-										   button_down_color=(0, 0, 1, 1), img_source="images/comment.png",
-										   always_release=True, on_release=lambda x: self.addmarker())
+										   button_down_color=(0, 0, 1, 1), img_source="images/comment_b.png",
+										   always_release=True, on_release=lambda x: self.initiatecomment())
+		else:
+			btn = ImageButton(id='marker_button', size_hint=(1, 1), source=self.imagepath + 'comment_w.png',
+							  upimage=self.imagepath + 'comment_w.png',
+							  downimage=self.imagepath + 'comment_w.png', always_release=True,
+							  on_release=lambda x: self.initiatecomment())
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].ids['marker_button'] = btn
 	@mainthread
@@ -907,6 +920,7 @@ class IVS_Accessory_Framework(App):
 		# print(self.config.filename)
 		# ivs.factory_default(self.config.filename)
 		os.remove("config/accessory.ini")
+		self.roam_factory_reset()
 		quit()
 
 	def initiateprivacy(self):
@@ -1093,6 +1107,9 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.valtjson, settype="string", title="Recording Name",
 								 desc="Default name for all recordings initiated from this device.", section="valt",
 								 key="recname")
+		self.build_settings_json(self.valtjson, settype="string", title="Comment Name",
+								 desc="Default Comment for all comments made from this device.", section="valt",
+								 key="markername")
 		self.build_settings_json(self.valtjson, settype="scrolloptions", title="Room", desc="VALT Room", section="valt",
 								 key="roomname", options=roomlist, default="None")
 		self.build_settings_json(self.valtjson, settype="numeric", title="Timeout", desc="Number of seconds to wait for a response from the VALT server", section="valt", key="timeout", default="5")
@@ -1140,8 +1157,8 @@ class IVS_Accessory_Framework(App):
 								 desc="Enable/Disable the Recording Button", section="application", key="recbutton")
 		self.build_settings_json(self.applicationjson, settype="bool", title="Lock Button",
 								 desc="Enable/Disable the Lock Button", section="application", key="privbutton")
-		self.build_settings_json(self.applicationjson, settype="bool", title="Marker Button",
-								 desc="Enable/Disable the Marker Button", section="application", key="markerbutton")
+		self.build_settings_json(self.applicationjson, settype="bool", title="Comment Button",
+								 desc="Enable/Disable the Comment Button", section="application", key="markerbutton")
 
 	def build_settings_defaults(self):
 		self.defaultsjson = {}
@@ -1149,7 +1166,7 @@ class IVS_Accessory_Framework(App):
 											"webpassword": None, "recbutton": "1", "privbutton": "1", "markerbutton": "0",
 											"orientation": "Automatic", "streamtype": "H264", "clock": "1"}
 		self.defaultsjson['valt'] = {"server": None, "username": None, "password": None,
-									 "recname": "Accessory Recording", "roomname": None, "room": None, "status": None, "timeout": 5}
+									 "recname": "Accessory Recording", "roomname": None, "room": None, "status": None, "timeout": 5, "markername":"Accessory Comment"}
 		self.defaultsjson['time'] = {"region": "America", "timezone": "America/Chicago", "ntp": None}
 		self.defaultsjson['network'] = {"mode": "DHCP", "ipaddress": None, "subnet": "24", "gateway": None,
 										"dns1": None, "dns2": None, "ssid": None, "hidden": None, "authtype": "WPA2",
@@ -1412,7 +1429,8 @@ class IVS_Accessory_Framework(App):
 		except:
 			pass
 	def addmarker(self):
-		self.valt.addmarker(self.config.get("valt", "room"),"Test")
+		self.valt.addcomment(self.config.get("valt", "room"),self.config.get("valt","markername"))
+		self.clear_feedback()
 	def show_logs(self):
 		self.screenmgmt.get_screen('Log_Screen').ids['log_layout'].clear_widgets()
 		lblheight = sp(15)
@@ -1514,6 +1532,9 @@ class IVS_Accessory_Framework(App):
 			if entry['ssid'] not in ssids and entry['ssid'] != "":
 				ssids.append(entry['ssid'])
 		return ssids
-
+	def roam_factory_reset(self):
+		if self.roam != None:
+			roam_command ="/system/reset-configuration =no-defaults=no =skip-backup=yes"
+			self.send_command_to_roam(roam_command)
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()
