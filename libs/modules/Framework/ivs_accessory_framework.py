@@ -919,7 +919,7 @@ class IVS_Accessory_Framework(App):
 	def accessoryfactorydefault(self, dt):
 		# print(self.config.filename)
 		# ivs.factory_default(self.config.filename)
-		os.remove("config/accessory.ini")
+		os.remove(self.configfilepath)
 		self.roam_factory_reset()
 		quit()
 
