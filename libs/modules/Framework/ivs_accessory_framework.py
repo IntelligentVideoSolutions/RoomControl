@@ -1526,11 +1526,12 @@ class IVS_Accessory_Framework(App):
 	def roam_wireless_scan(self):
 		result = self.send_command_to_roam('/interface/wifi/scan =.id=0 =duration=10')
 		Logger.debug(result)
-		ssids=[]
-		for entry in result:
-			Logger.debug(entry)
-			if entry['ssid'] not in ssids and entry['ssid'] != "":
-				ssids.append(entry['ssid'])
+		ssids = []
+		if result != None:
+			for entry in result:
+				Logger.debug(entry)
+				if entry['ssid'] not in ssids and entry['ssid'] != "":
+					ssids.append(entry['ssid'])
 		return ssids
 	def roam_factory_reset(self):
 		if self.roam != None:
