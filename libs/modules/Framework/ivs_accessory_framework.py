@@ -1524,14 +1524,20 @@ class IVS_Accessory_Framework(App):
 		else:
 			return result
 	def roam_wireless_scan(self):
-		result = self.send_command_to_roam('/interface/wifi/scan =.id=0 =duration=10')
-		Logger.debug(result)
 		ssids = []
-		if result != None:
-			for entry in result:
-				Logger.debug(entry)
-				if entry['ssid'] not in ssids and entry['ssid'] != "":
-					ssids.append(entry['ssid'])
+		if self.roam != None:
+			if self.config.get("roam","freq") == "5 GHz":
+				roamcmd = '/interface/wifi/scan =.id=wifi1 =duration=10'
+			else:
+				roamcmd = '/interface/wifi/scan =.id=wifi2 =duration=10'
+			result = self.send_command_to_roam(roamcmd)
+			# result = self.send_command_to_roam('/interface/wifi/scan =.id=wifi2 =duration=10')
+			Logger.debug(result)
+			if result != None:
+				for entry in result:
+					Logger.debug(entry)
+					if entry['ssid'] not in ssids and entry['ssid'] != "":
+						ssids.append(entry['ssid'])
 		return ssids
 	def roam_factory_reset(self):
 		if self.roam != None:
