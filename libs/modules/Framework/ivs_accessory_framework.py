@@ -147,6 +147,8 @@ class IVS_Accessory_Framework(App):
 		threading.Thread(target=self.connect_to_roam).start()
 
 
+
+
 	# Uncomment to check config files periodically for external updates.
 	# self.event_checkconfigfiles = Clock.schedule_interval(self.checkconfigfiles,self.configfilerechecktime)
 
@@ -1444,14 +1446,19 @@ class IVS_Accessory_Framework(App):
 		self.go_to_home_screen()
 		self.open_settings()
 	def connect_to_roam(self):
-		try:
-			self.roam=ros_api.Api(self.config.get("roam","roamip"), user=self.config.get("roam","roamusername"), password=self.config.get("roam","roampassword"),use_ssl=False,port=8728,timeout=15)
-		except Exception as e:
-			Logger.warn("Failed to Connect to ROAM")
-			Logger.warn(e)
-			self.roam=None
-		else:
-			Logger.info("Connected to ROAM at " + self.config.get("roam","roamip"))
+		if self.roam == None:
+			try:
+				self.roam=ros_api.Api(self.config.get("roam","roamip"), user=self.config.get("roam","roamusername"), password=self.config.get("roam","roampassword"),use_ssl=False,port=8728,timeout=15)
+			except Exception as e:
+				Logger.warn("Failed to Connect to ROAM")
+				Logger.warn(e)
+				self.event_roam_check = Clock.schedule_once(self.roam_check, 30)
+				self.roam=None
+			else:
+				Logger.info("Connected to ROAM at " + self.config.get("roam","roamip"))
+	def roam_check(self,b):
+		Logger.debug("Checking for Connection to ROAM")
+		threading.Thread(target=self.connect_to_roam).start()
 	def config_roam_wireless(self):
 		if self.roam != None:
 			if self.config.get("roam","freq") == "5 GHz":
