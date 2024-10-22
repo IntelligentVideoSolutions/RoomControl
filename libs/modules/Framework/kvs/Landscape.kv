@@ -22,9 +22,14 @@
 			spacing: 10
 			padding: 10
 			background_color: utils.get_color_from_hex('#F4F6F9')
+			BoxLayout:
+				size_hint: 1,.5
+				id: status_layout
+				spacing: 0
+				padding: 0
+
 			Image:
 				size_hint: 1,2.5
-
                 fit_mode: 'contain'
 				source: app.imagepath + 'ivslogo.png'
 			Label:

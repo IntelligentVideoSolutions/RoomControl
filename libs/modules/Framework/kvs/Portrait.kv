@@ -98,6 +98,12 @@
                 BoxLayout:
                     size_hint: None, None
                     id: privacy_layout
+                    pos: self.parent.width-((self.width)*4+42),self.parent.height-self.height-2
+                    height: self.parent.height/3-4
+                    width: self.parent.height/3-4
+                BoxLayout:
+                    size_hint: None, None
+                    id: status_layout
                     pos: self.parent.width-((self.width)*3+28),self.parent.height-self.height-2
                     height: self.parent.height/3-4
                     width: self.parent.height/3-4

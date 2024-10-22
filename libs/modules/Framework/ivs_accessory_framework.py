@@ -4,6 +4,11 @@
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
+from importlib.metadata import pass_none
+
+from kivy.core.gl import msgbox
+from win32con import FALSE
+
 from _version import __version__
 from kivy.utils import platform
 from kivy.config import Config
@@ -15,6 +20,7 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
+from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.clock import Clock, mainthread
 from kivy.uix.scrollview import ScrollView
@@ -92,6 +98,7 @@ class IVS_Accessory_Framework(App):
 	lastroomstatus = 0  # Tracks previous room status so updates only occur on changes.
 	orientation = ""
 	roam=None
+	roam_wifi_status = False
 	# debug = True
 
 	# removed in favor of os.getcwd()
@@ -336,6 +343,9 @@ class IVS_Accessory_Framework(App):
 		elif section == "roam":
 			if key == "roamip" or key == "roamusername" or key == "roampassword":
 				threading.Thread(target=self.connect_to_roam).start()
+			# if key == "test":
+			# 	Logger.debug("Initiate Wifi Test")
+			# 	self.roam_wireless_test()
 			else:
 				self.config_roam_wireless()
 
@@ -777,7 +787,19 @@ class IVS_Accessory_Framework(App):
 					self.addlockbutton()
 				elif self.valt.selected_room_status == 4:
 					self.addunlockbutton()
-
+	@mainthread
+	def add_wifi_icon(self):
+		self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].clear_widgets()
+		if self.orientation == "Landscape":
+			empty_widget = Widget()
+			self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].add_widget(empty_widget)
+			img = Image(source=self.imagepath + "wifi_icon_b.png", size_hint_x=None, width=28, height=28)
+		else:
+			img = Image(source=self.imagepath + "wifi_icon_w.png")
+		self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].add_widget(img)
+	@mainthread
+	def remove_wifi_icon(self):
+		self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].clear_widgets()
 	def getnetworkinfo(self):
 		lblwidth = sp(100)
 		lblheight = sp(30)
@@ -1094,7 +1116,8 @@ class IVS_Accessory_Framework(App):
 		self.valtjson = []
 		roomlist = []
 		# print("test")
-		valtrooms = self.valt.getrooms()
+		if hasattr(self,'valt'):
+			valtrooms = self.valt.getrooms()
 		if type(valtrooms).__name__ == 'list':
 			for room in valtrooms:
 				roomlist.append(room["name"])
@@ -1184,11 +1207,11 @@ class IVS_Accessory_Framework(App):
 								 desc="Enable/Disable the Debug Mode", section="system", key="debug")
 		self.build_settings_json(self.systemjson, settype="button", title="View Logs", section="system",
 								 key="logs", default=None)
-		self.build_settings_json(self.systemjson, settype="button", title="Exit Application", section="system",
-								 key="reload", default=None)
 		# self.build_settings_json(self.systemjson, settype="button", title="Reboot",section="system",key="reboot",default=None)
 		self.build_settings_json(self.systemjson, settype="button", title="Factory Default", section="system",
 								 key="factory", default=None)
+		self.build_settings_json(self.systemjson, settype="button", title="Exit Application", section="system",
+								 key="reload", default=None)
 
 	# self.build_settings_json(self.systemjson, settype="button", title="Apply Network Configuration", section="system",key="applynetwork", default=None)
 
@@ -1210,6 +1233,7 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="EAP Method", section="roam",key="eap", default=None, options=eaplist,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="string", title="EAP Username", section="roam", key="wifiusername",default=None,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="password", title="EAP Password", section="roam", key="wifipassword",default=None,desc="Use with EAP Auth Modes Only!")
+		self.build_settings_json(self.roamjson, settype="button", title="Test Wireless Settings", section="roam", key="test", default=None)
 
 
 	def update_settings_options(self, object, searchterm, newvalues):
@@ -1241,7 +1265,9 @@ class IVS_Accessory_Framework(App):
 		elif key == "logs":
 			self.close_settings()
 			self.show_logs()
-
+		elif key == "test":
+			threading.Thread(target=self.roam_wireless_test).start()
+	# @mainthread
 	def msgbox(self, message, **kwargs):
 		content = BoxLayout(orientation='vertical', spacing='5dp')
 		if 'width' in kwargs:
@@ -1456,9 +1482,29 @@ class IVS_Accessory_Framework(App):
 				self.roam=None
 			else:
 				Logger.info("Connected to ROAM at " + self.config.get("roam","roamip"))
+				try:
+					self.event_roam_wifi_check.cancel()
+				except:
+					pass
+				self.check_roam_wifi(1)
+				self.event_roam_wifi_check = Clock.schedule_interval(self.check_roam_wifi,10)
 	def roam_check(self,b):
 		Logger.debug("Checking for Connection to ROAM")
 		threading.Thread(target=self.connect_to_roam).start()
+	def check_roam_wifi(self,b):
+		if self.roam != None:
+			if self.config.get("roam", "freq") == "5 GHz":
+				wifi_interface = "wifi1"
+			else:
+				wifi_interface = "wifi2"
+			result = self.get_wifi_status(wifi_interface)
+			if self.roam_wifi_status != result:
+				self.roam_wifi_status = result
+				if self.roam_wifi_status:
+					self.add_wifi_icon()
+				else:
+					self.remove_wifi_icon()
+
 	def config_roam_wireless(self):
 		if self.roam != None:
 			if self.config.get("roam","freq") == "5 GHz":
@@ -1478,6 +1524,56 @@ class IVS_Accessory_Framework(App):
 
 			roam_command = '/interface/wifi/set =.id=' + wifi_interface + ' =disabled=no'
 			self.send_command_to_roam(roam_command)
+			# time.sleep(15)
+			# self.get_wifi_status(wifi_interface)
+	def roam_wireless_test(self):
+		if self.roam != None:
+			Logger.debug("Testing ROAM Wireless Connection")
+			self.roam_wireless_test_alert()
+			time.sleep(15)
+			self.wireless_test_alert_popup.dismiss()
+			if self.config.get("roam", "freq") == "5 GHz":
+				wifi_interface = "wifi1"
+			else:
+				wifi_interface = "wifi2"
+			result = self.get_wifi_status(wifi_interface)
+			if result:
+				self.roam_wireless_result("Wireless Connection Succeeded")
+			else:
+				self.roam_wireless_result("Wireless Connection Failed")
+		else:
+			Logger.debug("ROAM Wireless Bridge Not Found")
+			self.roam_wireless_result("ROAM Wireless Bridge Not Found")
+	@mainthread
+	def roam_wireless_test_alert(self):
+		self.wireless_test_alert_popup = self.msgbox("\n\nTesting.\n\nPlease wait...", title="ROAM Wireless Connection Test", height=200)
+	@mainthread
+	def roam_wireless_result(self,message):
+		self.msgbox(message, okbutton=True, height=130)
+	def get_wifi_status(self,wifi_interface):
+		if self.roam != None:
+			roam_command = '/interface/wifi/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			if response != None:
+				for entry in response:
+					if entry['name'] == wifi_interface:
+						Logger.debug(entry['running'])
+						if entry['running'] == 'true':
+							Logger.debug("Wifi Connected")
+							return True
+						else:
+							Logger.debug("Wifi Disconnected")
+							return False
+			else:
+				Logger.error("Wifi Check Failed")
+				self.roam = None
+				self.connect_to_roam()
+				return False
+		else:
+			Logger.debug("ROAM Wireless Bridge Not Found")
+			return False
+
 	def get_roam_network_info(self):
 		lblwidth = sp(100)
 		lblheight = sp(30)
@@ -1523,13 +1619,14 @@ class IVS_Accessory_Framework(App):
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
 	def send_command_to_roam(self,command):
-		Logger.debug(command)
-		try:
-			result = self.roam.talk(command)
-		except Exception as e:
-			Logger.warn(e)
-		else:
-			return result
+		if self.roam != None:
+			Logger.debug(command)
+			try:
+				result = self.roam.talk(command)
+			except Exception as e:
+				Logger.warn(e)
+			else:
+				return result
 	def roam_wireless_scan(self):
 		ssids = []
 		if self.roam != None:
@@ -1545,6 +1642,8 @@ class IVS_Accessory_Framework(App):
 					Logger.debug(entry)
 					if entry['ssid'] not in ssids and entry['ssid'] != "":
 						ssids.append(entry['ssid'])
+		else:
+			Logger.debug("ROAM Wireless Bridge Not Found")
 		return ssids
 	def roam_factory_reset(self):
 		if self.roam != None:

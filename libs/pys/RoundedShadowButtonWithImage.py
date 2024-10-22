@@ -55,6 +55,8 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 		self.shape.size = self.size
 		self.shadow.pos = (0,0)
 		self.shadow.size = self.size
+		self.img.height = self.height - 17
+		self.img.width = self.height - 17
 		max_size = self.width-self.img_width-self.buffer
 		self.lbl.size = self.lbl.texture_size
 		img_pos_x=(self.width-(self.lbl.texture_size[0] + self.img.width + self.buffer))/2
@@ -62,6 +64,8 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 		self.img.pos=(img_pos_x,self.height/2-self.img.height/2)
 		lbl_pos_x = img_pos_x + self.img.width + self.buffer
 		self.lbl.pos=(lbl_pos_x,self.height/2-self.lbl.height/2)
+		# print("Height:" + str(self.height))
+		# print("Width:" + str(self.width))
 		# print("Text: " + str(self.lbl.text))
 		# print("Label Text Size: " + str(self.lbl.text_size))
 		# print("Shape Size: " + str(self.size))
