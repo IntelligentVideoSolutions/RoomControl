@@ -2,6 +2,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.clock import Clock, mainthread
 from kivy.properties import StringProperty, NumericProperty
 from kivy.logger import Logger
+from kivy.app import App
 from libs.modules.ivs import ivs
 import threading
 import time
@@ -12,6 +13,7 @@ class Keypad(RelativeLayout):
 	pinlength = NumericProperty(6)
 	last_push_time = 0
 	push_clear_time = 10 # Time in seconds to wait between button presses before clearing entry.
+	homescreen = "Portrait_Home_Screen"
 	def __init__(self, valt, room, **kwargs):
 		super(Keypad, self).__init__(**kwargs)
 		self.valt = valt
@@ -21,26 +23,33 @@ class Keypad(RelativeLayout):
 		print(self.ids["display_label"].text)
 	def PressButton(self,instance):
 		if instance.text == "Del":
-			curlen = len(self.ids["display_label"].text)
-			self.ids["display_label"].text = self.ids["display_label"].text[0:curlen-1]
+			# curlen = len(self.ids["display_label"].text)
+			# self.ids["display_label"].text = self.ids["display_label"].text[0:curlen-1]
+			curlen = len(App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text)
+			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text[0:curlen-1]
 		elif instance.text == "Clear":
-			self.ids["display_label"].text = ""
+			# self.ids["display_label"].text = ""
+			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = ""
 		else:
-			self.ids["display_label"].text = self.ids["display_label"].text + instance.text
+			# self.ids["display_label"].text = self.ids["display_label"].text + instance.text
+			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text + instance.text
 			if self.last_push_time == 0:
 				self.event_check_push_time = Clock.schedule_interval(self.check_push_time, 1)
 			self.last_push_time = time.time()
-		if len(self.ids["display_label"].text) == self.pinlength:
+		# if len(self.ids["display_label"].text) == self.pinlength:
+		if len(App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text) == self.pinlength:
 			# self.event_Pin_Entered = Clock.schedule_once(self.PinEntered, .25)
 			threading.Thread(target=self.PinEntered).start()
 			# self.clear_display_label(0)
 			Clock.schedule_once(self.disable_input,-1)
 	@mainthread
 	def update_display_label(self,text):
-		self.ids["display_label"].text = text
+		# self.ids["display_label"].text = text
+		App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = text
 	def PinEntered(self):
 		# print("pin entered")
-		enteredcode = self.ids["display_label"].text
+		# enteredcode = self.ids["display_label"].text
+		enteredcode = App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text
 		Logger.info(__name__ + ": " + "PIN entered: " + enteredcode)
 
 		self.author = self.getuserid(enteredcode, self.valt.getusers())
@@ -71,7 +80,8 @@ class Keypad(RelativeLayout):
 		return retval
 	@mainthread
 	def clear_display_label(self,dt):
-		self.ids["display_label"].text = ""
+		# self.ids["display_label"].text = ""
+		App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = ""
 		self.enable_input()
 	def start_recording(self):
 		self.valt.startrecording(self.room, self.recordingname, author=self.author)
@@ -119,4 +129,5 @@ class Keypad(RelativeLayout):
 		if time.time()-self.last_push_time >= self.push_clear_time:
 			self.event_check_push_time.cancel()
 			self.last_push_time = 0
-			self.ids["display_label"].text = ""
+			# self.ids["display_label"].text = ""
+			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = ""

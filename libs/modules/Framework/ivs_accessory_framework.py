@@ -1,5 +1,5 @@
 # IVS Accessory Framework
-# Version 2.3.4
+# Version 2.3.5
 # Last Updated: 10/16/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
@@ -45,6 +45,7 @@ from libs.modules.ivs.valt import VALT
 from libs.modules.CameraControl.CameraControl import CameraControl
 from libs.modules.ScheduleDisplay.ScheduleDisplay import ScheduleDisplay
 from libs.modules.Keypad.Keypad import Keypad
+from libs.modules.SmartButton.SmartButton import SmartButton
 
 # Mikrotik API module Import
 import libs.modules.ros_api as ros_api
@@ -99,6 +100,7 @@ class IVS_Accessory_Framework(App):
 	orientation = ""
 	roam=None
 	roam_wifi_status = False
+	status_buttons_list = {}
 	# debug = True
 
 	# removed in favor of os.getcwd()
@@ -122,6 +124,7 @@ class IVS_Accessory_Framework(App):
 		Builder.load_file(self.working_path + 'libs/modules/CameraControl/CameraControl.kv')
 		Builder.load_file(self.working_path + 'libs/modules/ScheduleDisplay/ScheduleDisplay.kv')
 		Builder.load_file(self.working_path + 'libs/modules/Keypad/Keypad.kv')
+		Builder.load_file(self.working_path + 'libs/modules/SmartButton/SmartButton.kv')
 
 	def get_application_config(self):
 		return super(IVS_Accessory_Framework, self).get_application_config(self.configfilepath)
@@ -152,7 +155,8 @@ class IVS_Accessory_Framework(App):
 		# self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
 		self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = __version__
 		threading.Thread(target=self.connect_to_roam).start()
-
+		self.define_status_buttons()
+		self.update_status_bar(0)
 
 
 
@@ -195,6 +199,9 @@ class IVS_Accessory_Framework(App):
 		self.build_application_settings()
 		self.build_system_settings()
 		self.build_roam_settings()
+		self.build_camera_control_settings()
+		self.build_keypad_settings()
+		self.build_smart_button_settings()
 		settings.register_type("ip", SettingIP)
 		settings.register_type("scrolloptions", SettingScrollOptions)
 		settings.register_type("password", SettingPassword)
@@ -208,6 +215,11 @@ class IVS_Accessory_Framework(App):
 
 		# 12/21/2023: Disabled network panel in settings as there is no good way to set the IP address from python. The way the address had been getting set was hacky using os commands. As part of the migration to android, this feature has been deprecated.
 		# settings.add_json_panel('Network', self.config, data=json.dumps(self.networkjson))
+
+		settings.add_json_panel('Camera Control', self.config, data=json.dumps(self.ccjson))
+		settings.add_json_panel('Keypad', self.config, data=json.dumps(self.kpjson))
+		settings.add_json_panel('Smart Button', self.config,data=json.dumps(self.sbjson))
+
 
 		settings.add_json_panel('System', self.config, data=json.dumps(self.systemjson))
 		settings.add_json_panel('ROAM', self.config, data=json.dumps(self.roamjson))
@@ -276,6 +288,10 @@ class IVS_Accessory_Framework(App):
 		self.notification.dismiss()
 
 	def on_config_change(self, config, section, key, value):
+		Logger.debug("Config Updated")
+		Logger.debug("Section: " + str(section))
+		Logger.debug("Key: " + str(key))
+		Logger.debug("Value: " + str(value))
 		if section == "valt":
 			if key == "timeout":
 				self.valt.change_timeout(value)
@@ -319,6 +335,8 @@ class IVS_Accessory_Framework(App):
 				self.reinitialize()
 			if key == "orientation":
 				self.set_orientation()
+			if key == "recbutton" or key == "privbutton" or key == 'markerbutton':
+				self.update_status_bar(self.valt.selected_room_status)
 		elif section == "network":
 			if key.find("mode") > 0 and value == "DHCP":
 				nic = key[0:key.find("mode")]
@@ -340,6 +358,9 @@ class IVS_Accessory_Framework(App):
 				else:
 					Logger.info("Debug Mode Disabled")
 					Config.set('kivy', 'log_level', 'info')
+		if section == "smartbutton":
+			if self.config.get('application','mode') == "Smart Button":
+				self.lw.update_buttons(self.valt.selected_room_status)
 		elif section == "roam":
 			if key == "roamip" or key == "roamusername" or key == "roampassword":
 				threading.Thread(target=self.connect_to_roam).start()
@@ -468,8 +489,8 @@ class IVS_Accessory_Framework(App):
 		threading.Thread(target=self.startrecording).start()
 
 	def initiatecomment(self):
-		if self.orientation == "Landscape":
-			self.update_feedback("Adding Comment", (0, 0, 0, 1))
+		# if self.orientation == "Landscape":
+		self.update_feedback("Adding Comment", (0, 0, 0, 1))
 		threading.Thread(target=self.addmarker).start()
 
 	def initiatestop(self):
@@ -665,11 +686,18 @@ class IVS_Accessory_Framework(App):
 		# btn = ImageButton(id='start_button', size_hint=(1, 1), source=self.imagepath + 'Start_Rec.png',
 		# 				  upimage=self.imagepath + 'Start_Rec.png', downimage=self.imagepath + 'Start_Rec_down.png',
 		# 				  always_release=True, on_release=lambda x: self.initiaterecording())
-		btn = RoundedShadowButtonWithImage(id='start_button', text="Start Recording", size_hint=(1, 1), color="black",
+		if self.orientation == "Landscape":
+			btn = RoundedShadowButtonWithImage(id='start_button', text="Start Recording", size_hint=(1, 1), color="black",
 										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/record_icon.png",
 										   always_release=True, on_release=lambda x: self.initiaterecording())
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
+		# else:
+			# btn = ImageButton(id="start_button", size_hint=(1, 1), source=self.imagepath + 'record_icon.png',
+			# 				  upimage=self.imagepath + 'record_icon.png', downimage=self.imagepath + 'record_icon.png',
+			# 				  always_release=True, on_release=lambda x: self.initiaterecording())
+
+
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].padding = 0
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].spacing = 10
 
@@ -686,11 +714,12 @@ class IVS_Accessory_Framework(App):
 											   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 											   button_down_color=(0, 0, 1, 1), img_source="images/locked_icon.png",
 											   always_release=True, on_release=lambda x: self.initiatedisableprivacy())
-		else:
-			btn = ImageButton(id="privacy_button", size_hint=(1, 1), source=self.imagepath + 'locked_icon.png',
-							  upimage=self.imagepath + 'locked_icon.png', downimage=self.imagepath + 'locked_icon.png',
-							  always_release=True, on_release=lambda x: self.initiatedisableprivacy())
-		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
+		# else:
+		# 	btn = ImageButton(id="privacy_button", size_hint=(1, 1), source=self.imagepath + 'locked_icon.png',
+		# 					  upimage=self.imagepath + 'locked_icon.png', downimage=self.imagepath + 'locked_icon.png',
+		# 					  always_release=True, on_release=lambda x: self.initiatedisableprivacy())
+
 
 	@mainthread
 	def addlockbutton(self):
@@ -705,12 +734,13 @@ class IVS_Accessory_Framework(App):
 											   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 											   button_down_color=(0, 0, 1, 1), img_source="images/unlocked_icon.png",
 											   always_release=True, on_release=lambda x: self.initiateprivacy())
-		else:
-			btn = ImageButton(id="privacy_button", size_hint=(1, 1), source=self.imagepath + 'unlocked_icon.png',
-							  upimage=self.imagepath + 'unlocked_icon.png',
-							  downimage=self.imagepath + 'unlocked_icon.png', always_release=True,
-							  on_release=lambda x: self.initiateprivacy())
-		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
+		# else:
+		# 	btn = ImageButton(id="privacy_button", size_hint=(1, 1), source=self.imagepath + 'unlocked_icon.png',
+		# 					  upimage=self.imagepath + 'unlocked_icon.png',
+		# 					  downimage=self.imagepath + 'unlocked_icon.png', always_release=True,
+		# 					  on_release=lambda x: self.initiateprivacy())
+		#
 
 	@mainthread
 	def addpausestopbuttons(self):
@@ -718,23 +748,37 @@ class IVS_Accessory_Framework(App):
 		# btn = ImageButton(id="pause_button", size_hint=(1, 1), source=self.imagepath + 'small_pause.png',
 		# 				  upimage=self.imagepath + 'small_pause.png', downimage=self.imagepath + 'small_pause_down.png',
 		# 				  always_release=True, on_release=lambda x: self.initiatepause())
-		btn = RoundedShadowButtonWithImage(id='pause_button', text="Pause", size_hint=(1, 1),
+		if self.orientation == "Landscape":
+			btn = RoundedShadowButtonWithImage(id='pause_button', text="Pause", size_hint=(1, 1),
 										   color="black",
 										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/pause_icon.png",
 										   always_release=True, on_release=lambda x: self.initiatepause())
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
+		# else:
+		# 	btn = ImageButton(id="pause_button", size_hint=(1, 1), source=self.imagepath + 'pause_icon.png',
+		# 					  upimage=self.imagepath + 'pause_icon.png',
+		# 					  downimage=self.imagepath + 'pause_icon.png', always_release=True,
+		# 					  on_release=lambda x: self.initiatepause())
+		# 	self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
 		# btn = ImageButton(id="stop_button", size_hint=(1, 1), source=self.imagepath + 'small_stop.png',
 		# 				  upimage=self.imagepath + 'small_stop.png', downimage=self.imagepath + 'small_stop_down.png',
 		# 				  always_release=True, on_release=lambda x: self.initiatestop())
-		btn = RoundedShadowButtonWithImage(id='stop_button', text="Stop", size_hint=(1, 1),
+		if self.orientation == "Landscape":
+			btn = RoundedShadowButtonWithImage(id='stop_button', text="Stop", size_hint=(1, 1),
 										   color="black",
 										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/stop_icon.png",
 										   always_release=True, on_release=lambda x: self.initiatestop())
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].padding = 2
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].spacing = 4
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].padding = 2
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].spacing = 4
+		# else:
+		# 	btn = ImageButton(id="stop_button", size_hint=(1, 1), source=self.imagepath + 'stop_icon_w.png',
+		# 					  upimage=self.imagepath + 'stop_icon_w.png',
+		# 					  downimage=self.imagepath + 'stop_icon_w.png', always_release=True,
+		# 					  on_release=lambda x: self.initiatestop())
+
 
 	@mainthread
 	def addresumebutton(self):
@@ -742,13 +786,20 @@ class IVS_Accessory_Framework(App):
 		# btn = ImageButton(size_hint=(1, 1), source=self.imagepath + 'resume.png', upimage=self.imagepath + 'resume.png',
 		# 				  downimage=self.imagepath + 'resume_down.png', always_release=True,
 		# 				  on_release=lambda x: self.initiateresume())
-		btn = RoundedShadowButtonWithImage(id='resume_button', text="Resume", size_hint=(1, 1),
-										   color="black",
-										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
-										   button_down_color=(0, 0, 1, 1), img_source="images/resume_icon.png",
-										   always_release=True, on_release=lambda x: self.initiateresume())
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
-		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].ids['resume_button'] = btn
+		if self.orientation == "Landscape":
+			btn = RoundedShadowButtonWithImage(id='resume_button', text="Resume", size_hint=(1, 1),
+											   color="black",
+											   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
+											   button_down_color=(0, 0, 1, 1), img_source="images/resume_icon.png",
+											   always_release=True, on_release=lambda x: self.initiateresume())
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].ids['resume_button'] = btn
+
+	# else:
+		# 	btn = ImageButton(id="resume_button", size_hint=(1, 1), source=self.imagepath + 'resume_icon.png',
+		# 					  upimage=self.imagepath + 'resume_icon.png',
+		# 					  downimage=self.imagepath + 'resume_icon.png', always_release=True,
+		# 					  on_release=lambda x: self.initiateresume())
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].padding = 0
 		# self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].spacing = 0
 
@@ -760,13 +811,14 @@ class IVS_Accessory_Framework(App):
 										   font_size=self.button_font_size, button_radius=10, button_color=(1, 1, 1, 1),
 										   button_down_color=(0, 0, 1, 1), img_source="images/comment_b.png",
 										   always_release=True, on_release=lambda x: self.initiatecomment())
-		else:
-			btn = ImageButton(id='marker_button', size_hint=(1, 1), source=self.imagepath + 'comment_w.png',
-							  upimage=self.imagepath + 'comment_w.png',
-							  downimage=self.imagepath + 'comment_w.png', always_release=True,
-							  on_release=lambda x: self.initiatecomment())
-		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
-		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].ids['marker_button'] = btn
+			self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].add_widget(btn)
+			self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].ids['marker_button'] = btn
+
+	# else:
+		# 	btn = ImageButton(id='marker_button', size_hint=(1, 1), source=self.imagepath + 'comment_w.png',
+		# 					  upimage=self.imagepath + 'comment_w.png',
+		# 					  downimage=self.imagepath + 'comment_w.png', always_release=True,
+		# 					  on_release=lambda x: self.initiatecomment())
 	@mainthread
 	def addremovebuttons(self):
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
@@ -794,12 +846,24 @@ class IVS_Accessory_Framework(App):
 			empty_widget = Widget()
 			self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].add_widget(empty_widget)
 			img = Image(source=self.imagepath + "wifi_icon_b.png", size_hint_x=None, width=28, height=28)
+			self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].add_widget(img)
 		else:
-			img = Image(source=self.imagepath + "wifi_icon_w.png")
-		self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].add_widget(img)
+			if hasattr(self,"valt"):
+				self.update_status_bar(self.valt.selected_room_status)
+			else:
+				self.update_status_bar(0)
+		# else:
+		# 	img = Image(source=self.imagepath + "wifi_icon_w.png")
+			# self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].add_widget(img)
 	@mainthread
 	def remove_wifi_icon(self):
-		self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].clear_widgets()
+		if self.orientation == "Landscape":
+			self.screenmgmt.get_screen(self.homescreen).ids['status_layout'].clear_widgets()
+		else:
+			if hasattr(self,"valt"):
+				self.update_status_bar(self.valt.selected_room_status)
+			else:
+				self.update_status_bar(0)
 	def getnetworkinfo(self):
 		lblwidth = sp(100)
 		lblheight = sp(30)
@@ -960,6 +1024,29 @@ class IVS_Accessory_Framework(App):
 		self.valt.stop_room_check_thread()
 		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
 		threading.Thread(target=self.disableprivacy).start()
+
+	def initiatelock(self):
+		self.update_feedback("Locking Room", (0, 0, 0, 1))
+		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
+		self.screenmgmt.get_screen(self.homescreen).ids['recording_layout'].clear_widgets()
+		self.valt.stop_room_check_thread()
+		threading.Thread(target=self.enablelock).start()
+
+	def initiateunlock(self):
+		self.update_feedback("Unlocking Room", (0, 0, 0, 1))
+		self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].text = ""
+		self.valt.stop_room_check_thread()
+		self.screenmgmt.get_screen(self.homescreen).ids['privacy_layout'].clear_widgets()
+		threading.Thread(target=self.disablelock).start()
+
+	def enablelock(self):
+		self.valt.lockroom(self.config.get("valt", "room"))
+		self.valt.start_room_check_thread()
+
+	def disablelock(self):
+		self.valt.unlockroom(self.config.get("valt", "room"))
+		self.valt.start_room_check_thread()
+
 
 	def enableprivacy(self):
 		# if self.valt.getroomstatus(self.config.get("valt","room")) == 1:
@@ -1141,12 +1228,12 @@ class IVS_Accessory_Framework(App):
 
 	def build_application_settings(self):
 		self.applicationjson = []
-		modelist = ["Camera Control", "Schedule", "Keypad", "None"]
+		modelist = ["Camera Control", "Schedule", "Keypad", "Smart Button","None"]
 		orientationlist = ["Landscape", "Portrait", "Automatic"]
-		streamtypelist = ["H264", "MJPG"]
-		resolutionlist = ["640x480", "800x450", "1280x720", "1920x1080"]
-		fpslist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-				   "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]
+		# streamtypelist = ["H264", "MJPG"]
+		# resolutionlist = ["640x480", "800x450", "1280x720", "1920x1080"]
+		# fpslist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
+		# 		   "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]
 		self.build_settings_json(self.applicationjson, settype="title", title="Application Settings")
 		self.build_settings_json(self.applicationjson, settype="password", title="Password",
 								 desc="Password to Access the Settings Menu", section="application",
@@ -1159,21 +1246,21 @@ class IVS_Accessory_Framework(App):
 								 options=modelist, default="Camera Control")
 		self.build_settings_json(self.applicationjson, settype="bool", title="Date/Time", desc="Display and Time",
 								 section="application", key="clock", default=1)
-		self.build_settings_json(self.applicationjson, settype="title", title="Camera Control Settings")
-		self.build_settings_json(self.applicationjson, settype="scrolloptions", title="Stream Type",
-								 desc="Stream Type to use in Camera Control Mode", section="application",
-								 key="streamtype", options=streamtypelist, default="H264")
-		self.build_settings_json(self.applicationjson, settype="scrolloptions", title="Resolution",
-								 desc="Resolution to use in Camera Control Mode", section="application",
-								 key="resolution", options=resolutionlist, default="800x450")
-		self.build_settings_json(self.applicationjson, settype="scrolloptions", title="FPS",
-								 desc="Frames Per Second to use in Camera Control Mode", section="application",
-								 key="fps", options=fpslist, default="30")
-		self.build_settings_json(self.applicationjson, settype="bool", title="Audio", desc="Enable/Disable Audio",
-								 section="application", key="audio", default=0)
-		self.build_settings_json(self.applicationjson, settype="title", title="Keypad Settings")
-		self.build_settings_json(self.applicationjson, settype="numeric", title="Pin Length",
-								 desc="Length of Keypad Pin Code", section="application", key="pinlength", default=6)
+		# self.build_settings_json(self.applicationjson, settype="title", title="Camera Control Settings")
+		# self.build_settings_json(self.applicationjson, settype="scrolloptions", title="Stream Type",
+		# 						 desc="Stream Type to use in Camera Control Mode", section="application",
+		# 						 key="streamtype", options=streamtypelist, default="H264")
+		# self.build_settings_json(self.applicationjson, settype="scrolloptions", title="Resolution",
+		# 						 desc="Resolution to use in Camera Control Mode", section="application",
+		# 						 key="resolution", options=resolutionlist, default="800x450")
+		# self.build_settings_json(self.applicationjson, settype="scrolloptions", title="FPS",
+		# 						 desc="Frames Per Second to use in Camera Control Mode", section="application",
+		# 						 key="fps", options=fpslist, default="30")
+		# self.build_settings_json(self.applicationjson, settype="bool", title="Audio", desc="Enable/Disable Audio",
+		# 						 section="application", key="audio", default=0)
+		# self.build_settings_json(self.applicationjson, settype="title", title="Keypad Settings")
+		# self.build_settings_json(self.applicationjson, settype="numeric", title="Pin Length",
+		# 						 desc="Length of Keypad Pin Code", section="application", key="pinlength", default=6)
 		# self.build_settings_json(self.applicationjson, settype="title", title="Web Interface")
 		# self.build_settings_json(self.applicationjson, settype="bool", title="Web Interface", desc="Enable/Disable the Web Interface", section="application", key="webinterface")
 		# self.build_settings_json(self.applicationjson, settype="password", title="Web Password", desc="Password to Access the Web Interface", section="application", key="webpassword")
@@ -1184,6 +1271,40 @@ class IVS_Accessory_Framework(App):
 								 desc="Enable/Disable the Lock Button", section="application", key="privbutton")
 		self.build_settings_json(self.applicationjson, settype="bool", title="Comment Button",
 								 desc="Enable/Disable the Comment Button", section="application", key="markerbutton")
+	def build_camera_control_settings(self):
+		self.ccjson = []
+		streamtypelist = ["H264", "MJPG"]
+		resolutionlist = ["640x480", "800x450", "1280x720", "1920x1080"]
+		fpslist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
+				   "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]
+		# self.build_settings_json(self.ccjson, settype="title", title="Camera Control Settings")
+		self.build_settings_json(self.ccjson, settype="scrolloptions", title="Stream Type",
+								 desc="Stream Type to use in Camera Control Mode", section="application",
+								 key="streamtype", options=streamtypelist, default="H264")
+		self.build_settings_json(self.ccjson, settype="scrolloptions", title="Resolution",
+								 desc="Resolution to use in Camera Control Mode", section="application",
+								 key="resolution", options=resolutionlist, default="800x450")
+		self.build_settings_json(self.ccjson, settype="scrolloptions", title="FPS",
+								 desc="Frames Per Second to use in Camera Control Mode", section="application",
+								 key="fps", options=fpslist, default="30")
+		self.build_settings_json(self.ccjson, settype="bool", title="Audio", desc="Enable/Disable Audio",
+								 section="application", key="audio", default=0)
+	def build_keypad_settings(self):
+		self.kpjson = []
+		# self.build_settings_json(self.kpjson, settype="title", title="Keypad Settings")
+		self.build_settings_json(self.kpjson, settype="numeric", title="Pin Length",
+								 desc="Length of Keypad Pin Code", section="application", key="pinlength", default=6)
+	def build_smart_button_settings(self):
+		self.sbjson = []
+		self.build_settings_json(self.sbjson, settype="title", title="Buttons")
+		self.build_settings_json(self.sbjson, settype="bool", title="Recording Button",
+								 desc="Enable/Disable the Recording Button", section="smartbutton", key="record_button")
+		self.build_settings_json(self.sbjson, settype="bool", title="Privacy Button",
+								 desc="Enable/Disable the Privacy Button", section="smartbutton", key="privacy_button")
+		self.build_settings_json(self.sbjson, settype="bool", title="Comment Button",
+								 desc="Enable/Disable the Comment Button", section="smartbutton", key="comment_button")
+		self.build_settings_json(self.sbjson, settype="bool", title="Lock Button",
+								 desc="Lock/Unlock the Room", section="smartbutton", key="lock_button")
 
 	def build_settings_defaults(self):
 		self.defaultsjson = {}
@@ -1199,6 +1320,8 @@ class IVS_Accessory_Framework(App):
 										"wpamethod": "peap"}
 		self.defaultsjson['system'] = {"reload": None, "reboot": None, "factory": None, "applynetwork": None, "debug": "0"}
 		self.defaultsjson['roam'] = {"freq":"2.4 GHz","roamip":"192.168.20.1","roamusername":"ivsadmin","roampassword":"@dmin51!!"}
+		self.defaultsjson['smartbutton'] = {"record_button": "0", "privacy_button": "0", "comment_button": "0", "lock_button":"0"}
+
 
 	def build_system_settings(self):
 		self.systemjson = []
@@ -1367,6 +1490,8 @@ class IVS_Accessory_Framework(App):
 			self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
 		elif self.config.get("application", "mode") == "Keypad":
 			self.lw = Keypad(self.valt, self.config.get("valt", "room"), pinlength = int(self.config.get("application", "pinlength")), recordingname=self.config.get("valt", "recname"))
+		elif self.config.get("application", "mode") == "Smart Button":
+			self.lw = SmartButton(self.config, self.valt, self.config.get("valt", "room"), recordingname=self.config.get("valt", "recname"))
 		# self.lw = Keypad(self.valt, self.config.get("valt", "room"), 6)
 		self.screenmgmt.get_screen(self.homescreen).ids['app_window'].clear_widgets()
 		if self.config.get("application", "mode") != "None":
@@ -1379,6 +1504,12 @@ class IVS_Accessory_Framework(App):
 	@mainthread
 	def update_feedback(self, newfeedback, newcolor=(0, 0, 0, 1)):
 		if newfeedback != None:
+		# 	try:
+		# 		self.recevent.cancel()
+		# 		self.screenmgmt.get_screen(self.homescreen).ids['recording_time'].text = ""
+		# 		self.recstarttime = 0
+		# 	except:
+		# 		pass
 			if self.screenmgmt.get_screen(self.homescreen).ids['feedback'].text != str(newfeedback):
 				self.screenmgmt.get_screen(self.homescreen).ids['feedback'].text = str(newfeedback)
 			if self.screenmgmt.get_screen(self.homescreen).ids['feedback'].color != newcolor:
@@ -1446,6 +1577,8 @@ class IVS_Accessory_Framework(App):
 		# if curroomstatus != self.lastroomstatus:
 		# 	self.lastroomstatus = curroomstatus
 		self.updroomstatus(curroomstatus)
+		if self.orientation == "Portrait":
+			self.update_status_bar(curroomstatus)
 
 	def error_message(self,current_error_message):
 		self.update_feedback(current_error_message,(1,0,0,1))
@@ -1454,6 +1587,8 @@ class IVS_Accessory_Framework(App):
 		Logger.debug(__name__ + ": " + "Terminating all Open Applications")
 		try:
 			self.lw.disconnect()
+			self.screenmgmt.get_screen(self.homescreen).ids['app_window'].remove_widget(self.lw)
+
 		except:
 			pass
 	def addmarker(self):
@@ -1649,5 +1784,113 @@ class IVS_Accessory_Framework(App):
 		if self.roam != None:
 			roam_command ="/system/reset-configuration =no-defaults=no =skip-backup=yes"
 			self.send_command_to_roam(roam_command)
+	def define_status_buttons(self):
+		# UNLOCK BUTTON
+		btn = ImageButton(id="unlock_button", size_hint=(None, None), source=self.imagepath + 'locked_icon.png',
+						  upimage=self.imagepath + 'locked_icon.png', downimage=self.imagepath + 'locked_icon.png',
+						  always_release=True, on_release=lambda x: self.initiateunlock())
+		self.status_buttons_list.update({'unlock_button': {'button': btn, 'enabled': False}})
+
+		# LOCK BUTTON
+		btn = ImageButton(id="lock_button", size_hint=(None, None), source=self.imagepath + 'unlocked_icon.png',
+						  upimage=self.imagepath + 'unlocked_icon.png',
+						  downimage=self.imagepath + 'unlocked_icon.png', always_release=True,
+						  on_release=lambda x: self.initiatelock())
+		self.status_buttons_list.update({'lock_button': {'button': btn, 'enabled': False}})
+
+		# RECORDING BUTTON
+		btn = ImageButton(id="start_button", size_hint=(None, None), source=self.imagepath + 'record_icon.png',
+						  upimage=self.imagepath + 'record_icon.png', downimage=self.imagepath + 'record_icon.png',
+						  always_release=True, on_release=lambda x: self.initiaterecording())
+		self.status_buttons_list.update({'start_button': {'button': btn, 'enabled': False}})
+
+		# COMMENT BUTTON
+		btn = ImageButton(id='comment_button', size_hint=(None, None), source=self.imagepath + 'comment_w.png',
+						  upimage=self.imagepath + 'comment_w.png',
+						  downimage=self.imagepath + 'comment_w.png', always_release=True,
+						  on_release=lambda x: self.initiatecomment())
+		self.status_buttons_list.update({'comment_button': {'button': btn, 'enabled': False}})
+
+		# PAUSE BUTTON
+		btn = ImageButton(id="pause_button", size_hint=(None, None), source=self.imagepath + 'pause_icon.png',
+						  upimage=self.imagepath + 'pause_icon.png',
+						  downimage=self.imagepath + 'pause_icon.png', always_release=True,
+						  on_release=lambda x: self.initiatepause())
+		self.status_buttons_list.update({'pause_button': {'button': btn, 'enabled': False}})
+
+		# RESUME BUTTON
+		btn = ImageButton(id="resume_button", size_hint=(None, None), source=self.imagepath + 'resume_icon.png',
+						  upimage=self.imagepath + 'resume_icon.png',
+						  downimage=self.imagepath + 'resume_icon.png', always_release=True,
+						  on_release=lambda x: self.initiateresume())
+		self.status_buttons_list.update({'resume_button': {'button': btn, 'enabled': False}})
+
+		# STOP BUTTON
+		btn = ImageButton(id="stop_button", size_hint=(None, None), source=self.imagepath + 'stop_icon_w.png',
+						  upimage=self.imagepath + 'stop_icon_w.png',
+						  downimage=self.imagepath + 'stop_icon_w.png', always_release=True,
+						  on_release=lambda x: self.initiatestop())
+		self.status_buttons_list.update({'stop_button': {'button': btn, 'enabled': False}})
+
+		# ROAM WIFI STATUS
+		img = Image(source=self.imagepath + "wifi_icon_w.png")
+		self.status_buttons_list.update({'wifi_button': {'button': img, 'enabled': False}})
+
+		# SETTINGS BUTTON
+		btn = ImageButton(id="settings_button", size_hint=(None, None), source=self.imagepath + 'info_icon_w.png',
+						  upimage=self.imagepath + 'info_icon_w.png', downimage=self.imagepath + 'info_icon_w.png',
+						  always_release=True, on_release=lambda x: self.getnetworkinfo())
+		self.status_buttons_list.update({'settings_button': {'button': btn, 'enabled': False}})
+
+		# INFO BUTTON
+		btn = ImageButton(id="about_button", size_hint=(None, None), source=self.imagepath + 'config_icon_w.png',
+						  upimage=self.imagepath + 'config_icon_w.png', downimage=self.imagepath + 'config_icon_w.png',
+						  always_release=True, on_release=lambda x: self.open_auth())
+		self.status_buttons_list.update({'about_button': {'button': btn, 'enabled': False}})
+	def add_status_buttons(self):
+		# if self.buttons_list:
+		i=0
+		self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].clear_widgets()
+		for btn in self.status_buttons_list.values():
+			if btn['enabled']:
+				i = i + 1
+				self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].add_widget(btn['button'])
+				btn['button'].height = btn['button'].parent.height
+				btn['button'].width = btn['button'].parent.height
+		self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].width = self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].height * i
+		Logger.debug(self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].height)
+		Logger.debug(self.screenmgmt.get_screen(self.homescreen).ids['status_bar_layout'].width)
+	def disable_all_status_buttons(self):
+		for btn in self.status_buttons_list.values():
+			btn['enabled'] = False
+	@mainthread
+	def update_status_bar(self,curroomstatus):
+		if self.orientation == "Portrait":
+			Logger.debug("Updating Status Bar")
+			self.disable_all_status_buttons()
+			self.status_buttons_list['about_button']['enabled'] = True
+			self.status_buttons_list['settings_button']['enabled'] = True
+			if curroomstatus == 1 or curroomstatus == 5:
+				if int(self.config.get('application', 'recbutton')):
+					self.status_buttons_list['start_button']['enabled'] = True
+				if int(self.config.get('application', 'privbutton')):
+					self.status_buttons_list['lock_button']['enabled'] = True
+			elif curroomstatus == 2:
+				if int(self.config.get('application', 'recbutton')):
+					self.status_buttons_list['stop_button']['enabled'] = True
+					self.status_buttons_list['pause_button']['enabled'] = True
+					self.status_buttons_list['comment_button']['enabled'] = True
+			elif curroomstatus == 3:
+				if int(self.config.get('application', 'recbutton')):
+					self.status_buttons_list['stop_button']['enabled'] = True
+					self.status_buttons_list['resume_button']['enabled'] = True
+					self.status_buttons_list['comment_button']['enabled'] = True
+			elif curroomstatus == 4:
+				if int(self.config.get('application', 'privbutton')):
+					self.status_buttons_list['unlock_button']['enabled'] = True
+			if self.roam_wifi_status:
+				self.status_buttons_list['wifi_button']['enabled'] = True
+			self.add_status_buttons()
+
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()

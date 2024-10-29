@@ -31,26 +31,14 @@
                     valign: 'bottom'
                     fit_mode: 'contain'
                     source: app.imagepath + 'ivsicon.png'
-                ImageButton:
+                BoxLayout:
                     size_hint: None, None
-                    pos: self.parent.width-((self.width)*2+14), self.parent.height-self.height-2
-                    height: self.parent.height/3-4
-                    width: self.parent.height/3-4
-                    source: app.imagepath + 'config_icon_w.png'
-                    upimage: app.imagepath + 'config_icon_w.png'
-                    downimage: app.imagepath + 'config_icon_w.png'
-                    always_release: True
-                    on_release: app.open_auth()
-                ImageButton:
-                    size_hint: None, None
-                    pos: self.parent.width-self.width, self.parent.height-self.height-2
-                    height: self.parent.height/3-4
-                    width: self.parent.height/3-4
-                    source: app.imagepath + 'info_icon_w.png'
-                    upimage: app.imagepath + 'info_icon_w.png'
-                    downimage: app.imagepath + 'info_icon_w.png'
-                    always_release: True
-                    on_release: app.getnetworkinfo()
+                    id: status_bar_layout
+                    orientation: 'horizontal'
+                    spacing: 0
+                    padding: 0
+                    pos: self.parent.width-self.width-10, self.parent.height-self.height-2
+                    height: self.parent.height/3
                 Label:
                     size_hint: None, None
                     height: self.parent.height/3-4
@@ -70,45 +58,36 @@
                     id: recording_time
                     color: 1,0,0,1
                     pos: (self.parent.width-self.width)/2,self.parent.height/3
+#                    pos: (self.parent.width-self.width)/2,0
                     height: self.parent.height/3
                     width: self.parent.width
                     text_size: self.size
                     halign: "center"
                     valign: "center"
-                    font_size: '30sp'
+                    font_size: '40sp'
                 Label:
                     id: feedback
                     color: 0,0,0,1
                     size_hint: None, None
-                    pos: (self.parent.width-self.width)/2,self.parent.height/3
+#                    pos: (self.parent.width-self.width)/2,self.parent.height/3
+                    pos: (self.parent.width-self.width)/2,0
                     height: self.parent.height/3
                     width: self.parent.width
                     text_size: self.size
                     halign: "center"
                     valign: "center"
-                    font_size: '20sp'
+                    font_size: '60sp'
                 BoxLayout:
                     size_hint: None, None
                     id: recording_layout
-                    spacing: 0
-                    padding: 0
-                    pos: (self.parent.width-self.width)/2,0
-                    height: self.parent.height/3
-                    width: self.parent.width * .45
                 BoxLayout:
                     size_hint: None, None
                     id: privacy_layout
-                    pos: self.parent.width-((self.width)*4+42),self.parent.height-self.height-2
-                    height: self.parent.height/3-4
-                    width: self.parent.height/3-4
                 BoxLayout:
                     size_hint: None, None
                     id: status_layout
-                    pos: self.parent.width-((self.width)*3+28),self.parent.height-self.height-2
-                    height: self.parent.height/3-4
-                    width: self.parent.height/3-4
 		BackgroundBoxLayout:
-			size_hint: 1,7
+			size_hint: 1,5
 			id: app_window
 			orientation: 'horizontal'
 			spacing: 10

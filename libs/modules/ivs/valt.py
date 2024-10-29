@@ -1253,6 +1253,8 @@ class VALT:
 		self.logger.debug(__name__ + ": " + str(self.selected_room) + ' status updated to ' + str(new_status))
 	def bind_to_selected_room_status(self,callback):
 		self._observers.append(callback)
+	def unbind_to_selected_room_status(self,callback):
+		self._observers.remove(callback)
 	@property
 	def errormsg(self):
 		return self._errormsg

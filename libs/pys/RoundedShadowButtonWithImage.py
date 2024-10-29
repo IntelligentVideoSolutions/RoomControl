@@ -55,8 +55,9 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 		self.shape.size = self.size
 		self.shadow.pos = (0,0)
 		self.shadow.size = self.size
-		self.img.height = self.height - 17
-		self.img.width = self.height - 17
+		if self.height >= 17 and self.height <= 45:
+			self.img.height = self.height - 17
+			self.img.width = self.height - 17
 		max_size = self.width-self.img_width-self.buffer
 		self.lbl.size = self.lbl.texture_size
 		img_pos_x=(self.width-(self.lbl.texture_size[0] + self.img.width + self.buffer))/2
@@ -64,14 +65,20 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 		self.img.pos=(img_pos_x,self.height/2-self.img.height/2)
 		lbl_pos_x = img_pos_x + self.img.width + self.buffer
 		self.lbl.pos=(lbl_pos_x,self.height/2-self.lbl.height/2)
-		# print("Height:" + str(self.height))
-		# print("Width:" + str(self.width))
-		# print("Text: " + str(self.lbl.text))
-		# print("Label Text Size: " + str(self.lbl.text_size))
-		# print("Shape Size: " + str(self.size))
-		# print("Label Texture Size: " + str(self.lbl.texture_size))
-		# print("Label Position: " + str(self.lbl.pos))
-		# print("Image Position: " + str(self.img.pos))
+		# self.print_stats()
+
+	def print_stats(self):
+		print("Height:" + str(self.height))
+		print("Width:" + str(self.width))
+		print("Text: " + str(self.lbl.text))
+		print("Image Width: " + str(self.img.width))
+		print("Image Height: " + str(self.img.height))
+		print("Label Text Size: " + str(self.lbl.text_size))
+		print("Shape Size: " + str(self.size))
+		print("Label Texture Size: " + str(self.lbl.texture_size))
+		print("Label Position: " + str(self.lbl.pos))
+		print("Image Position: " + str(self.img.pos))
+		print("Buffer: " + str(self.buffer))
 
 	def on_button_radius(self,instance,value):
 		self.button_radius = value
@@ -84,9 +91,11 @@ class RoundedShadowButtonWithImage(ButtonBehavior, RelativeLayout):
 	def on_button_down_color(self,instance,value):
 		self.button_down_color = value
 	def on_press(self):
-		self.shape_color.rgba = self.button_down_color
+		if not self.disabled:
+			self.shape_color.rgba = self.button_down_color
 	def on_release(self):
-		self.shape_color.rgba = self.button_color
+		if not self.disabled:
+			self.shape_color.rgba = self.button_color
 	def on_disabled(self,instance,value):
 		self.disabled = value
 		if self.disabled:

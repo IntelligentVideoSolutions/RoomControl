@@ -22,7 +22,9 @@ class AxisCamera:
 		self.ptz_capable = False
 		self.authtype = 0
 		self.ptz = 0
-		self.privacy = 0
+		# self.privacy = 0
+		self._privacy = 0
+		self._privacy_observers = []
 		self.baseurl = 'http://' + ip + '/axis-cgi/'
 		self.camera_address = ip
 		self.username = un
@@ -428,6 +430,19 @@ class AxisCamera:
 			self.camera_check_thread = threading.Thread(target=self.check_camera_status)
 			self.camera_check_thread.daemon = True
 			self.camera_check_thread.start()
+
+	@property
+	def privacy(self):
+		return self._privacy
+	@privacy.setter
+	def privacy(self,new_status):
+		self._privacy = new_status
+		for callback in self._privacy_observers:
+			callback(self._privacy)
+		self.logger.debug(__name__ + ": " + 'Camera privacy status updated to ' + str(new_status))
+	def bind_to_privacy(self,callback):
+		self._privacy_observers.append(callback)
+
 	@property
 	def connected(self):
 		return self._connected
@@ -439,6 +454,7 @@ class AxisCamera:
 		self.logger.debug(__name__ + ": " + 'Camera connected status updated to ' + str(new_status))
 	def bind_to_connected(self,callback):
 		self._connected_observers.append(callback)
+
 	def disconnect(self):
 		self.kill_threads = True
 	def log_level(self,loglevel):
