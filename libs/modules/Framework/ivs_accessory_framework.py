@@ -4,10 +4,13 @@
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
+
 from importlib.metadata import pass_none
 
 from kivy.core.gl import msgbox
-from win32con import FALSE
+
+# Not sure why this import was in here. Commented out as they do not appear to be used anywhere
+# from win32con import FALSE
 
 from _version import __version__
 from kivy.utils import platform

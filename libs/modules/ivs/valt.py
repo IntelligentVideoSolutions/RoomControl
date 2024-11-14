@@ -1016,9 +1016,7 @@ class VALT:
 	def handleerror(self, e):
 		#ivs.log(e,self.logpath, severity="WARN")
 		self.logger.error(__name__ + ": " + str(e))
-		if str(e) == "<urlopen error timed out>" or str(e) == "<urlopen error [Errno 11001] getaddrinfo failed>" or str(
-				e) == "HTTP Error 400: Bad Request" or str(
-				e) == "<urlopen error [Errno -3] Temporary failure in name resolution>":
+		if str(e) == "<urlopen error timed out>" or str(e) == "<urlopen error [Errno 11001] getaddrinfo failed>" or str(e) == "HTTP Error 400: Bad Request" or str(e) == "<urlopen error [Errno -3] Temporary failure in name resolution>" or str(e) == "<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>":
 			self.errormsg = "Server Address Unreachable"
 			self.accesstoken = 0
 			self.reauthenticate(self.failure_reauth_time)
@@ -1036,6 +1034,10 @@ class VALT:
 			else:
 				self.errormsg = "Unable to Connect to VALT Server"
 				self.reauthenticate(self.failure_reauth_time)
+		elif str(e) == "HTTP Error 502: Bad Gateway":
+			self.errormsg = "VALT Server Offline"
+			self.accesstoken = 0
+			self.reauthenticate(self.failure_reauth_time)
 		elif str(e) == "No Recording":
 			self.errormsg = "Room is Not Currently Recording"
 		elif str(e) == "Room Already Recording":

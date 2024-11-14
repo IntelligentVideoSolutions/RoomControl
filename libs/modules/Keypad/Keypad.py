@@ -31,6 +31,7 @@ class Keypad(RelativeLayout):
 			# self.ids["display_label"].text = ""
 			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = ""
 		else:
+			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].color = (0,0,0,1)
 			# self.ids["display_label"].text = self.ids["display_label"].text + instance.text
 			App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text = App.get_running_app().screenmgmt.get_screen(self.homescreen).ids["feedback"].text + instance.text
 			if self.last_push_time == 0:
