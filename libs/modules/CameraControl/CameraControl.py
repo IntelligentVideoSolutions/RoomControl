@@ -22,6 +22,9 @@ class CameraControl(RelativeLayout):
 	debug = False
 	camstatus = None
 	camera_control = None
+	camip = StringProperty("192.168.20.10")
+	camuser = StringProperty("root")
+	campw = StringProperty("admin51")
 	def on_vidtype(self,instance,value):
 		self.vidtype = value
 		if self.my_camera != None:
@@ -39,6 +42,12 @@ class CameraControl(RelativeLayout):
 		# print(self.volume)
 		if self.my_camera != None:
 			self.my_camera.volume = self.volume
+	def on_camip(self,instance,value):
+		self.camip = value
+	def on_camuser(self,instance,value):
+		self.camuser = value
+	def on_campw(self,instance,value):
+		self.campw = value
 	def __init__(self, valt, room, **kwargs):
 		super(CameraControl, self).__init__(**kwargs)
 		self.valt = valt
@@ -71,11 +80,15 @@ class CameraControl(RelativeLayout):
 		if self.volume == 0:
 			self.ids['volume_slider'].disabled = True
 	def get_cameras(self):
-		self.cameralist = self.valt.getcameras(self.room)
+		if self.room != -1:
+			self.cameralist = self.valt.getcameras(self.room)
+		else:
+			self.cameralist = [{"id":1,"name":"ROAM","ip":self.camip,"username":self.camuser,"password":self.campw}]
 		# print(type(self.cameralist))
 		self.build_camera_list()
 	@mainthread
 	def build_camera_list(self):
+		Logger.debug(self.cameralist)
 		if type(self.cameralist).__name__ == 'list':
 			self.camera_dropdown = DropDown()
 			for camera in self.cameralist:
@@ -91,8 +104,10 @@ class CameraControl(RelativeLayout):
 			mainbutton = RoundedShadowButton(text='Select Camera', size_hint=(1, 1), selected_id=self.camera_id,font_size='20sp',button_radius=10, button_color=(1,1,1,1),color="black",button_down_color=(247/255,142/255,48/255,1),always_release=True)
 			# mainbutton = DropDownButton(text='Select Camera', size_hint=(1, 1), selected_id=self.camera_id,font_size='30sp')
 			mainbutton.bind(on_release=self.camera_dropdown.open)
-			self.ids['camera_selector'] = mainbutton
-			self.ids['select_layout'].add_widget(mainbutton)
+			Logger.debug(len(self.cameralist))
+			if len(self.cameralist) > 1:
+				self.ids['camera_selector'] = mainbutton
+				self.ids['select_layout'].add_widget(mainbutton)
 	def selectcamera(self,cameraid):
 		self.disable_camera_controls()
 		self.disable_privacy_button()
@@ -296,12 +311,13 @@ class CameraControl(RelativeLayout):
 		# 	self.my_camera.volume = self.ids['volume_slider'].value
 	def connect_video_feed(self):
 		Logger.debug(__name__ + ": " + "Connecting to Video Feed")
+		# self.camera_address = "192.168.20.10"
 		if self.vidtype == "MJPG":
-			sourcestring='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + str(self.fps)
+			sourcestring='http://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + '/axis-cgi/mjpg/video.cgi?resolution=' + self.resolution + '&fps=' + str(self.fps) +'&audio=' + str(self.volume)
 			Logger.debug(__name__ + ": " + sourcestring)
 			self.my_camera = Video(source=sourcestring, state='play', preview='images/splash.png', volume=self.volume)
 		elif self.vidtype == "H264":
-			sourcestring = 'rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?resolution=' + self.resolution + '&fps=' + str(self.fps)
+			sourcestring = 'rtsp://' + self.camera_username + ':' + self.camera_password + '@' + self.camera_address + ':554/axis-media/media.amp?videocodec=h264&resolution=' + self.resolution + '&fps=' + str(self.fps) +'&audio=' + str(self.volume)
 			Logger.debug(__name__ + ": " + sourcestring)
 			self.my_camera = Video(source=sourcestring, state='play', preview='images/splash.png', volume=self.volume)
 		self.video_feed_thread = threading.Thread(target=self.wait_for_video_feed)

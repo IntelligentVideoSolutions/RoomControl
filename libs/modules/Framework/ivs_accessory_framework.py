@@ -1,16 +1,15 @@
 # IVS Accessory Framework
-# Version 2.3.5
-# Last Updated: 10/16/2024
+# Version 2.4
+# Last Updated: 12/18/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
 
-from importlib.metadata import pass_none
-
-from kivy.core.gl import msgbox
 
 # Not sure why this import was in here. Commented out as they do not appear to be used anywhere
+#from importlib.metadata import pass_none
 # from win32con import FALSE
+# from kivy.core.gl import msgbox
 
 from _version import __version__
 from kivy.utils import platform
@@ -1322,7 +1321,7 @@ class IVS_Accessory_Framework(App):
 										"wpamode": "Personal", "username": None, "password": None, "wpakey": "none",
 										"wpamethod": "peap"}
 		self.defaultsjson['system'] = {"reload": None, "reboot": None, "factory": None, "applynetwork": None, "debug": "0"}
-		self.defaultsjson['roam'] = {"freq":"2.4 GHz","roamip":"192.168.20.1","roamusername":"ivsadmin","roampassword":"@dmin51!!"}
+		self.defaultsjson['roam'] = {"freq":"2.4 GHz","roamip":"192.168.20.1","roamusername":"ivsadmin","roampassword":"@dmin51!!","roamcamip":"192.168.20.10","roamcamusername":"root","roamcampassword":"admin51"}
 		self.defaultsjson['smartbutton'] = {"record_button": "0", "privacy_button": "0", "comment_button": "0", "lock_button":"0"}
 
 
@@ -1350,6 +1349,10 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Internal IP", section="roam", key="roamip",default="192.168.20.1")
 		self.build_settings_json(self.roamjson, settype="string", title="ROAM Username", section="roam", key="roamusername",default="ivsadmin")
 		self.build_settings_json(self.roamjson, settype="password", title="ROAM Password", section="roam",key="roampassword", default="@dmin51!!")
+		self.build_settings_json(self.roamjson, settype="title", title="ROAM Camera Config")
+		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Camera IP", section="roam", key="roamcamip", default="192.168.20.10")
+		self.build_settings_json(self.roamjson, settype="string", title="ROAM Camera Username", section="roam", key="roamcamusername", default="root")
+		self.build_settings_json(self.roamjson, settype="password", title="ROAM Camera Password", section="roam", key="roamcampassword", default="admin51")
 		self.build_settings_json(self.roamjson, settype="title", title="ROAM Wifi Config")
 		self.build_settings_json(self.roamjson,settype="scrolloptions",title="Radio Frequency",section="roam",key="freq",default="2.4", options=freqlist)
 		self.build_settings_json(self.roamjson, settype="string", title="SSID", section="roam",key="ssid", default=None)
@@ -1486,9 +1489,14 @@ class IVS_Accessory_Framework(App):
 
 	def load_app_window(self):
 		if self.config.get("application", "mode") == "Camera Control":
-			self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
-							   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
-							   volume=self.config.get("application", "audio"), logpath=self.logpath)
+			if self.roam == None:
+				self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
+								   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
+								   volume=self.config.get("application", "audio"), logpath=self.logpath)
+			else:
+				self.lw = CameraControl(self.valt, -1, vidtype=self.config.get("application", "streamtype"),
+								   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
+								   volume=self.config.get("application", "audio"), logpath=self.logpath,camip=self.config.get("roam", "roamcamip"),camuser=self.config.get("roam", "roamcamusername"),campw=self.config.get("roam", "roamcampassword"))
 		elif self.config.get("application", "mode") == "Schedule":
 			self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
 		elif self.config.get("application", "mode") == "Keypad":
