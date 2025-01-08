@@ -1,6 +1,6 @@
 # IVS Accessory Framework
-# Version 2.4
-# Last Updated: 12/18/2024
+# Version 2.5
+# Last Updated: 12/30/2024
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
@@ -10,10 +10,15 @@ import logging
 #from importlib.metadata import pass_none
 # from win32con import FALSE
 # from kivy.core.gl import msgbox
+# from idlelib.configdialog import changes
+# from test import network_address #Pretty sure I added this while I was testing something
+
 
 from _version import __version__
 from kivy.utils import platform
 from kivy.config import Config
+
+
 
 if platform != "android":
 	Config.set('kivy', 'keyboard_mode', 'systemanddock')
@@ -41,6 +46,7 @@ import time, netifaces, os, json, threading
 from datetime import timedelta
 from functools import partial
 from pathlib import Path
+import ipaddress
 # IVS Imports
 from libs.modules.ivs import ivs
 from libs.modules.ivs.valt import VALT
@@ -369,6 +375,10 @@ class IVS_Accessory_Framework(App):
 			# if key == "test":
 			# 	Logger.debug("Initiate Wifi Test")
 			# 	self.roam_wireless_test()
+			elif key == "wificonfip" or key.find("roamwifi") != -1:
+				self.config_roam_wireless_ip()
+			elif key == "wiredconfip" or key.find("roamwired") != -1:
+				self.config_roam_wired_ip()
 			else:
 				self.config_roam_wireless()
 
@@ -1205,6 +1215,7 @@ class IVS_Accessory_Framework(App):
 		self.valtjson = []
 		roomlist = []
 		# print("test")
+		valtrooms = []
 		if hasattr(self,'valt'):
 			valtrooms = self.valt.getrooms()
 		if type(valtrooms).__name__ == 'list':
@@ -1345,6 +1356,8 @@ class IVS_Accessory_Framework(App):
 		freqlist=["2.4 GHz","5 GHz"]
 		authlist=["wpa","wpa2-psk","wpa-eap", "wpa2-eap", "wpa3-psk", "wpa3-eap"]
 		eaplist=["peap","tls","ttls"]
+		ipconflist = ["DHCP","Static"]
+		subnetlist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32"]
 		self.build_settings_json(self.roamjson, settype="title", title="ROAM Bridge Config")
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Internal IP", section="roam", key="roamip",default="192.168.20.1")
 		self.build_settings_json(self.roamjson, settype="string", title="ROAM Username", section="roam", key="roamusername",default="ivsadmin")
@@ -1362,7 +1375,17 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="EAP Method", section="roam",key="eap", default=None, options=eaplist,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="string", title="EAP Username", section="roam", key="wifiusername",default=None,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="password", title="EAP Password", section="roam", key="wifipassword",default=None,desc="Use with EAP Auth Modes Only!")
+		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wifi IP Configuration", section="roam", key="wificonfip", default="DHCP", options=ipconflist)
+		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi IP", desc="Only if set to static", section="roam", key="roamwifiip", default="192.168.0.2")
+		# self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi IP", section="roam", key="roamwifisubnet", default="255.255.255.0")
+		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wifi Subnet Mask", desc="Only if set to static",section="roam", key="roamwifisubnet",options=subnetlist, default="24")
+		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi Gateway", desc="Only if set to static", section="roam", key="roamwifigateway", default="192.168.0.1")
 		self.build_settings_json(self.roamjson, settype="button", title="Test Wireless Settings", section="roam", key="test", default=None)
+		self.build_settings_json(self.roamjson, settype="title", title="ROAM Wired Config")
+		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wired IP Configuration",section="roam", key="wiredconfip", default="DHCP", options=ipconflist)
+		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wired IP", desc="Only if set to static", section="roam", key="roamwiredip", default="192.168.0.2")
+		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wired Subnet Mask", desc="Only if set to static",section="roam", key="roamwiredsubnet",options=subnetlist, default="24")
+		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wired Gateway", desc="Only if set to static", section="roam", key="roamwiredgateway", default="192.168.0.1")
 
 
 	def update_settings_options(self, object, searchterm, newvalues):
@@ -1719,7 +1742,68 @@ class IVS_Accessory_Framework(App):
 		else:
 			Logger.debug("ROAM Wireless Bridge Not Found")
 			return False
+	def config_roam_wireless_ip(self):
+		if self.roam != None:
+			if self.config.get("roam", "freq") == "5 GHz":
+				wifi_interface = "wifi1"
+			else:
+				wifi_interface = "wifi2"
+			self.clear_roam_interface(wifi_interface)
+			self.change_roam_interface(wifi_interface, self.config.get("roam", "wificonfip"),
+									   self.config.get("roam", "roamwifiip"),
+									   self.config.get("roam", "roamwifisubnet"),
+									   self.config.get("roam", "roamwifigateway"))
 
+	def config_roam_wired_ip(self):
+		if self.roam != None:
+			self.clear_roam_interface("ether1-WAN")
+			self.change_roam_interface("ether1-WAN",self.config.get("roam", "wiredconfip"),self.config.get("roam", "roamwiredip"),self.config.get("roam", "roamwiredsubnet"),self.config.get("roam","roamwiredgateway"))
+	def clear_roam_interface(self,interface):
+		roam_command = '/ip/address/print'
+		response = self.send_command_to_roam(roam_command)
+		Logger.debug(response)
+		for ip_address in response:
+			if ip_address["interface"] == interface and ip_address["dynamic"] == "false":
+				roam_command = "/ip/address/remove =.id=" + ip_address[".id"]
+				response = self.send_command_to_roam(roam_command)
+				Logger.debug(response)
+		roam_command = '/ip/route/print'
+		response = self.send_command_to_roam(roam_command)
+		Logger.debug(response)
+		for route in response:
+			# if route["dynamic"] == "false" and route["static"] == "true" and route["gateway"] == gateway:
+			if route["dynamic"] == "false" and route["static"] == "true":
+				# print(route[".id"])
+				roam_command = "/ip/route/remove =.id=" + route[".id"]
+				response = self.send_command_to_roam(roam_command)
+				Logger.debug(response)
+	def change_roam_interface(self,interface, mode, ip, subnet, gateway):
+		if mode == "DHCP":
+			roam_command = '/ip/dhcp-client/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			for dhcp_interface in response:
+				if dhcp_interface["interface"] == interface:
+					roam_command = '/ip/dhcp-client/enable =.id=' + dhcp_interface[".id"]
+					response = self.send_command_to_roam(roam_command)
+					Logger.debug(response)
+		else:
+			roam_command = '/ip/dhcp-client/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			for dhcp_interface in response:
+				if dhcp_interface["interface"] == interface:
+					roam_command = '/ip/dhcp-client/disable =.id=' + dhcp_interface[".id"]
+					response = self.send_command_to_roam(roam_command)
+					Logger.debug(response)
+			network = ipaddress.IPv4Network(
+				f"{ip}/{subnet}", strict=False)
+			roam_command = '/ip/address/add =interface=' + interface + ' =address=' + ip + "/" + subnet + " =network=" + str(network.network_address)
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			roam_command = '/ip/route/add =dst-address=0.0.0.0/0 =gateway=' + gateway
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
 	def get_roam_network_info(self):
 		lblwidth = sp(100)
 		lblheight = sp(30)
@@ -1746,7 +1830,7 @@ class IVS_Accessory_Framework(App):
 			Logger.debug(response)
 			for entry in response:
 				nic= entry['interface']
-				ipaddress = entry['address'].split("/")
+				current_ipaddress = entry['address'].split("/")
 				lbl = Label(text=nic, size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 				layout = StandardGridLayout(cols=2, size_hint_x=1, size_hint_y=None, spacing=10)
@@ -1757,11 +1841,11 @@ class IVS_Accessory_Framework(App):
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
 				lbl = StandardTextLabel(text="IP:", width=lblwidth, size_hint_x=None, size_hint_y=None, font_size=self.standardfontsize, height=lblheight)
-				textbox = DisabledTextInput(text=ipaddress[0], size_hint_y=None, font_size=self.standardfontsize,	height=lblheight)
+				textbox = DisabledTextInput(text=current_ipaddress[0], size_hint_y=None, font_size=self.standardfontsize,	height=lblheight)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
 				lbl = StandardTextLabel(text="Subnet Mask:", width=lblwidth, size_hint_x=None, size_hint_y=None, font_size=self.standardfontsize, height=lblheight)
-				textbox = DisabledTextInput(text=ipaddress[1], size_hint_y=None, font_size=self.standardfontsize,	height=lblheight)
+				textbox = DisabledTextInput(text=current_ipaddress[1], size_hint_y=None, font_size=self.standardfontsize,	height=lblheight)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(lbl)
 				self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].ids[nic + '_layout'].add_widget(textbox)
 	def send_command_to_roam(self,command):
