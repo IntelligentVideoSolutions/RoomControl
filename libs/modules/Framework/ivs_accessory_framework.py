@@ -4,7 +4,7 @@
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
-
+from threading import main_thread
 
 # Not sure why this import was in here. Commented out as they do not appear to be used anywhere
 #from importlib.metadata import pass_none
@@ -145,6 +145,9 @@ class IVS_Accessory_Framework(App):
 	def on_start(self):
 		self.load_kv_files()
 		Window.bind(on_resize=self.on_window_resize)
+		if int(self.config.get("system", "debug")):
+			Logger.info("Debug Mode Enabled")
+			Config.set('kivy', 'log_level', 'debug')
 		screen = LandscapeHome(name='Landscape_Home_Screen')
 		self.screenmgmt.add_widget(screen)
 		screen = AboutScreen(name='About_Screen')
@@ -155,12 +158,6 @@ class IVS_Accessory_Framework(App):
 		self.screenmgmt.add_widget(screen)
 		self.set_orientation()
 		threading.Thread(target=self.connect_to_roam).start()
-		#TODO: REMOVE THIS SLEEP!!!!
-		time.sleep(1)
-
-		if int(self.config.get("system", "debug")):
-			Logger.info("Debug Mode Enabled")
-			Config.set('kivy', 'log_level', 'debug')
 		self.initialize(1)
 		firmware = ivs.loadconfig(self.versionfilepath)
 		# self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
@@ -395,8 +392,7 @@ class IVS_Accessory_Framework(App):
 		# ivs.log("Initializing Application", self.logpath, severity="INFO")
 		Logger.info(__name__ + ": " + "Initializing Application")
 		# self.config.read(self.configfilepath)
-		if self.roam != None:
-			self.load_app_window()
+
 		threading.Thread(target=self.connecttovalt).start()
 		self.enable_disable_clock()
 		# self.connect_to_roam()
@@ -1367,6 +1363,7 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Internal IP", section="roam", key="roamip",default="192.168.20.1")
 		self.build_settings_json(self.roamjson, settype="string", title="ROAM Username", section="roam", key="roamusername",default="ivsadmin")
 		self.build_settings_json(self.roamjson, settype="password", title="ROAM Password", section="roam",key="roampassword", default="@dmin51!!")
+		self.build_settings_json(self.roamjson, settype="button", title="Reset ROAM Config", section="roam", key="reset", default=None)
 		self.build_settings_json(self.roamjson, settype="title", title="ROAM Camera Config")
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Camera IP", section="roam", key="roamcamip", default="192.168.20.10")
 		self.build_settings_json(self.roamjson, settype="string", title="ROAM Camera Username", section="roam", key="roamcamusername", default="root")
@@ -1380,12 +1377,12 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="EAP Method", section="roam",key="eap", default=None, options=eaplist,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="string", title="EAP Username", section="roam", key="wifiusername",default=None,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="password", title="EAP Password", section="roam", key="wifipassword",default=None,desc="Use with EAP Auth Modes Only!")
+		self.build_settings_json(self.roamjson, settype="button", title="Test Wireless Settings", section="roam", key="test", default=None)
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wifi IP Configuration", section="roam", key="wificonfip", default="DHCP", options=ipconflist)
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi IP", desc="Only if set to static", section="roam", key="roamwifiip", default="192.168.0.2")
 		# self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi IP", section="roam", key="roamwifisubnet", default="255.255.255.0")
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wifi Subnet Mask", desc="Only if set to static",section="roam", key="roamwifisubnet",options=subnetlist, default="24")
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi Gateway", desc="Only if set to static", section="roam", key="roamwifigateway", default="192.168.0.1")
-		self.build_settings_json(self.roamjson, settype="button", title="Test Wireless Settings", section="roam", key="test", default=None)
 		self.build_settings_json(self.roamjson, settype="title", title="ROAM Wired Config")
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wired IP Configuration",section="roam", key="wiredconfip", default="DHCP", options=ipconflist)
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wired IP", desc="Only if set to static", section="roam", key="roamwiredip", default="192.168.0.2")
@@ -1424,6 +1421,9 @@ class IVS_Accessory_Framework(App):
 			self.show_logs()
 		elif key == "test":
 			threading.Thread(target=self.roam_wireless_test).start()
+		elif key == "reset":
+			# self.notification = self.msgbox("Resetting ROAM Wireless Config", height='150dp', title="Notification")
+			threading.Thread(target=self.roam_factory_reset()).start()
 	# @mainthread
 	def msgbox(self, message, **kwargs):
 		content = BoxLayout(orientation='vertical', spacing='5dp')
@@ -1515,6 +1515,7 @@ class IVS_Accessory_Framework(App):
 		self.config.write()
 		self.updatedconfig = True
 
+	@mainthread
 	def load_app_window(self):
 		if self.roam == None:
 			if self.config.get("application", "mode") == "Camera Control":
@@ -1581,6 +1582,7 @@ class IVS_Accessory_Framework(App):
 				found = True
 		if not found:
 			self.config.set('valt', 'roomname', "None")
+
 
 	def check_orientation(self):
 		if Window.size[0] < Window.size[1]:
@@ -1665,6 +1667,9 @@ class IVS_Accessory_Framework(App):
 					self.event_roam_wifi_check.cancel()
 				except:
 					pass
+				self.load_app_window()
+				self.config.set("application", "mode", "Camera Control")
+				self.update_config_with_current_roam_config()
 				self.check_roam_wifi(1)
 				self.event_roam_wifi_check = Clock.schedule_interval(self.check_roam_wifi,10)
 	def roam_check(self,b):
@@ -1824,11 +1829,13 @@ class IVS_Accessory_Framework(App):
 			lbl = Label(text="ROAM Network Interfaces", size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
 			self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 
-			response = self.send_command_to_roam('/interface/wifi/radio/print')
+			# response = self.send_command_to_roam('/interface/wifi/radio/print')
+			# response = self.send_command_to_roam('/interface/wifi/print')
 			Logger.debug(response)
 			for entry in response:
 				Logger.debug(entry)
-				interfaces[entry['interface']] = entry['radio-mac']
+				# interfaces[entry['interface']] = entry['radio-mac']
+				# interfaces[entry['name']] = entry['radio-mac']
 
 			response = self.send_command_to_roam('/interface/bridge/host/print')
 			Logger.debug(response)
@@ -1996,6 +2003,72 @@ class IVS_Accessory_Framework(App):
 			if self.roam_wifi_status:
 				self.status_buttons_list['wifi_button']['enabled'] = True
 			self.add_status_buttons()
+	def update_config_with_current_roam_config(self):
+		if self.roam != None:
+			Logger.info("Updating with current configuration from ROAM")
+			roam_command = '/interface/wifi/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			if response != None:
+				for entry in response:
+					if entry['running'] == 'true':
+						if entry['default-name'] == 'wifi1':
+							self.config.set("roam","freq","5 GHz")
+						elif entry['default-name'] == 'wifi2':
+							self.config.set("roam", "freq", "2.4 GHz")
+						if "configuration.ssid" in entry:
+							self.config.set("roam","SSID",entry['configuration.ssid'])
+						if "security.authentication-types" in entry:
+							self.config.set("roam","auth",entry['security.authentication-types'])
+						if "security.eap-methods" in entry:
+							self.config.set("roam", "eap", entry['security.eap-methods'])
+						if "security.eap-username" in entry:
+							self.config.set("roam", "wifiusername", entry['security.eap-username'])
+						if "security.eap-password" in entry:
+							self.config.set("roam", "wifipassword", entry['security.eap-password'])
+						if "security.passphrase" in entry:
+							self.config.set("roam", "psk", entry['security.passphrase'])
+			roam_command = '/ip/dhcp-client/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			if response != None:
+				for entry in response:
+					if entry['disabled'] == 'false':
+						if entry['interface'] == 'wifi1' or entry['interface'] == 'wifi2':
+							self.config.set("roam","wificonfip","DHCP")
+						elif entry['interface'] == "ether1-WAN":
+							self.config.set("roam", "wiredconfip", "DHCP")
+			roam_command = '/ip/address/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.debug(response)
+			if response != None:
+				for entry in response:
+					if entry['dynamic'] == 'false':
+						address = entry['address']
+						address = address.split("/")
+						if entry['interface'] == 'wifi1' or entry['interface'] == 'wifi2':
+							self.config.set("roam", "wificonfip", "STATIC")
+							self.config.set("roam", "roamwifiip", address[0])
+							self.config.set("roam", "roamwifisubnet", address[1])
+						elif entry['interface'] == 'ether1-WAN':
+							self.config.set("roam", "wiredconfip", "STATIC")
+							self.config.set("roam", "roamwiredip", address[0])
+							self.config.set("roam", "roamwiredsubnet", address[1])
+			roam_command = '/ip/route/print'
+			response = self.send_command_to_roam(roam_command)
+			Logger.info(response)
+			if response != None:
+				for entry in response:
+					if entry['dst-address'] == '0.0.0.0/0' and entry['dynamic'] == 'false':
+						if self.config.get("roam", "wificonfip") == "STATIC":
+							self.config.set("roam", "roamwifigateway", entry['gateway'])
+						if self.config.get("roam", "wiredconfip") == "STATIC":
+							self.config.set("roam", "roamwiredgateway", entry['gateway'])
+
+
+		else:
+			Logger.debug("ROAM Wireless Bridge Not Found")
+			return False
 
 if __name__ == '__main__':
 	IVS_Accessory_Framework().run()
