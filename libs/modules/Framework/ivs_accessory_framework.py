@@ -1,6 +1,6 @@
 # IVS Accessory Framework
-# Version 2.5
-# Last Updated: 12/30/2024
+# Version 2.5.1
+# Last Updated: 1/10/2025
 # Compatible with Valt Versions 5.x and 6.x
 # Kivy Imports
 import logging
@@ -154,6 +154,9 @@ class IVS_Accessory_Framework(App):
 		screen = PortraitHome(name='Portrait_Home_Screen')
 		self.screenmgmt.add_widget(screen)
 		self.set_orientation()
+		threading.Thread(target=self.connect_to_roam).start()
+		#TODO: REMOVE THIS SLEEP!!!!
+		time.sleep(1)
 
 		if int(self.config.get("system", "debug")):
 			Logger.info("Debug Mode Enabled")
@@ -162,7 +165,6 @@ class IVS_Accessory_Framework(App):
 		firmware = ivs.loadconfig(self.versionfilepath)
 		# self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = firmware["version"]
 		self.screenmgmt.get_screen('About_Screen').ids['firmware'].text = __version__
-		threading.Thread(target=self.connect_to_roam).start()
 		self.define_status_buttons()
 		self.update_status_bar(0)
 
@@ -393,6 +395,8 @@ class IVS_Accessory_Framework(App):
 		# ivs.log("Initializing Application", self.logpath, severity="INFO")
 		Logger.info(__name__ + ": " + "Initializing Application")
 		# self.config.read(self.configfilepath)
+		if self.roam != None:
+			self.load_app_window()
 		threading.Thread(target=self.connecttovalt).start()
 		self.enable_disable_clock()
 		# self.connect_to_roam()
@@ -430,7 +434,8 @@ class IVS_Accessory_Framework(App):
 	@mainthread
 	def connsuccess(self):
 		# Add Widget to LeftWindow
-		self.load_app_window()
+		if self.roam == None:
+			self.load_app_window()
 		# ivs.log("Connection Successful", self.logpath, severity="INFO")
 		Logger.info(__name__ + ": " + "Connection Successful")
 		self.config.set('valt', 'status', 'Connected')
@@ -1323,7 +1328,7 @@ class IVS_Accessory_Framework(App):
 		self.defaultsjson = {}
 		self.defaultsjson['application'] = {"settingspassword": "admin51", "mode": "None", "webinterface": "1",
 											"webpassword": None, "recbutton": "1", "privbutton": "1", "markerbutton": "0",
-											"orientation": "Automatic", "streamtype": "H264", "clock": "1"}
+											"orientation": "Automatic", "streamtype": "H264", "clock": "1", "fps": 30,"resolution":"800x450","audio":"0"}
 		self.defaultsjson['valt'] = {"server": None, "username": None, "password": None,
 									 "recname": "Accessory Recording", "roomname": None, "room": None, "status": None, "timeout": 5, "markername":"Accessory Comment"}
 		self.defaultsjson['time'] = {"region": "America", "timezone": "America/Chicago", "ntp": None}
@@ -1511,25 +1516,29 @@ class IVS_Accessory_Framework(App):
 		self.updatedconfig = True
 
 	def load_app_window(self):
-		if self.config.get("application", "mode") == "Camera Control":
-			if self.roam == None:
-				self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"),
-								   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
-								   volume=self.config.get("application", "audio"), logpath=self.logpath)
-			else:
-				self.lw = CameraControl(self.valt, -1, vidtype=self.config.get("application", "streamtype"),
-								   fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"),
-								   volume=self.config.get("application", "audio"), logpath=self.logpath,camip=self.config.get("roam", "roamcamip"),camuser=self.config.get("roam", "roamcamusername"),campw=self.config.get("roam", "roamcampassword"))
-		elif self.config.get("application", "mode") == "Schedule":
-			self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
-		elif self.config.get("application", "mode") == "Keypad":
-			self.lw = Keypad(self.valt, self.config.get("valt", "room"), pinlength = int(self.config.get("application", "pinlength")), recordingname=self.config.get("valt", "recname"))
-		elif self.config.get("application", "mode") == "Smart Button":
-			self.lw = SmartButton(self.config, self.valt, self.config.get("valt", "room"), recordingname=self.config.get("valt", "recname"))
+		if self.roam == None:
+			if self.config.get("application", "mode") == "Camera Control":
+				self.lw = CameraControl(self.valt, self.config.get("valt", "room"), vidtype=self.config.get("application", "streamtype"), fps=int(self.config.get("application", "fps")), resolution=self.config.get("application", "resolution"), volume=self.config.get("application", "audio"), logpath=self.logpath)
+			elif self.config.get("application", "mode") == "Schedule":
+				self.lw = ScheduleDisplay(self.valt, self.config.get("valt", "room"))
+			elif self.config.get("application", "mode") == "Keypad":
+				self.lw = Keypad(self.valt, self.config.get("valt", "room"), pinlength = int(self.config.get("application", "pinlength")), recordingname=self.config.get("valt", "recname"))
+			elif self.config.get("application", "mode") == "Smart Button":
+				self.lw = SmartButton(self.config, self.valt, self.config.get("valt", "room"), recordingname=self.config.get("valt", "recname"))
+		else:
+			self.lw = CameraControl(None, -1, vidtype=self.config.get("application", "streamtype"),
+								fps=int(self.config.get("application", "fps")),
+								resolution=self.config.get("application", "resolution"),
+								volume=self.config.get("application", "audio"), logpath=self.logpath,
+								camip=self.config.get("roam", "roamcamip"),
+								camuser=self.config.get("roam", "roamcamusername"),
+								campw=self.config.get("roam", "roamcampassword"))
+
 		# self.lw = Keypad(self.valt, self.config.get("valt", "room"), 6)
 		self.screenmgmt.get_screen(self.homescreen).ids['app_window'].clear_widgets()
-		if self.config.get("application", "mode") != "None":
+		if self.config.get("application", "mode") != "None" or self.roam != None:
 			self.screenmgmt.get_screen(self.homescreen).ids['app_window'].add_widget(self.lw)
+			logging.debug("Added " + str(self.lw) + " to " + str(self.homescreen) )
 
 	# else:
 	# 	lw=BackgroundLabel(text="test",size_hint=(1,1),color='black',font_size=15)
@@ -1621,7 +1630,8 @@ class IVS_Accessory_Framework(App):
 		Logger.debug(__name__ + ": " + "Terminating all Open Applications")
 		try:
 			self.lw.disconnect()
-			self.screenmgmt.get_screen(self.homescreen).ids['app_window'].remove_widget(self.lw)
+			if self.roam == None:
+				self.screenmgmt.get_screen(self.homescreen).ids['app_window'].remove_widget(self.lw)
 
 		except:
 			pass
