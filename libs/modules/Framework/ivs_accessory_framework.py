@@ -1829,12 +1829,12 @@ class IVS_Accessory_Framework(App):
 			lbl = Label(text="ROAM Network Interfaces", size_hint_y=None, font_size=self.standardfontsize, color=self.standardfontcolor,height=lblheight)
 			self.screenmgmt.get_screen('About_Screen').ids['network_info_layout'].add_widget(lbl)
 
-			# response = self.send_command_to_roam('/interface/wifi/radio/print')
+			response = self.send_command_to_roam('/interface/wifi/radio/print')
 			# response = self.send_command_to_roam('/interface/wifi/print')
 			Logger.debug(response)
 			for entry in response:
 				Logger.debug(entry)
-				# interfaces[entry['interface']] = entry['radio-mac']
+				interfaces[entry['interface']] = entry['radio-mac']
 				# interfaces[entry['name']] = entry['radio-mac']
 
 			response = self.send_command_to_roam('/interface/bridge/host/print')
