@@ -198,6 +198,7 @@ class IVS_Accessory_Framework(App):
 	# self.create_settings()
 	def build_settings(self, settings):
 		# self.settings = Settings()
+		# print("DOES THIS RUN?")
 		self.settings = settings
 		# self.settings = SettingsWithSpinner
 		self.build_network_settings()
@@ -675,6 +676,12 @@ class IVS_Accessory_Framework(App):
 		# print(x)
 		if self.config.get('application', 'settingspassword') == self.authpopup.ids['password'].text:
 			self.authpopup.dismiss()
+			self.update_config_with_current_roam_config()
+			self.write_config()
+			try:
+				self.refresh_settings()
+			except:
+				pass
 			self.open_settings()
 		else:
 			self.authpopup.ids['feedback'].text = "Invalid Password"
@@ -1377,7 +1384,8 @@ class IVS_Accessory_Framework(App):
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="EAP Method", section="roam",key="eap", default=None, options=eaplist,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="string", title="EAP Username", section="roam", key="wifiusername",default=None,desc="Use with EAP Auth Modes Only!")
 		self.build_settings_json(self.roamjson, settype="password", title="EAP Password", section="roam", key="wifipassword",default=None,desc="Use with EAP Auth Modes Only!")
-		self.build_settings_json(self.roamjson, settype="button", title="Test Wireless Settings", section="roam", key="test", default=None)
+		self.build_settings_json(self.roamjson, settype="button", title="Apply Wireless Settings", section="roam", key="wifiapply", default=None,desc="Reapplies current config and checks wireless status.")
+		self.build_settings_json(self.roamjson, settype="button", title="Check Wireless Status", section="roam", key="wificheck", default=None, desc="Checks wireless status only.")
 		self.build_settings_json(self.roamjson, settype="scrolloptions", title="ROAM Wifi IP Configuration", section="roam", key="wificonfip", default="DHCP", options=ipconflist)
 		self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi IP", desc="Only if set to static", section="roam", key="roamwifiip", default="192.168.0.2")
 		# self.build_settings_json(self.roamjson, settype="ip", title="ROAM Wifi IP", section="roam", key="roamwifisubnet", default="255.255.255.0")
@@ -1419,7 +1427,11 @@ class IVS_Accessory_Framework(App):
 		elif key == "logs":
 			self.close_settings()
 			self.show_logs()
-		elif key == "test":
+		elif key == "wificheck":
+			threading.Thread(target=self.roam_wireless_test).start()
+		elif key == "wifiapply":
+			threading.Thread(target=self.config_roam_wireless).start()
+			# self.msgbox('Applying Current Wireless Settings', okbutton=True, title="Apply Wifi Settings")
 			threading.Thread(target=self.roam_wireless_test).start()
 		elif key == "reset":
 			# self.notification = self.msgbox("Resetting ROAM Wireless Config", height='150dp', title="Notification")
@@ -1714,7 +1726,7 @@ class IVS_Accessory_Framework(App):
 		if self.roam != None:
 			Logger.debug("Testing ROAM Wireless Connection")
 			self.roam_wireless_test_alert()
-			time.sleep(15)
+			time.sleep(5)
 			self.wireless_test_alert_popup.dismiss()
 			if self.config.get("roam", "freq") == "5 GHz":
 				wifi_interface = "wifi1"
@@ -2009,25 +2021,38 @@ class IVS_Accessory_Framework(App):
 			roam_command = '/interface/wifi/print'
 			response = self.send_command_to_roam(roam_command)
 			Logger.debug(response)
+			running = False
 			if response != None:
 				for entry in response:
+					Logger.debug(entry)
 					if entry['running'] == 'true':
+						running = True
 						if entry['default-name'] == 'wifi1':
+							Logger.debug("5 GHz")
 							self.config.set("roam","freq","5 GHz")
 						elif entry['default-name'] == 'wifi2':
+							Logger.debug("2.4 GHz")
 							self.config.set("roam", "freq", "2.4 GHz")
 						if "configuration.ssid" in entry:
+							Logger.debug(entry['configuration.ssid'])
 							self.config.set("roam","SSID",entry['configuration.ssid'])
 						if "security.authentication-types" in entry:
+							Logger.debug(entry['security.authentication-types'])
 							self.config.set("roam","auth",entry['security.authentication-types'])
 						if "security.eap-methods" in entry:
+							Logger.debug(entry['security.eap-methods'])
 							self.config.set("roam", "eap", entry['security.eap-methods'])
 						if "security.eap-username" in entry:
+							Logger.debug(entry['security.eap-username'])
 							self.config.set("roam", "wifiusername", entry['security.eap-username'])
 						if "security.eap-password" in entry:
+							Logger.debug(entry['security.eap-password'])
 							self.config.set("roam", "wifipassword", entry['security.eap-password'])
 						if "security.passphrase" in entry:
+							Logger.debug(entry['security.passphrase'])
 							self.config.set("roam", "psk", entry['security.passphrase'])
+			if not running:
+				Logger.debug("No Wireless Radios Currently Running")
 			roam_command = '/ip/dhcp-client/print'
 			response = self.send_command_to_roam(roam_command)
 			Logger.debug(response)
